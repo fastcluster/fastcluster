@@ -1,0 +1,5 @@
+﻿To cite fastcluster in publications, please use:
+
+Daniel Müllner, fastcluster: Fast Hierarchical, Agglomerative Clustering
+Routines for R and Python, Journal of Statistical Software, 53 (2013), no. 9,
+1–18, http://www.jstatsoft.org/v53/i09/.

@@ -1,0 +1,676 @@
+\def\fastclusterversion{1.1.20}
+\documentclass[fontsize=10pt,paper=letter,BCOR=-6mm]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\normalfont
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\newcommand*\q{\textquotesingle}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{xcolor}
+\usepackage{ifpdf}
+  \ifpdf
+    \newcommand*\driver{}
+  \else
+    \newcommand*\driver{dvipdfmx}
+  \fi
+\usepackage[%
+  pdftitle={fastcluster manual},
+  pdfauthor={Daniel Müllner},
+%  pdfsubject={},
+  pdfdisplaydoctitle=true,
+%  pdfduplex=DuplexFlipLongEdge,
+  pdfstartview=FitH,
+  colorlinks=True,
+  pdfhighlight=/I,
+%  pdfborder={0 0 1},
+%  linkbordercolor={1 .8 .8},
+%  citebordercolor={.5 .9 .5},
+%  urlbordercolor={.5 .7 1},
+%  linkcolor={blue},
+%  citecolor={blue},
+  urlcolor={blue!80!black},
+  linkcolor={red!80!black},
+%  runcolor={blue},
+%  filecolor={blue},
+  pdfpagemode=UseOutlines,
+  bookmarksopen=true,
+  bookmarksopenlevel=1,
+  bookmarksdepth=2,
+  breaklinks=true,
+  unicode=true,
+  \driver
+]{hyperref}
+% Optimize the PDF targets and make the PDF file smaller
+\ifpdf\RequirePackage{hypdestopt}\fi
+
+\renewcommand*\sectionautorefname{Section}
+
+\usepackage{typearea}
+
+\DeclareMathOperator\size{size}
+\DeclareMathOperator\Var{Var}
+
+\newcommand*\linkage{\href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html}{\texttt{linkage}}}
+\newcommand*\hierarchy{\href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html}{\texttt{scipy.\hskip0pt cluster.\hskip0pt hierarchy}}}
+\newcommand*\hclust{\href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/hclust.html}{\texttt{hclust}}}
+\newcommand*\stats{\href{http://stat.ethz.ch/R-manual/R-devel/library/stats/html/00Index.html}{\texttt{stats}}}
+\newcommand*\flashClustPack{\href{http://cran.r-project.org/web/packages/flashClust/index.html}{\texttt{flashClust}}}
+\newcommand*\dist{\href{http://stat.ethz.ch/R-manual/R-devel/library/stats/html/dist.html}{\texttt{dist}}}
+\newcommand*\print{\href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/print.html}{\texttt{print}}}
+\newcommand*\plot{\href{http://stat.ethz.ch/R-manual/R-patched/library/graphics/html/plot.html}{\texttt{plot}}}
+\newcommand*\identify{\href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/identify.hclust.html}{\texttt{identify}}}
+\newcommand*\rect{\href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/rect.hclust.html}{\texttt{rect.hclust}}}
+\newcommand*\NA{\href{http://stat.ethz.ch/R-manual/R-devel/library/base/html/NA.html}{\texttt{NA}}}
+
+%\usepackage{showframe}
+
+\makeatletter
+\newenvironment{methods}{%
+  \list{}{\labelwidth\z@
+    \itemindent-\leftmargin
+    \let\makelabel\methodslabel}%
+}{%
+  \endlist
+}
+\newcommand*{\methodslabel}[1]{%
+  %\hspace{\labelsep}%
+  \hbox to \textwidth{\hspace{\labelsep}%
+  \normalfont\bfseries\ttfamily
+  #1\hskip-\labelsep\hfill}%
+}
+
+\makeatother
+\setkomafont{descriptionlabel}{\normalfont\ttfamily\bfseries}
+
+
+\begin{document}
+%\VignetteIndexEntry{User's manual}
+\title{The \textit{fastcluster} package: User's manual}
+\author{\href{http://danifold.net}{Daniel Müllner}}
+\date{July 19, 2015}
+\subtitle{Version \fastclusterversion}
+\maketitle
+
+\makeatletter
+\renewenvironment{quotation}{%
+  \list{}{\listparindent 1em%
+    \itemindent    \listparindent
+    \leftmargin2.5em
+    \rightmargin   \leftmargin
+    \parsep        \z@ \@plus\p@
+  }%
+  \item\relax
+}{%
+  \endlist
+}
+\makeatother
+\begin{abstract}\noindent\small
+The fastcluster package is a C++ library for hierarchical, agglomerative
+clustering. It efficiently implements the
+seven most widely used clustering schemes: single, complete, average, weighted/mcquitty, Ward, centroid and median linkage. The library currently has interfaces to two languages: R and Python/SciPy. Part of the functionality is designed as drop-in replacement for existing routines: \linkage{} in the SciPy package \hierarchy{}, \hclust{} in R's \stats{} package, and the \flashClustPack{} package. Once the fastcluster library is loaded at the beginning of the code, every program that uses hierarchical clustering can benefit immediately and effortlessly from the performance gain. Moreover, there are memory-saving routines for clustering of vector data, which go beyond what the existing packages provide.
+\end{abstract}
+
+\noindent
+This document describes the usage for the two interfaces for R and Python and is meant as the reference document for the end user. Installation instructions are given in the file INSTALL in the source distribution and are not repeated here. The sections about the two interfaces are independent and in consequence somewhat redundant, so that users who need a reference for one interface need to consult only one section.
+
+If you use the fastcluster package for scientific work, please cite it as:
+\begin{quote}
+Daniel Müllner, \textit{fastcluster: Fast Hierarchical, Agglomerative Clustering Routines for R and Python}, Journal of Statistical Software, \textbf{53} (2013), no.~9, 1--18, \url{http://www.jstatsoft.org/v53/i09/}.
+\end{quote}
+
+\textbf{The fastcluster package is considered stable and will undergo few changes from now on. If some years from now there have not been any updates, this does not necessarily mean that the package is unmaintained but maybe it just was not necessary to correct anything. Of course, please still report potential bugs and incompatibilities to \texttt{daniel@danifold.net}.}
+
+\tableofcontents
+
+\section{The R interface}
+
+Load the package with the following command:
+\begin{quote}
+  \texttt{library(\q fastcluster\q)}
+\end{quote}
+
+The package overwrites the function \hclust{} from the \stats{} package (in the same
+way as the \flashClustPack{} package does). Please remove any references to the
+\flashClustPack{} package in your R files to not accidentally overwrite the \hclust{}
+function with the \flashClustPack{} version.
+
+The \hyperref[hclust]{new \texttt{hclust} function} has exactly the same calling conventions as the old one. You may just load the package and immediately and effortlessly enjoy the performance improvements. The function is also an improvement to the \texttt{flashClust} function from the \flashClustPack{} package. Just replace every call to \texttt{flashClust} by \hyperref[hclust]{\texttt{hclust}} and expect your code to work as before, only faster.\footnote{If you are using flashClust prior to version 1.01, update it! See the change log for \flashClustPack{} at \url{http://cran.r-project.org/web/packages/flashClust/ChangeLog}.} In case the data includes infinite or NaN values, see \autoref{sec:infnan}.
+
+If you need to access the old function or make sure that the right function is
+called, specify the package as follows:
+\begin{quote}
+    \texttt{\hyperref[hclust]{fastcluster::hclust}(…)}\\
+    \texttt{flashClust::hclust(…)}\\
+    \texttt{stats::hclust(…)}
+\end{quote}
+
+Vector data can be clustered with a memory-saving algorithm with the command:
+\begin{quote}
+    \texttt{\hyperref[hclust.vector]{hclust.vector}(…)}
+ \end{quote}
+
+The following sections contain comprehensive descriptions of these methods.
+
+\begin{methods}
+\item [\normalfont\texttt{\textbf{hclust}}\,(\textit{d, method=\q complete\q, members=NULL})]
+\phantomsection\label{hclust}
+\addcontentsline{toc}{subsection}{\texttt{hclust}}
+
+Hierarchical, agglomerative clustering on a condensed dissimilarity matrix.
+
+This method has the same specifications as the method \hclust{} in the package \stats{} and \texttt{hclust} alias \texttt{flashClust} in the package \flashClustPack{}. In particular, the \print{}, \plot{}, \rect{} and \identify{} methods work as expected.
+
+The argument $d$ is a condensed distance matrix, as it is produced by \dist.
+
+The argument \textit{method} is one of the strings \textit{\q single\q}, \textit{\q complete\q}, \textit{\q average\q}, \textit{\q mcquitty\q}, \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward.D\q}, \textit{\q ward.D2\q} or an unambiguous abbreviation thereof.
+
+The argument \textit{members} specifies the sizes of the initial nodes, ie.\ the number of observations in the initial clusters. The default value \texttt{NULL} says that all initial nodes are singletons, ie.\ have size 1. Otherwise, \textit{members} must be a vector whose size is the number of input points. The vector is processed as a \href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/double.html}{\texttt{double}} array so that not only integer cardinalities of nodes can be accounted for but also weighted nodes with real weights.
+
+The general scheme of the agglomerative clustering procedure is as follows:
+\begin{enumerate}
+\item Start with $N$ singleton clusters (nodes) labeled $-1,\ldots, -N$, which represent the input points.
+\item Find a pair of nodes with minimal distance among all pairwise distances.
+\item Join the two nodes into a new node and remove the two old nodes. The new nodes are labeled consecutively $1,2,\ldots$
+\item The distances from the new node to all other nodes is determined by the \textit{method} parameter (see below).
+\item Repeat $N-1$ times from step 2, until there is one big node, which contains all original input points.
+\end{enumerate}
+
+The output of \texttt{hclust} is an object of class \texttt{\q hclust\q} and represents a \emph{stepwise dendrogram}. It contains the following fields:
+\begin{description}
+\item[\normalfont\textit{merge}]
+This is an $(N-1)\times 2$ array. Row $i$ specifies the labels of the nodes which are joined step $i$ of the clustering.
+
+\item[\normalfont\textit{height}]
+This is a vector of length $N-1$. It contains the sequence of dissimilarities at which every pair of nearest nodes is joined.
+
+\item[\normalfont\textit{order}]
+This is a vector of length $N$. It contains a permutation of the numbers $1,\ldots N$ for the \plot{} method. When the dendrogram is plotted, this is the order in which the singleton nodes are plotted as the leaves of a rooted tree. The order is computed so that the dendrogram is plotted without intersections (except the case when there are inversions for the \textit{\q centroid\q} and \textit{\q median\q} methods). The choice of the \textit{\q order\q} sequence follows the same scheme as the \texttt{stats} package does, only with a faster algorithm. Note that there are many valid choices to order the nodes in a dendrogram without intersections. Also, subsequent points in the \textit{\q order\q} field are not always close in the ultrametric given by the dendrogram.
+
+\item[\normalfont\textit{labels}]
+This copies the attribute \textit{\q Labels\q} from the first input parameter $d$. It contains the labels for the objects being clustered.
+
+\item[\normalfont\textit{method}]
+The (unabbreviated) string for the \textit{\q method\q} parameter. See below for a specification of all available methods.
+
+\item[\normalfont\textit{call}]
+The full command that produced the result. See \href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/match.call.html}{\texttt{match.call}}.
+
+\item[\normalfont\textit{dist.method}]
+This \textit{\q method\q} attribute of the first input parameter $d$. This specifies which metric was used in the \texttt{dist} method which generated the first argument.
+\end{description}
+
+The parameter \textit{method} specifies which clustering scheme to use. The clustering scheme determines the distance from a new node to the other nodes. Denote the dissimilarities by $d$, the nodes to be joined by $I,J$, the new node by $K$ and any other node by $L$. The symbol $|I|$ denotes the size of the cluster $I$.
+
+\begin{description}
+\item [\normalfont\textit{method=\q single\q}:]
+$\displaystyle d(K,L) = \min(d(I,L), d(J,L))$
+
+The distance between two clusters $A,B$ is the closest distance between any two points in each cluster:
+\[
+ d(A,B)=\min_{a\in A, b\in B}d(a,b)
+\]
+
+\item [\normalfont\textit{method=\q complete\q}:]
+$\displaystyle d(K,L) = \max(d(I,L), d(J,L))$
+
+The distance between two clusters $A,B$ is the maximal distance between any two points in each cluster:
+\[
+ d(A,B)=\max_{a\in A, b\in B}d(a,b)
+\]
+
+\item [\normalfont\textit{method=\q average\q}:]
+$\displaystyle d(K,L) = \frac{|I|\cdot d(I,L)+|J|\cdot d(J,L)}{|I|+|J|}$
+
+The distance between two clusters $A,B$ is the average distance between the points in the two clusters:
+\[
+ d(A,B)=\frac1{|A||B|}\sum_{a\in A, b\in B}d(a,b)
+\]
+
+\item [\normalfont\textit{method=\q mcquitty\q}:]
+$\displaystyle d(K,L) = \tfrac12(d(I,L)+d(J,L))$
+
+There is no global description for the distance between clusters since the distance depends on the order of the merging steps.
+\end{description}
+
+The following three methods are intended for Euclidean data only, ie.\ when $X$ contains the pairwise \textbf{squared} distances between vectors in Euclidean space. The algorithm will work on any input, however, and it is up to the user to make sure that applying the methods makes sense.
+
+\begin{description}
+\item [\normalfont\textit{method=\q centroid\q}:]
+$\displaystyle d(K,L) = \frac{|I|\cdot d(I,L)+|J|\cdot d(J,L)}{|I|+|J|}-\frac{|I|\cdot|J|\cdot d(I,J)}{(|I|+|J|)^2}$
+
+There is a geometric interpretation: $d(A,B)$ is the distance between the centroids (ie.\ barycenters) of the clusters in Euclidean space:
+\[
+  d(A,B) = \|\vec c_A-\vec c_B\|^2,
+\]
+where $\vec c_A$ denotes the centroid of the points in cluster $A$.
+
+\item [\normalfont\textit{method=\q median\q}:]
+$\displaystyle d(K,L) = \tfrac12 d(I,L)+\tfrac12 d(J,L)-\tfrac14 d(I,J)$
+
+Define the midpoint $\vec w_K$ of a cluster $K$ iteratively as $\vec w_K=k$ if $K=\{k\}$ is a singleton and as the midpoint $\frac12(\vec w_I+\vec w_J)$ if $K$ is formed by joining $I$ and $J$. Then we have
+\[
+ d(A,B)=\|\vec w_A-\vec w_B\|^2
+\]
+in Euclidean space for all nodes $A,B$. Notice however that this distance depends on the order of the merging steps.
+
+\item [\normalfont\textit{method=\q ward.D\q}:]
+$\displaystyle d(K,L) = \frac{(|I|+|L|)\cdot d(I,L)+(|J|+|L|)\cdot d(J,L)-|L|\cdot d(I,J)}{|I|+|J|+|L|}$
+
+The global cluster dissimilarity can be expressed as
+\[
+d(A,B)=\frac{2|A||B|}{|A|+|B|}\cdot\|\vec c_A-\vec c_B\|^2,
+\]
+where $\vec c_A$ again denotes the centroid of the points in cluster $A$.
+
+\item [\normalfont\textit{method=\q ward.D2\q}:]
+This is the equivalent of \textit{\q ward.D\q}, but for input consisting of untransformed (in particular: \textbf{non-squared}) Euclidean distances. Internally, all distances are squared first, then method \textit{ward.D} is applied, and finally the square root of all heights in the dendrogram is taken. Thus, global cluster dissimilarity can be expressed as the square root of that for \textit{ward.D}, namely
+\[
+d(A,B)=\sqrt{\frac{2|A||B|}{|A|+|B|}}\cdot\|\vec c_A-\vec c_B\|.
+\]
+\end{description}
+
+\item [\normalfont\texttt{\textbf{hclust.vector}}\,(\textit{X, method=\q single\q, members=NULL, metric=\q euclidean\q, p=NULL})]
+\phantomsection\label{hclust.vector}
+\addcontentsline{toc}{subsection}{\texttt{hclust.vector}}
+This performs hierarchical, agglomerative clustering on vector data with memory-saving algorithms. While the \hyperref[hclust]{\texttt{hclust}} method requires $\Theta(N^2)$ memory for clustering of $N$ points, this method needs $\Theta(ND)$ for $N$ points in $\mathbb R^D$, which is usually much smaller.
+
+The argument $X$ must be a two-dimensional matrix with \href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/double.html}{\texttt{double}} precision values. It describes $N$ data points in $\mathbb R^D$ as an $(N\times D)$ matrix.
+
+The parameter \textit{\q members\q} is the same as for \hyperref[hclust]{\texttt{hclust}}.
+
+The parameter \textit{\q method\q} is one of the strings \textit{\q single\q}, \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, or an unambiguous abbreviation thereof.
+
+If \textit{method} is \textit{\q single\q}, single linkage clustering is performed on the data points with the metric which is specified by the \textit{metric} parameter. The choices are the same as in the \href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/dist.html}{\texttt{dist}} method: \textit{\q euclidean\q}, \textit{\q maximum\q}, \textit{\q manhattan\q}, \textit{\q canberra\q}, \textit{\q binary\q} and \textit{\q minkowski\q}. Any unambiguous substring can be given. The parameter \textit{p} is used for the \textit{\q minkowski\q} metric only.
+
+The call
+\begin{quote}
+\texttt{hclust.vector(X, method=\q single\q, metric=[...])}
+\end{quote}
+is equivalent to
+\begin{quote}
+\texttt{hclust(dist(X, metric=[...]), method=\q single\q)}
+\end{quote}
+but uses less memory and is equally fast. Ties may be resolved differently, ie.\ if two pairs of nodes have equal, minimal dissimilarity values at some point, in the specific computer's representation for floating point numbers, either pair may be chosen for the next merging step in the dendrogram.
+
+If \textit{method} is one of \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, clustering is performed with respect to Euclidean distances. In this case, the parameter \textit{metric} must be \textit{\q euclidean\q}. Notice that \texttt{hclust.vector} operates on Euclidean distances for compatibility reasons with the \dist{} method, while \hyperref[hclust]{\texttt{hclust}} assumes \textbf{squared} Euclidean distances for compatibility with the \href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/hclust.html}{\texttt{stats::hclust}} method! Hence, the call
+\phantomsection\label{squared}
+\begin{quote}
+\texttt{hc = hclust.vector(X, method=\q centroid\q)}
+\end{quote}
+is, aside from the lesser memory requirements, equivalent to
+\begin{quote}
+\texttt{d = dist(X)}\\
+\texttt{hc = hclust(d\textasciicircum 2, method=\q centroid\q)}\\
+\texttt{hc\$height = sqrt(hc\$height)}
+\end{quote}
+The same applies to the \textit{\q median\q} method. The \textit{\q ward\q} method in \hyperref[hclust.vector]{\texttt{hclust.vector}} is equivalent to \hyperref[hclust]{\texttt{hclust}} with method \textit{\q ward.D2\q}, but to method \textit{\q ward.D\q} only after squaring as above. Differences in these algebraically equivalent methods may arise only from floating-point inaccuracies and the resolution of ties (which may, however, in extreme cases affect the entire clustering result due to the inherently unstable nature of the clustering schemes).
+\end{methods}
+\section{The Python interface}
+
+The fastcluster package is imported as usual by:
+\begin{quote}
+  \texttt{import fastcluster}
+\end{quote}
+
+It provides the following functions:
+\begin{quote}
+    \hyperref[linkage]{\texttt{linkage}}\,(\textit{X, method=\q single\q, metric=\q euclidean\q, preserve\_input=True})\\
+    \hyperref[single]{\texttt{single}}\,($X$)\\
+    \hyperref[complete]{\texttt{complete}}\,($X$)\\
+    \hyperref[average]{\texttt{average}}\,($X$)\\
+    \hyperref[weighted]{\texttt{weighted}}\,($X$)\\
+    \hyperref[ward]{\texttt{ward}}\,($X$)\\
+    \hyperref[centroid]{\texttt{centroid}}\,($X$)\\
+    \hyperref[median]{\texttt{median}}\,($X$)\\
+    \hyperref[linkage_vector]{\texttt{linkage\_vector}}\,(\textit{X, method=\q single\q, metric=\q euclidean\q, extraarg=None})
+\end{quote}
+
+The following sections contain comprehensive descriptions of these methods.
+
+\begin{methods}
+\item [\normalfont\texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q single\q, metric=\q euclidean\q, preserve\_input=\q True\q})]
+\phantomsection\label{linkage}
+\addcontentsline{toc}{subsection}{\texttt{linkage}}
+
+Hierarchical, agglomerative clustering on a condensed dissimilarity matrix or on vector data.
+
+Apart from the argument \textit{preserve\_input}, the method has the same input parameters and output format as the function of the same name in the module \hierarchy.
+
+The argument $X$ is preferably a \href{http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html}{NumPy array} with floating point entries (\texttt{X.dtype\hskip0pt==\hskip0pt numpy.double}). Any other data format will be converted before it is processed. NumPy's \href{http://docs.scipy.org/doc/numpy/reference/maskedarray.html}{masked arrays} are not treated as special, and the mask is simply ignored.
+
+If $X$ is a one-dimensional array, it is considered a condensed matrix of pairwise dissimilarities in the format which is returned by \href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html}{\texttt{scipy.spatial.distance.pdist}}. It contains the flattened, upper-triangular part of a pairwise dissimilarity matrix. That is, if there are $N$ data points and the matrix $d$ contains the dissimilarity between the $i$-th and $j$-th observation at position $d_{i,j}$, the vector $X$ has length $\binom N2$ and is ordered as follows:
+\[
+d
+= \begin{pmatrix}
+0&d_{0,1}&d_{0,2}&\ldots&d_{0,n-1}\\
+ & 0&d_{1,2} & \ldots\\
+&&0&\ldots\\
+&&&\ddots\\
+&&&&0
+ \end{pmatrix}
+= \begin{pmatrix}
+0&X[0] &X[1]&\ldots&X[n-2]\\
+ & 0&X[n-1] & \ldots\\
+&&0&\ldots\\
+&&&\ddots\\
+&&&&0
+ \end{pmatrix}
+\]
+The \textit{metric} argument is ignored in case of dissimilarity input.
+
+The optional argument \textit{preserve\_input} specifies whether the method makes a working copy of the dissimilarity vector or writes temporary data into the existing array. If the dissimilarities are generated for the clustering step only and are not needed afterward, approximately half the memory can be saved by specifying \textit{preserve\_input=False}. Note that the input array $X$ contains unspecified values after this procedure. It is therefore safer to write
+\begin{verbatim}
+    linkage(X, method="...", preserve_input=False)
+    del X
+\end{verbatim}
+to make sure that the matrix $X$ is not accessed accidentally  after it has been
+used as scratch memory. (The single linkage algorithm does not write to the distance matrix or its copy anyway, so the \textit{preserve\_input} flag has no effect in this case.)
+
+If $X$ contains vector data, it must be a two-dimensional array with $N$ observations in $D$ dimensions as an $(N\times D)$ array. The  \textit{preserve\_input} argument is ignored in this case. The specified \textit{metric} is used to generate pairwise distances from the input. The following two function calls yield equivalent output:
+\begin{verbatim}
+    linkage(pdist(X, metric), method="...", preserve_input=False)
+    linkage(X, metric=metric, method="...")
+\end{verbatim}
+
+The two results are identical in most cases, but differences occur if ties are resolved differently: if the minimum in step 2 below is attained for more than one pair of nodes, either pair may be chosen. It is not guaranteed that both \texttt{linkage} variants choose the same pair in this case.
+
+The general scheme of the agglomerative clustering procedure is as follows:
+\begin{enumerate}
+\item Start with $N$ singleton clusters (nodes) labeled $0,\ldots, N-1$, which represent the input points.
+\item Find a pair of nodes with minimal distance among all pairwise distances.
+\item Join the two nodes into a new node and remove the two old nodes. The new nodes are labeled consecutively $N,N+1,\ldots$
+\item The distances from the new node to all other nodes is determined by the \textit{method} parameter (see below).
+\item Repeat $N-1$ times from step 2, until there is one big node, which contains all original input points.
+\end{enumerate}
+
+The output of \texttt{linkage} is \emph{stepwise dendrogram}, which is represented as an $(N-1)\times 4$ \href{http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html}{NumPy array} with floating point entries (\texttt{dtype=numpy.double}). The first two columns contain the node indices which are joined in each step. The input nodes are labeled $0,\ldots,N-1$, and the newly generated nodes have the labels $N,\ldots, 2N-2$. The third column contains the distance between the two nodes at each step, ie.\ the current minimal distance at the time of the merge. The fourth column counts the number of points which comprise each new node.
+
+The parameter \textit{method} specifies which clustering scheme to use. The clustering scheme determines the distance from a new node to the other nodes. Denote the dissimilarities by $d$, the nodes to be joined by $I,J$, the new node by $K$ and any other node by $L$. The symbol $|I|$ denotes the size of the cluster $I$.
+
+\begin{description}
+\item [\normalfont\textit{method=\q single\q}:]
+$\displaystyle d(K,L) = \min(d(I,L), d(J,L))$
+
+The distance between two clusters $A,B$ is the closest distance between any two points in each cluster:
+\[
+ d(A,B)=\min_{a\in A, b\in B}d(a,b)
+\]
+
+\item [\normalfont\textit{method=\q complete\q}:]
+$\displaystyle d(K,L) = \max(d(I,L), d(J,L))$
+
+The distance between two clusters $A,B$ is the maximal distance between any two points in each cluster:
+\[
+ d(A,B)=\max_{a\in A, b\in B}d(a,b)
+\]
+
+\item [\normalfont\textit{method=\q average\q}:]
+$\displaystyle d(K,L) = \frac{|I|\cdot d(I,L)+|J|\cdot d(J,L)}{|I|+|J|}$
+
+The distance between two clusters $A,B$ is the average distance between the points in the two clusters:
+\[
+ d(A,B)=\frac1{|A||B|}\sum_{a\in A, b\in B}d(a,b)
+\]
+
+\item [\normalfont\textit{method=\q weighted\q}:]
+$\displaystyle d(K,L) = \tfrac12(d(I,L)+d(J,L))$
+
+There is no global description for the distance between clusters since the distance depends on the order of the merging steps.
+\end{description}
+
+The following three methods are intended for Euclidean data only, ie.\ when $X$ contains the pairwise (non-squared!)\ distances between vectors in Euclidean space. The algorithm will work on any input, however, and it is up to the user to make sure that applying the methods makes sense.
+
+\begin{description}
+\item [\normalfont\textit{method=\q centroid\q}:]
+$\displaystyle d(K,L) = \sqrt{\frac{|I|\cdot d(I,L)+|J|\cdot d(J,L)}{|I|+|J|}-\frac{|I|\cdot|J|\cdot d(I,J)}{(|I|+|J|)^2}}$
+
+There is a geometric interpretation: $d(A,B)$ is the distance between the centroids (ie.\ barycenters) of the clusters in Euclidean space:
+\[
+  d(A,B) = \|\vec c_A-\vec c_B\|,
+\]
+where $\vec c_A$ denotes the centroid of the points in cluster $A$.\pagebreak[2]
+
+\item [\normalfont\textit{method=\q median\q}:]
+$\displaystyle d(K,L) = \sqrt{\tfrac12 d(I,L)+\tfrac12 d(J,L)-\tfrac14 d(I,J)}$
+
+Define the midpoint $\vec w_K$ of a cluster $K$ iteratively as $\vec w_K=k$ if $K=\{k\}$ is a singleton and as the midpoint $\frac12(\vec w_I+\vec w_J)$ if $K$ is formed by joining $I$ and $J$. Then we have
+\[
+ d(A,B)=\|\vec w_A-\vec w_B\|
+\]
+in Euclidean space for all nodes $A,B$. Notice however that this distance depends on the order of the merging steps.
+
+\item [\normalfont\textit{method=\q ward\q}:]
+$\displaystyle d(K,L) = \sqrt{\frac{(|I|+|L|)\cdot d(I,L)+(|J|+|L|)\cdot d(J,L)-|L|\cdot d(I,J)}{|I|+|J|+|L|}}$
+
+The global cluster dissimilarity can be expressed as
+\[
+d(A,B)=\sqrt{\frac{2|A||B|}{|A|+|B|}}\cdot\|\vec c_A-\vec c_B\|,
+\]
+where $\vec c_A$ again denotes the centroid of the points in cluster $A$.
+\end{description}
+
+\item [\normalfont\texttt{fastcluster.\textbf{single}}\,(\textit{X})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{single}}\label{single}
+Alias for \texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q single\q}).
+
+\item [\normalfont\texttt{fastcluster.\textbf{complete}}\,(\textit{X})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{complete}}\label{complete}
+Alias for \texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q complete\q}).
+
+\item [\normalfont\texttt{fastcluster.\textbf{average}}\,(\textit{X})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{average}}\label{average}
+Alias for \texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q average\q}).
+
+\item [\normalfont\texttt{fastcluster.\textbf{weighted}}\,(\textit{X})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{weighted}}\label{weighted}
+Alias for \texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q weighted\q}).
+
+\item [\normalfont\texttt{fastcluster.\textbf{centroid}}\,(\textit{X})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{centroid}}\label{centroid}
+Alias for \texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q centroid\q}).
+
+\item [\normalfont\texttt{fastcluster.\textbf{median}}\,(\textit{X})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{median}}\label{median}
+Alias for \texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q median\q}).
+
+\item [\normalfont\texttt{fastcluster.\textbf{ward}}\,(\textit{X})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{ward}}\label{ward}
+Alias for \texttt{fastcluster.\textbf{linkage}}\,(\textit{X, method=\q ward\q}).
+
+\item [\normalfont\texttt{fastcluster.\textbf{linkage\_vector}}\,(\textit{X, method=\q single\q, metric=\q euclidean\q, extraarg=\q None\q})]
+\phantomsection\addcontentsline{toc}{subsection}{\texttt{linkage\_vector}}\label{linkage_vector}
+This performs hierarchical, agglomerative clustering on vector data with memory-saving algorithms. While the \hyperref[linkage]{\texttt{linkage}} method requires $\Theta(N^2)$ memory for clustering of $N$ points, this method needs $\Theta(ND)$ for $N$ points in $\mathbb R^D$, which is usually much smaller.
+
+The argument $X$ has the same format as before, when $X$ describes vector data, ie.\ it is an $(N\times D)$ array. Also the output array has the same format. The parameter \textit{method} must be one of \textit{\q single\q}, \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, ie.\ only for these methods there exist memory-saving algorithms currently. If \textit{method}, is one of \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, the \textit{metric} must be \textit{\q euclidean\q}.
+
+Like the \texttt{linkage} method, \texttt{linkage\_vector} does not treat NumPy's \href{http://docs.scipy.org/doc/numpy/reference/maskedarray.html}{masked arrays} as special and simply ignores the mask.
+
+For single linkage clustering, any dissimilarity function may be chosen. Basically, every metric which is implemented in the method \href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html}{\texttt{scipy.spatial.distance.pdist}} is reimplemented here. However, the metrics differ in some instances since a number of mistakes and typos (both in the code and in the documentation) were corrected in the \textit{fastcluster} package.\footnote{Hopefully, the SciPy metric will be corrected in future versions and some day coincide with the \textit{fastcluster} definitions. See the bug reports at \url{http://projects.scipy.org/scipy/ticket/1484}, \url{http://projects.scipy.org/scipy/ticket/1486}.}
+
+Therefore, the available metrics with their definitions are listed below as a reference. The symbols $u$ and $v$ mostly denote vectors in $\mathbb R^D$ with coordinates $u_j$ and $v_j$ respectively. See below for additional metrics for Boolean vectors. Unless otherwise stated, the input array $X$ is converted to a floating point array (\texttt{X.dtype==numpy.double}) if it does has have already the required data type. Some metrics accept Boolean input; in this case this is stated explicitly below.
+
+\begin{description}
+\item[\normalfont\textit{\q euclidean\q}:] Euclidean metric, $L_2$ norm
+\[
+ d(u,v) = \| u-v\|_2 = \sqrt{\sum_j (u_j-v_j)^2}
+\]
+
+\item[\normalfont\textit{\q sqeuclidean\q}:] squared Euclidean metric
+\[
+ d(u,v) = \| u-v\|^2_2 = \sum_j (u_j-v_j)^2
+\]
+
+\item[\normalfont\textit{\q seuclidean\q}:] standardized Euclidean metric
+\[
+ d(u,v) = \sqrt{\sum_j (u_j-v_j)^2 /V_j}
+\]
+
+The vector $V=(V_0,\ldots,V_{D-1})$ is given as the \textit{extraarg} argument. If no \textit{extraarg} is given, $V_j$ is by default the unbiased sample variance of all observations in the $j$-th coordinate, $V_j = \Var_i(X_{i,j})=\frac1{N-1}\sum_i(X_{i,j}^2-\mu(X_j)^2)$. (Here, $\mu(X_j)$ denotes as usual the mean of $X_{i,j}$ over all rows $i$.)
+
+\item[\normalfont\textit{\q mahalanobis\q}:] Mahalanobis distance
+\[
+ d(u,v) = \sqrt{(u-v)^{\mkern-3mu\top}V (u-v)}
+\]
+Here, $V=\textit{extraarg}$, a $(D\times D)$-matrix. If $V$ is not specified, the inverse of the covariance matrix \texttt{numpy.linalg.inv(numpy.cov(X, rowvar=False))} is used:
+\[
+ (V^{-1})_{j,k} = \frac1{N-1} \sum_i (X_{i,j}-\mu(X_j))(X_{i,k}-\mu(X_k))
+\]
+
+\item[\normalfont\textit{\q cityblock\q}:] the Manhattan distance, $L_1$ norm
+\[
+ d(u,v) = \sum_j |u_j-v_j|
+\]
+
+\item[\normalfont\textit{\q chebychev\q}:] the supremum norm, $L_\infty$ norm
+\[
+ d(u,v) = \max_j |u_j-v_j|
+\]
+
+\item[\normalfont\textit{\q minkowski\q}:] the $L_p$ norm
+\[
+ d(u,v) = \left(\sum_j |u_j-v_j|^p\right)^{1/p}
+\]
+This metric coincides with the \textit{cityblock}, \textit{euclidean} and \textit{chebychev} metrics for $p=1$, $p=2$ and $p=\infty$ (\texttt{numpy.inf}), respectively. The parameter $p$ is given as the \textit{\q extraarg\q} argument.
+
+\item[\normalfont\textit{\q cosine\q}]
+\[
+ d(u,v) = 1 - \frac{\langle u,v\rangle}{\|u\|\cdot\|v\|} = 1 - \frac{\sum_j u_jv_j}{\sqrt{\sum_j u_j^2\cdot \sum_j v_j^2}}
+\]
+
+\item[\normalfont\textit{\q correlation\q}:] This method first mean-centers the rows of $X$ and then applies the \textit{cosine} distance. Equivalently, the \textit{correlation} distance measures $1-{}$\textrm{(Pearson's correlation coefficient)}.
+\[
+ d(u,v) = 1 - \frac{\langle u-\mu(u),v-\mu(v)\rangle}{\|u-\mu(u)\|\cdot\|v-\mu(v)\|},
+\]
+
+\item[\normalfont\textit{\q canberra\q}]
+\[
+ d(u,v) = \sum_j\frac{|u_j-v_j|}{|u_j|+|v_j|}
+\]
+Summands with $u_j=v_j=0$ contribute 0 to the sum.
+
+\item[\normalfont\textit{\q braycurtis\q}]
+\[
+ d(u,v) = \frac{\sum_j |u_j-v_j|}{\sum_j |u_j+v_j|}
+\]
+
+\item[\textnormal{(user function):}] The parameter \textit{metric} may also be a function which accepts two NumPy floating point vectors and returns a number. Eg.\ the Euclidean distance could be emulated with
+\begin{quote}
+\texttt{fn = lambda u, v: numpy.sqrt(((u-v)*(u-v)).sum())}\\
+\texttt{linkage\_vector(X, method=\q single\q, metric=fn)}
+\end{quote}
+This method, however, is much slower than the built-in function.
+
+\item[\normalfont\textit{\q hamming\q}:] The Hamming distance accepts a Boolean array (\texttt{X.dtype==bool}) for efficient storage. Any other data type is converted to \texttt{numpy.double}.
+\[
+ d(u,v) = |\{j\mid u_j\neq v_j\}|
+\]
+
+\item[\normalfont\textit{\q jaccard\q}:] The Jaccard distance accepts a Boolean array (\texttt{X.dtype\hskip0pt ==\hskip0pt bool}) for efficient storage. Any other data type is converted to \texttt{numpy.double}.
+\[
+ d(u,v) = \frac{|\{j\mid u_j\neq v_j\}|}{|\{j\mid u_j\neq 0\text{ or } v_j\neq 0\}|}
+\]
+\[
+ d(0,0) = 0
+\]
+Python represents \texttt{True} by 1 and \texttt{False} by 0. In the Boolean case, the Jaccard distance is therefore:
+\[
+ d(u,v) = \frac{|\{j\mid u_j\neq v_j\}|}{|\{j\mid u_j\lor v_j\}|}
+\]
+
+\end{description}
+The following metrics are designed for Boolean vectors. The input array is converted to the \texttt{bool} data type if it is not Boolean already. Use the following abbreviations for the entries of a contingency table:
+\begin{align*}
+a &= |\{j\mid u_j\land v_j \}| & b &= |\{j\mid u_j\land(\lnot v_j)\}|\\
+c &= |\{j\mid (\lnot u_j)\land v_j \}| & d &= |\{j\mid (\lnot u_j)\land(\lnot v_j)\}|
+\end{align*}
+Recall that $D$ denotes the number of dimensions, hence $D=a+b+c+d$.
+
+
+\begin{description}
+\item[\normalfont\textit{\q yule\q}]
+\[
+ d(u,v) = \frac{2bc}{ad+bc}
+\]
+
+\item[\normalfont\textit{\q dice\q}]
+\begin{gather*}
+ d(u,v) = \frac{b+c}{2a+b+c}\\
+ d(0,0) = 0
+\end{gather*}
+
+\item[\normalfont\textit{\q rogerstanimoto\q}]
+\[
+ d(u,v) = \frac{2(b+c)}{b+c+D}
+\]
+
+\item[\normalfont\textit{\q russellrao\q}]
+\[
+ d(u,v) = \frac{b+c+d}{D}
+\]
+
+\item[\normalfont\textit{\q sokalsneath\q}]
+\begin{gather*}
+ d(u,v) = \frac{2(b+c)}{a+2(b+c)}\\
+ d(0,0) = 0
+\end{gather*}
+
+\item[\normalfont\textit{\q kulsinski\q}]
+\[
+ d(u,v) = \frac 12\cdot\left(\frac b{a+b} + \frac c{a+c}\right)
+\]
+
+\item[\normalfont\textit{\q matching\q}]
+\[
+ d(u,v) = \frac{b+c}{D}
+\]
+Notice that when given a Boolean array, the \textit{matching} and \textit{hamming} distance are the same. The \textit{matching} distance formula, however, converts every input to Boolean first. Hence, the vectors $(0,1)$ and $(0,2)$ have zero \textit{matching} distance since they are both converted to $(\mathrm{False}, \mathrm{True})$ but the \textit{hamming} distance is $0.5$.
+
+\item[\normalfont\textit{\q sokalmichener\q}] is an alias for \textit{\q matching\q}.
+
+\end{description}
+
+\end{methods}
+
+\section{Behavior for NaN and infinite values}\label{sec:infnan}
+
+Whenever the fastcluster package encounters a NaN value as the distance between nodes, either as the initial distance or as an updated distance after some merging steps, it raises an error. This was designed intentionally, even if there might be ways to propagate NaNs through the algorithms in a more or less sensible way. Indeed, since the clustering result depends on every single distance value, the presence of NaN values usually indicates a dubious clustering result, and therefore NaN values should be eliminated in preprocessing.\pagebreak[1]
+
+In the R interface for vector input, coordinates with {\NA} value are interpreted as missing data and treated in the same way as R's {\dist} function does. This results in valid output whenever the resulting distances are not NaN. The Python interface does not provide any way of handling missing coordinates, and data should be processed accordingly and given as pairwise distances to the clustering algorithms in this case.
+
+The fastcluster package handles node distances and coordinates with infinite values correctly, as long as the formulas for the distance updates and the metric (in case of vector input) make sense. In concordance with the statement above, an error is produced if a NaN value results from performing arithmetic with infinity. Also, the usual proviso applies: internal formulas in the code are mathematically equivalent to the formulas as stated in the documentation only for finite, real numbers but might produce different results for $\pm\infty$. Apart from obvious cases like single or complete linkage, it is therefore recommended that users think about how they want infinite values to be treated by the distance update and metric formulas and then check whether the fastcluster code does exactly what they want in these special cases.
+
+\section{Differences between the two interfaces}
+\begin{itemize}
+\item The \textit{\q mcquitty\q} method in R is called \textit{\q weighted\q} in Python.
+\item R and SciPy use different conventions for the ``Euclidean'' methods \textit{\q centroid\q}, \textit{\q median\q}! R assumes that the dissimilarity matrix consists of squared Euclidean distances, while SciPy expects non-squared Euclidean distances. The fastcluster package respects these conventions and uses different formulas in the two interfaces.
+
+The \textit{\q ward\q} method in the Python interface is identical to \textit{\q ward.D2\q} in the R interface.
+
+If the same results in both interfaces ought to be obtained, then the \hyperref[hclust]{\texttt{hclust}} function in R must be input the entry-wise square of the distance matrix, \verb!d^2!, for the \textit{\q ward.D\q}, \textit{\q centroid\q} and \textit{\q median\q} methods, and later the square root of the height field in the dendrogram must be taken. The \hyperref[hclust.vector]{\texttt{hclust.vector}} method calculates non-squared Euclidean distances, like R's \dist{} method and identically to the Python interface. See the \hyperref[squared]{example} in the \hyperref[hclust.vector]{\texttt{hclust.vector}} documentation above.
+
+For the \textit{\q average\q} and \textit{\q weighted\q} alias \textit{\q mcquitty\q} methods, the same, non-squared distance matrix \texttt{d} as in the Python interface must be used for the same results. The \textit{\q single\q} and \textit{\q complete\q} methods only depend on the relative order of the distances, hence it does not make a difference whether the method operates on the distances or the squared distances.
+
+The code example in the R documentation (enter \texttt{?hclust} or \texttt{example(hclust)} in R) contains another instance where the squared distance matrix is generated from Euclidean data.
+
+\item The Python interface is not designed to deal with missing values, and NaN values in the vector data raise an error message. The \hyperref[hclust.vector]{\texttt{hclust.vector}} method in the R interface, in contrast, deals with NaN and the (R specific) {\NA} values in the same way as the \dist{} method does. Confer the documentation for \dist{} for details.
+\end{itemize}
+
+\section{References}
+\begin{trivlist}
+\item
+\textit{NumPy: Scientific computing tools for Python}, \url{http://numpy.scipy.org/}.
+
+\item
+Eric Jones, Travis Oliphant, Pearu Peterson et al., \textit{SciPy: Open Source Scientific Tools for Python}, 2001, \url{http://www.scipy.org}.
+
+\item
+\textit{R: A Language and Environment for Statistical Computing}, R Foundation for Statistical Computing, Vienna, 2011, \url{http://www.r-project.org}.
+\end{trivlist}
+\end{document}
+%%% Local variables:
+%%% mode: latex
+%%% TeX-master: "fastcluster.Rtex"
+%%% TeX-PDF-mode: t
+%%% End:

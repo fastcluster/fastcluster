@@ -1,0 +1,115 @@
+﻿fastcluster: Fast hierarchical clustering routines for R and Python
+
+Copyright © 2011 Daniel Müllner
+<http://danifold.net>
+
+
+Installation
+‾‾‾‾‾‾‾‾‾‾‾‾
+Installation procedures were tested under 64-bit Ubuntu. CRAN also hosts
+precompiled binaries (of the R library, not the Python module) for Windows and
+OS X. In principle, it should be possible to install the fastcluster package
+on any system that has a C++ compiler and R respectively Python with NumPy.
+There are no unusual libraries needed to compile the package, only the STL
+library, which every C++ compiler should have by default.
+
+Please send me feedback if you accomplish to install the fastcluster package on
+a certain platform but needed to tweak the configuration! I will update the
+installation instructions and modify the package if needed (eg. include the
+right compiler flags for various operating systems).
+
+
+Installation for R
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+Enter the command install.packages("fastcluster") in R, and R will download the
+package automatically, then install it. That's it!
+
+If this does not work, please consult R's help function by typing ?INSTALL from
+within R or read the “R installation and administration” manual:
+
+    http://cran.r-project.org/doc/manuals/R-admin.html#Installing-packages
+
+For manual download, you can get the fastcluster package from the download page
+at CRAN:
+
+    http://cran.r-project.org/web/packages/fastcluster/
+
+You may need to start R with administrator rights to be able to install
+packages. There are ways to install R packages without administrator privileges
+in your user directories. See this help page for example:
+
+  http://csg.sph.umich.edu/docs/R/localpackages.html
+
+
+Installation for Python
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+Make sure that you have both Python and NumPy installed.
+
+
+1. On all platforms
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+If pip is installed, type
+
+    pip install --upgrade --user fastcluster
+
+in a terminal, which automatically downloads the latest version from PyPI,
+compiles the C++ library and installs the package for a single user without
+administrator rights.
+
+If this works, there is no need to follow the alternative steps below.
+
+
+2. Microsoft Windows
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+Installation files for Windows are stored on PyPI:
+
+    https://pypi.python.org/pypi/fastcluster
+
+Christoph Gohlke also provides installation files for Windows on his web page:
+
+    http://www.lfd.uci.edu/~gohlke/pythonlibs/#fastcluster
+
+
+3. With setuptools
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+If pip is not available but setuptools, type
+
+    easy_install --upgrade --user fastcluster
+
+in a terminal.
+
+
+4. From the source package
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+If you have not done so already, download the fastcluster package from PyPI
+here:
+
+    http://pypi.python.org/pypi/fastcluster/
+
+Open a terminal, go to the directory with the downloaded file and extract the
+contents of the archive with:
+
+    tar -xvf fastcluster-(version).tar.gz
+
+Alternatively, use your favorite archive manager for unpacking, eg. on
+Windows. This will generate a new directory “fastcluster-(version)”. Switch to
+this subdirectory:
+
+    cd fastcluster-(...)
+
+The source distribution on CRAN also contains the complete source files. See
+the directory src/python there.
+
+Now compile and install the Python module by:
+
+    python setup.py install
+
+You may need to precede this command with sudo or install the package in your
+home directory, like this:
+
+    python setup.py install --user
+
+See the chapter “Installing Python modules” in the Python documentation for
+further help:
+
+    http://docs.python.org/install/index.html
