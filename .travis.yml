@@ -19,6 +19,6 @@ install:
 - pip install numpy scipy
 - pip install -e .
 script:
-- nosetests
-after_success:
 - python setup.py test
+after_success:
+- coverall
