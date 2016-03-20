@@ -1,14 +1,12 @@
+language: generic
 branches:
   only:
   - master
-language: python
 matrix:
   include:
   - os: osx
-    language: generic
     env: TERRYFY_PYTHON='homebrew 2'
   - os: osx
-    language: generic
     env: TERRYFY_PYTHON='homebrew 3'
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git clone https://github.com/MacPython/terryfy;
