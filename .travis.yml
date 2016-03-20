@@ -16,7 +16,7 @@ before_install:
   venv; fi
 - if [[ "$TERRYFY_PYTHON" == "homebrew 3" ]]; then alias pip=`which pip3` ; fi
 install:
-- pip install numpy scipy
+- pip install numpy scipy nose
 - pip install -e .
 script:
 - nosetests
