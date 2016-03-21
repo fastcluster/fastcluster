@@ -2,6 +2,7 @@ language: generic
 cache:
   directories:
   - dist
+sudo: false
 branches:
   only:
   - master
@@ -26,3 +27,4 @@ script:
 - python setup.py test
 after_success:
 - coverall
+- ls -la dist
