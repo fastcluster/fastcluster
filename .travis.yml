@@ -1,4 +1,7 @@
 language: generic
+cache:
+  directories:
+  - dist
 branches:
   only:
   - master
@@ -17,7 +20,8 @@ before_install:
 - if [[ "$TERRYFY_PYTHON" == "homebrew 3" ]]; then alias pip=`which pip3` ; fi
 install:
 - pip install numpy scipy
-- pip install -e .
+- python setup.py build
+- python setup.py bdist_wheel
 script:
 - python setup.py test
 after_success:
