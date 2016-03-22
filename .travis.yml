@@ -1,8 +1,8 @@
+sudo: false
 language: generic
 cache:
   directories:
-  - dist
-sudo: false
+  - "$HOME/fastcluster/dist"
 branches:
   only:
   - master
@@ -29,3 +29,4 @@ after_success:
 - coverall
 - pwd
 - ls -la dist
+- ls -la "$HOME"
