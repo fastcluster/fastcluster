@@ -27,4 +27,5 @@ script:
 - python setup.py test
 after_success:
 - coverall
+- pwd
 - ls -la dist
