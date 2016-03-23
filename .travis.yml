@@ -1,11 +1,8 @@
-sudo: false
 language: generic
-cache:
-  directories:
-  - "$HOME/fastcluster/dist"
 branches:
   only:
   - master
+  - /^v.*$/
 matrix:
   include:
   - os: osx
@@ -26,12 +23,6 @@ install:
 script:
 - python setup.py test
 after_success:
-- coverall
-- pwd
-- ls -la dist
-- echo "$HOME"
-- ls -la "$HOME"
-- ls -la .
 - WHEELFILE=`ls -1 dist/*.whl`
 deploy:
   provider: releases
@@ -41,3 +32,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: dmuellner/fastcluster
+    tags: true
