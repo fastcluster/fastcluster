@@ -35,7 +35,7 @@
   exception if a NaN distance value occurs.
 */
 
-#include <cmath> // for std::pow
+#include <cmath> // for std::pow, std::sqrt
 #include <cstddef> // for std::ptrdiff_t
 #include <limits> // for std::numeric_limits<...>::infinity()
 #include <algorithm> // for std::fill_n
@@ -237,7 +237,7 @@ public:
 
   void sqrt() const {
     for (node * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
-      ZZ->dist = ::sqrt(ZZ->dist);
+      ZZ->dist = std::sqrt(ZZ->dist);
     }
   }
 
@@ -247,7 +247,7 @@ public:
 
   void sqrtdouble(const t_float) const { // ignore the argument
     for (node * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
-      ZZ->dist = ::sqrt(2*ZZ->dist);
+      ZZ->dist = std::sqrt(2*ZZ->dist);
     }
   }
 
