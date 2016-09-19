@@ -535,7 +535,7 @@ public:
           for (t_index k=0; k<dim; ++k) {
             sum += X(i,k)*X(i,k);
           }
-          precomputed[i] = 1/sqrt(sum);
+          precomputed[i] = 1/std::sqrt(sum);
         }
         break;
       case METRIC_HAMMING:
@@ -846,7 +846,7 @@ private:
   t_float cityblock(const t_index i, const t_index j) const {
     t_float sum = 0;
     for (t_index k=0; k<dim; ++k) {
-      sum += fabs(X(i,k)-X(j,k));
+      sum += std::abs(X(i,k)-X(j,k));
     }
     return sum;
   }
@@ -854,7 +854,7 @@ private:
   t_float minkowski(const t_index i, const t_index j) const {
     t_float sum = 0;
     for (t_index k=0; k<dim; ++k) {
-      sum += pow(fabs(X(i,k)-X(j,k)),postprocessarg);
+      sum += std::pow(std::abs(X(i,k)-X(j,k)),postprocessarg);
     }
     return sum;
   }
@@ -862,7 +862,7 @@ private:
   t_float chebychev(const t_index i, const t_index j) const {
     t_float max = 0;
     for (t_index k=0; k<dim; ++k) {
-      t_float diff = fabs(X(i,k)-X(j,k));
+      t_float diff = std::abs(X(i,k)-X(j,k));
       if (diff>max) {
         max = diff;
       }
@@ -915,12 +915,12 @@ private:
   t_float canberra(const t_index i, const t_index j) const {
     t_float sum = 0;
     for (t_index k=0; k<dim; ++k) {
-      t_float numerator = fabs(X(i,k)-X(j,k));
+      t_float numerator = std::abs(X(i,k)-X(j,k));
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
 #endif
-      sum += numerator==0 ? 0 : numerator / (fabs(X(i,k)) + fabs(X(j,k)));
+      sum += numerator==0 ? 0 : numerator / (std::abs(X(i,k)) + std::abs(X(j,k)));
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic pop
 #endif
@@ -963,8 +963,8 @@ private:
     t_float sum1 = 0;
     t_float sum2 = 0;
     for (t_index k=0; k<dim; ++k) {
-      sum1 += fabs(X(i,k)-X(j,k));
-      sum2 += fabs(X(i,k)+X(j,k));
+      sum1 += std::abs(X(i,k)-X(j,k));
+      sum2 += std::abs(X(i,k)+X(j,k));
     }
     return sum1/sum2;
   }

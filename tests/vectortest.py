@@ -10,15 +10,13 @@ else:
     def u(x):
         return x
 print(u('''Test program for the 'fastcluster' package.
-
-Copyright (c) 2011 Daniel Müllner, <http://danifold.net>
-''').encode('utf-8'))
+Copyright (c) 2011 Daniel Müllner, <http://danifold.net>'''))
 import fastcluster as fc
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.20'
+version = '1.1.21'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
@@ -52,7 +50,7 @@ def test_all(n,dim):
   method = 'single'
 
   # metrics for boolean vectors
-  pcd = np.array(np.random.random_integers(0,1,(n,dim)), dtype=np.bool)
+  pcd = np.random.randint(0, 2, size=(n,dim), dtype=np.bool)
   pcd2 = pcd.copy()
 
   for metric in ('hamming', 'jaccard', 'yule', 'matching', 'dice',
@@ -86,7 +84,7 @@ def test_all(n,dim):
 
   # metrics for real vectors
   bound = math.sqrt(n)
-  pcd = np.random.random_integers(-bound,bound,(n,dim))
+  pcd = np.random.randint(-bound, bound + 1, (n,dim))
   for metric in ['euclidean', 'sqeuclidean', 'cityblock', 'chebychev',
                  'minkowski', 'cosine', 'correlation', 'hamming', 'jaccard',
                  'canberra',
@@ -232,8 +230,8 @@ If everything is OK, the test program will run forever, without an error
 message.
 ''')
     for _ in iterator:
-        dim = np.random.random_integers(2,12)
-        n = np.random.random_integers(max(2*dim,5),200)
+        dim = np.random.randint(2, 13)
+        n = np.random.randint(max(2*dim,5),200)
 
         print('Dimension: {0}'.format(dim))
         print('Number of points: {0}'.format(n))

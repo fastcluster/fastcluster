@@ -8,15 +8,13 @@ else:
     def u(x):
         return x
 print(u('''Test program for the 'fastcluster' package.
-
-Copyright (c) 2011 Daniel Müllner, <http://danifold.net>
-''').encode('utf-8'))
+Copyright (c) 2011 Daniel Müllner, <http://danifold.net>'''))
 import fastcluster as fc
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.20'
+version = '1.1.21'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
@@ -150,8 +148,8 @@ If everything is OK, the test program will run forever, without an error
 message.
 ''')
     for _ in iterator:
-        dim = np.random.random_integers(2,20)
-        n = np.random.random_integers(2,100)
+        dim = np.random.randint(2,20)
+        n = np.random.randint(2,100)
 
         print('Dimension: {0}'.format(dim))
         print('Number of points: {0}'.format(n))

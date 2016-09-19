@@ -163,14 +163,6 @@ enum method_codes_vector {
   MAX_METHOD_VECTOR_CODE       = 3
 };
 
-enum {
-   // Return values
-  RET_SUCCESS        = 0,
-  RET_MEMORY_ERROR   = 1,
-  RET_STL_ERROR      = 2,
-  RET_UNKNOWN_ERROR  = 3
- };
-
 // self-destructing array pointer
 template <typename type>
 class auto_array_ptr{
@@ -213,17 +205,11 @@ public:
 struct node {
   t_index node1, node2;
   t_float dist;
-
-  /*
-  inline bool operator< (const node a) const {
-    return this->dist < a.dist;
-  }
-  */
-
-  inline friend bool operator< (const node a, const node b) {
-    return (a.dist < b.dist);
-  }
 };
+
+inline bool operator< (const node a, const node b) {
+  return (a.dist < b.dist);
+}
 
 class cluster_result {
 private:
@@ -267,7 +253,7 @@ public:
   #ifdef R_pow
   #define my_pow R_pow
   #else
-  #define my_pow pow
+  #define my_pow std::pow
   #endif
 
   void power(const t_float p) const {
