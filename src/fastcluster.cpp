@@ -35,6 +35,7 @@
   exception if a NaN distance value occurs.
 */
 
+#include <cmath> // for std::pow
 #include <cstddef> // for std::ptrdiff_t
 #include <limits> // for std::numeric_limits<...>::infinity()
 #include <algorithm> // for std::fill_n

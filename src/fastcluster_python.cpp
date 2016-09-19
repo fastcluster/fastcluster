@@ -51,6 +51,7 @@
 
 // There is Py_IS_NAN but it is so much slower on my x86_64 system with GCC!
 
+#include <cmath> // for std::abs, std::pow, std::sqrt
 #include <cstddef> // for std::ptrdiff_t
 #include <limits> // for std::numeric_limits<...>::infinity()
 #include <algorithm> // for std::stable_sort
