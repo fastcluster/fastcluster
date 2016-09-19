@@ -5,7 +5,6 @@ and raises a FloatingPointError.'''
 print('''
 Test program for the 'fastcluster' package.
 Copyright (c) 2011 Daniel Müllner, <http://danifold.net>''')
-import sys
 import numpy as np
 import fastcluster
 
