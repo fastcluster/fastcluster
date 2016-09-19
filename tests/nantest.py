@@ -2,15 +2,10 @@
 # -*- coding: utf-8 -*-
 '''Test whether the fastcluster package correctly recognizes NaN values
 and raises a FloatingPointError.'''
-import sys
-if sys.hexversion < 0x03000000: # uniform unicode handling for both Python 2.x and 3.x
-    def u(x):
-        return x.decode('utf-8')
-else:
-    def u(x):
-        return x
-print('''Test program for the 'fastcluster' package.
+print('''
+Test program for the 'fastcluster' package.
 Copyright (c) 2011 Daniel Müllner, <http://danifold.net>''')
+import sys
 import numpy as np
 import fastcluster
 
