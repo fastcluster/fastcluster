@@ -9,8 +9,8 @@ if sys.hexversion < 0x03000000: # uniform unicode handling for both Python 2.x a
 else:
     def u(x):
         return x
-print(u('''Test program for the 'fastcluster' package.
-Copyright (c) 2011 Daniel Müllner, <http://danifold.net>'''))
+print('''Test program for the 'fastcluster' package.
+Copyright (c) 2011 Daniel Müllner, <http://danifold.net>''')
 import fastcluster as fc
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
