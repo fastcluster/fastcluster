@@ -92,7 +92,7 @@ Clustering Routines for R and Python*, Journal of Statistical Software, **53**
 # Linker optimization
 #extra_link_args=['-Wl,--strip-all'],
       )],
-      keywords='dendrogram, linkage, cluster, agglomerative, hierarchical, hierarchy, ward',
+      keywords=['dendrogram', 'linkage', 'cluster', 'agglomerative', 'hierarchical', 'hierarchy', 'ward'],
       author=u("Daniel Müllner"),
       author_email="daniel@danifold.net",
       license="BSD <http://opensource.org/licenses/BSD-2-Clause>",
