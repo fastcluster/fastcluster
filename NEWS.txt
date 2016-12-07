@@ -176,3 +176,12 @@ Version 1.1.19, 07/19/2015
 Version 1.1.20, 07/19/2015
 
   • New version number due to PyPI upload error.
+
+Version 1.1.21, 09/18/2016
+
+  • Appropiate use of std namespace, as required by CRAN.
+
+Version 1.1.22, 06/12/2016
+
+  • No fenv header usage if software floating-point emulation is used (bug
+    report: NaN test failed on Debian armel).

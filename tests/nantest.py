@@ -8,7 +8,7 @@ Copyright (c) 2011 Daniel Müllner, <http://danifold.net>''')
 import numpy as np
 import fastcluster
 
-version = '1.1.21'
+version = '1.1.22'
 if fastcluster.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fastcluster.__version__, version))
 

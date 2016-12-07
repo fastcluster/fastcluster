@@ -1,4 +1,4 @@
-\def\fastclusterversion{1.1.21}
+\def\fastclusterversion{1.1.22}
 \documentclass[fontsize=10pt,paper=letter,BCOR=-6mm]{scrartcl}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -89,7 +89,7 @@
 %\VignetteIndexEntry{User's manual}
 \title{The \textit{fastcluster} package: User's manual}
 \author{\href{http://danifold.net}{Daniel Müllner}}
-\date{September 18, 2016}
+\date{December 6, 2016}
 \subtitle{Version \fastclusterversion}
 \maketitle
 
@@ -122,6 +122,7 @@ Daniel Müllner, \textit{fastcluster: Fast Hierarchical, Agglomerative Clusterin
 
 \textbf{The fastcluster package is considered stable and will undergo few changes from now on. If some years from now there have not been any updates, this does not necessarily mean that the package is unmaintained but maybe it just was not necessary to correct anything. Of course, please still report potential bugs and incompatibilities to \texttt{daniel@danifold.net}.}
 
+\pagebreak
 \tableofcontents
 
 \section{The R interface}
