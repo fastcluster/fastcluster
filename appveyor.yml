@@ -1,5 +1,5 @@
 # version format
-version: 1.1.22-{build}
+version: 1.1.23-{build}
 
 environment:
   global:

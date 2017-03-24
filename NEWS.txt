@@ -185,3 +185,7 @@ Version 1.1.22, 06/12/2016
 
   • No fenv header usage if software floating-point emulation is used (bug
     report: NaN test failed on Debian armel).
+
+Version 1.1.23, 03/24/2017
+
+  • setup.py: Late NumPy import for better dependency management.

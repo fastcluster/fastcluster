@@ -9,7 +9,7 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.22'
+version = '1.1.23'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
