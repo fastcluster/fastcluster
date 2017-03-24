@@ -34,8 +34,8 @@ print('Version: ' + version)
 
 
 def get_include_dirs():
-    """ avoid importing numpy until here, so that users can run "setup.py install"
-    without having numpy installed yet """
+    """ Avoid importing numpy until here, so that users can run "setup.py install"
+    without having numpy installed yet. """
     def is_special_command():
         special_list = ('--help-commands',
                         'egg_info',
@@ -89,7 +89,6 @@ Clustering Routines for R and Python*, Journal of Statistical Software, **53**
 """),
       requires=['numpy'],
       install_requires=["numpy>=1.9"],
-      setup_requires=['numpy'],
       provides=['fastcluster'],
       ext_modules=[Extension('_fastcluster',
                              ['src/fastcluster_python.cpp'],
