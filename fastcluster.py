@@ -235,7 +235,7 @@ and simply ignores the mask.'''
         N = int(ceil(sqrt(NN*2)))
         if (N*(N-1)//2) != NN:
             raise ValueError(r'The length of the condensed distance matrix '
-                              'must be (k \choose 2) for k data points!')
+                             r'must be (k \choose 2) for k data points!')
     else:
         assert X.ndim==2
         N = len(X)
