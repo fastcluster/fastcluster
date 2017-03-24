@@ -81,7 +81,13 @@ page <http://www.lfd.uci.edu/~gohlke/pythonlibs/#fastcluster>`_.
 from now on. If some years from now there have not been any updates, this
 does not necessarily mean that the package is unmaintained but maybe it just
 was not necessary to correct anything. Of course, please still report potential
-bugs and incompatibilities to daniel@danifold.net.**
+bugs and incompatibilities to daniel@danifold.net. You may also use `my GitHub
+repository <https://github.com/dmuellner/fastcluster>`_ for bug reports, pull
+requests etc.**
+
+Note that PyPI and GitHub only host the source code for the Python interface.
+The archive with both the R and the Python interface is available on `CRAN
+<https://cran.r-project.org/web/packages/fastcluster/index.html>`_.
 
 Reference: Daniel Müllner, *fastcluster: Fast Hierarchical, Agglomerative
 Clustering Routines for R and Python*, Journal of Statistical Software, **53**
