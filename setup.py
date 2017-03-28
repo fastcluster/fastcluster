@@ -81,9 +81,9 @@ page <http://www.lfd.uci.edu/~gohlke/pythonlibs/#fastcluster>`_.
 from now on. If some years from now there have not been any updates, this
 does not necessarily mean that the package is unmaintained but maybe it just
 was not necessary to correct anything. Of course, please still report potential
-bugs and incompatibilities to daniel@danifold.net. You may also use `my GitHub
-repository <https://github.com/dmuellner/fastcluster>`_ for bug reports, pull
-requests etc.**
+bugs and incompatibilities to daniel@danifold.net. You may also use**
+`my GitHub repository <https://github.com/dmuellner/fastcluster/>`_
+**for bug reports, pull requests etc.**
 
 Note that PyPI and my GitHub repository host the source code for the Python
 interface only. The archive with both the R and the Python interface is
@@ -95,7 +95,7 @@ of this second GitHub repository, this is just an automatic, read-only mirror
 of the CRAN archive, so please do not attempt to report bugs or contact me via
 this repository.
 
-**Version 1.1.23 had only the file ``setup.py`` changed for better dependency
+**Version 1.1.23 had only the file** ``setup.py`` **changed for better dependency
 resolution. If version 1.1.22 is installed on your system, this is perfectly
 fine.**
 
