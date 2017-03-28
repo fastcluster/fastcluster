@@ -85,9 +85,19 @@ bugs and incompatibilities to daniel@danifold.net. You may also use `my GitHub
 repository <https://github.com/dmuellner/fastcluster>`_ for bug reports, pull
 requests etc.**
 
-Note that PyPI and GitHub only host the source code for the Python interface.
-The archive with both the R and the Python interface is available on `CRAN
-<https://cran.r-project.org/web/packages/fastcluster/index.html>`_.
+Note that PyPI and my GitHub repository host the source code for the Python
+interface only. The archive with both the R and the Python interface is
+available on `CRAN
+<https://cran.r-project.org/web/packages/fastcluster/index.html>`_ and the
+GitHub repository `“cran/fastcluster”
+<https://github.com/cran/fastcluster>`_. Even though I appear as the author also
+of this second GitHub repository, this is just an automatic, read-only mirror
+of the CRAN archive, so please do not attempt to report bugs or contact me via
+this repository.
+
+**Version 1.1.23 had only the file ``setup.py`` changed for better dependency
+resolution. If version 1.1.22 is installed on your system, this is perfectly
+fine.**
 
 Reference: Daniel Müllner, *fastcluster: Fast Hierarchical, Agglomerative
 Clustering Routines for R and Python*, Journal of Statistical Software, **53**
