@@ -33,13 +33,12 @@ install:
 - python setup.py bdist_wheel
 script:
 - python setup.py test
-after_success:
-- WHEELFILE=`ls -1 dist/fastcluster*.whl`
 deploy:
   provider: releases
   api_key:
     secure: Spde4nnDLwoQvazn9VUyjCDzFQPoSL69eZCyZdCa6PBlFI/RKiu4K/xH/jQZrHMh+1YUV6VMMZCFAZJIcbv7Outqeh6uVER1pyFYn7LLXKzANI87PV/I38HVQ8g+SKP5YyBUKRVnrNl9lPtSaMl8caL3x+ht/dVDyI0ZwujgRreL9qXf5V7s0H/P2IQQsPyFAV3kilYckT7xDnQdJ1KxRc820PQqHid6/04Lz/NUuwUBMQ88AeEaiHLK7/O4k9X/AQr0yozBTafBpyqqZ/rg/Carh4TpglSdovyIYF431Sa9hLi0ge2UjU2vNPnhsDRzaUjOzeqR2OmyDz9NE/0SZPWWrvlqR2GDWeIx/lYR3Qw8wWlNPzZpImxi0YOOcS098M6wdzphISrJVtTCs9EwwWqoT/STDIZ8cS3TnCq4p74k7QasGsL+Qp8gdgs4PnVdCbFSGZRSySSofhYO6QhuCoiM246OLg+RBy3z/XGQT+vsWQG8aCoX9tyJ5651rdtazRCQQUzrv8JyMZqiAmZ/BkFuFqUL0+nQkU49ykXlSP/RxaJEaReaJ72qMXe9RsT096pQkOX7sZ6qQtENVlaufd3jhZarD9PvhGGvFn/Bzrre2ROiBbUYY+G+d0Qg0YZd7wwbqlcB713pFr3yJ/9fxMlc6MkDhPqzRTQI+4/6bqY=
-  file: "$WHEELFILE"
+  file_glob: true
+  file: dist/fastcluster*.whl
   skip_cleanup: true
   on:
     repo: dmuellner/fastcluster
