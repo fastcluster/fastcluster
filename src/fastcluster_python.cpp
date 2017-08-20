@@ -1,8 +1,9 @@
 /*
   fastcluster: Fast hierarchical clustering routines for R and Python
 
-  Copyright © 2011 Daniel Müllner
-  <http://danifold.net>
+  Copyright:
+    * Until package version 1.1.23: © 2011 Daniel Müllner <http://danifold.net>
+    * All changes from version 1.1.24 on: © Google Inc. <http://google.com>
 */
 
 // for INT32_MAX in fastcluster.cpp

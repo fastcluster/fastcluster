@@ -1,7 +1,8 @@
 ﻿fastcluster: Fast hierarchical clustering routines for R and Python
 
-Copyright © 2011 Daniel Müllner
-<http://danifold.net>
+Copyright:
+  * Until package version 1.1.23: © 2011 Daniel Müllner <http://danifold.net>
+  * All changes from version 1.1.24 on: © Google Inc. <http://google.com>
 
 The fastcluster package is a C++ library for hierarchical, agglomerative
 clustering. It efficiently implements the seven most widely used clustering
@@ -28,7 +29,7 @@ The distribution on pypi.python.org contains only the files which are necessary
 for the Python interface. The full source distribution with both interfaces
 is available on CRAN
 
-    http://cran.r-project.org/web/packages/fastcluster/
+    https://CRAN.R-project.org/package=fastcluster
 
 The Python package can be either installed from PyPI (conveniently with
 easy_install) or manually from the source package at CRAN. Both distributions

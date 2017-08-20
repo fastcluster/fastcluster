@@ -1,4 +1,4 @@
-\def\fastclusterversion{1.1.23}
+\def\fastclusterversion{1.1.24}
 \documentclass[fontsize=10pt,paper=letter,BCOR=-6mm]{scrartcl}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -89,7 +89,7 @@
 %\VignetteIndexEntry{User's manual}
 \title{The \textit{fastcluster} package: User's manual}
 \author{\href{http://danifold.net}{Daniel Müllner}}
-\date{March 24, 2017}
+\date{August 14, 2017}
 \subtitle{Version \fastclusterversion}
 \maketitle
 
@@ -294,6 +294,18 @@ is equivalent to
 \texttt{hclust(dist(X, metric=[...]), method=\q single\q)}
 \end{quote}
 but uses less memory and is equally fast. Ties may be resolved differently, ie.\ if two pairs of nodes have equal, minimal dissimilarity values at some point, in the specific computer's representation for floating point numbers, either pair may be chosen for the next merging step in the dendrogram.
+
+Note that the formula for the \textit{\q canberra\q} metric changed in R 3.5.0: Before R version 3.5.0, the \textit{\q canberra\q} metric was computed as
+\[
+ d(u,v) = \sum_j\frac{|u_j-v_j|}{|u_j+v_j|}.
+\]
+Starting with R version 3.5.0, the formula was corrected to
+\[
+ d(u,v) = \sum_j\frac{|u_j-v_j|}{|u_j|+|v_j|}.
+\]
+Summands with $u_j=v_j=0$ always contribute 0 to the sum. The second, newer formula equals SciPy's definition.
+
+The fastcluster package detects the R version at runtime and chooses the formula accordingly, so that fastcluster and the \href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/dist.html}{\texttt{dist}} method always use the same formula for a given R version.
 
 If \textit{method} is one of \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, clustering is performed with respect to Euclidean distances. In this case, the parameter \textit{metric} must be \textit{\q euclidean\q}. Notice that \texttt{hclust.vector} operates on Euclidean distances for compatibility reasons with the \dist{} method, while \hyperref[hclust]{\texttt{hclust}} assumes \textbf{squared} Euclidean distances for compatibility with the \href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/hclust.html}{\texttt{stats::hclust}} method! Hence, the call
 \phantomsection\label{squared}

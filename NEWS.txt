@@ -1,7 +1,8 @@
 ﻿fastcluster: Fast hierarchical clustering routines for R and Python
 
-Copyright © 2011 Daniel Müllner
-<http://danifold.net>
+Copyright:
+  • Until package version 1.1.23: © 2011 Daniel Müllner <http://danifold.net>
+  • All changes from version 1.1.24 on: © Google Inc. <http://google.com>
 
 
 Version history
@@ -189,3 +190,11 @@ Version 1.1.22, 06/12/2016
 Version 1.1.23, 03/24/2017
 
   • setup.py: Late NumPy import for better dependency management.
+
+Version 1.1.24, 08/04/2017
+
+ • R 3.5 corrects the formula for the “Canberra” metric. See
+   https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17285.
+   The formula in the fastcluster package was changed accordingly. This
+   concerns only the R interface. SciPy and fastcluster's Python interface
+   always had the correct formula.

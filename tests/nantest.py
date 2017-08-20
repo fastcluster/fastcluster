@@ -4,11 +4,13 @@
 and raises a FloatingPointError.'''
 print('''
 Test program for the 'fastcluster' package.
-Copyright (c) 2011 Daniel Müllner, <http://danifold.net>''')
+Copyright:
+  * Until package version 1.1.23: (c) 2011 Daniel Müllner <http://danifold.net>
+  * All changes from version 1.1.24 on: (c) Google Inc. <http://google.com>''')
 import numpy as np
 import fastcluster
 
-version = '1.1.23'
+version = '1.1.24'
 if fastcluster.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fastcluster.__version__, version))
 

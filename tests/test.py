@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 print('''
 Test program for the 'fastcluster' package.
-Copyright (c) 2011 Daniel Müllner, <http://danifold.net>''')
+Copyright:
+  * Until package version 1.1.23: (c) 2011 Daniel Müllner <http://danifold.net>
+  * All changes from version 1.1.24 on: (c) Google Inc. <http://google.com>''')
 import sys
 import fastcluster as fc
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.23'
+version = '1.1.24'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
