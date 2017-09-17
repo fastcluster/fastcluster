@@ -32,7 +32,7 @@ except ImportError:
     def pdist(*args, **kwargs):
         raise ImportError('The fastcluster.linkage function cannot process '
                           'vector data since the function '
-                          'scipy.partial.distance.pdist could not be  '
+                          'scipy.spatial.distance.pdist could not be  '
                           'imported.')
 from _fastcluster import linkage_wrap, linkage_vector_wrap
 
