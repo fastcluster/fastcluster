@@ -243,6 +243,7 @@ static PyObject *linkage_wrap(PyObject * const, PyObject * const args) {
   PyArrayObject * D, * Z;
   long int N_ = 0;
   unsigned char method;
+  PyObject * members_;
 
   try{
 #if HAVE_DIAGNOSTIC
@@ -250,11 +251,12 @@ static PyObject *linkage_wrap(PyObject * const, PyObject * const args) {
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
     // Parse the input arguments
-    if (!PyArg_ParseTuple(args, "lO!O!b",
+    if (!PyArg_ParseTuple(args, "lO!O!bO",
                           &N_,                // signed long integer
                           &PyArray_Type, &D, // NumPy array
                           &PyArray_Type, &Z, // NumPy array
-                          &method)) {        // unsigned char
+                          &method,           // unsigned char
+                          &members_)) {      // Python object (None / NumPy array)
       return NULL; // Error if the arguments have the wrong type.
     }
 #if HAVE_DIAGNOSTIC
@@ -294,13 +296,28 @@ static PyObject *linkage_wrap(PyObject * const, PyObject * const args) {
 
     t_float * const D_ = reinterpret_cast<t_float *>(PyArray_DATA(D));
     cluster_result Z2(N-1);
-    auto_array_ptr<t_index> members;
     // For these methods, the distance update formula needs the number of
     // data points in a cluster.
+    t_index * members;
+    auto_array_ptr<t_index> members__;
     if (method==METHOD_METR_AVERAGE ||
         method==METHOD_METR_WARD ||
         method==METHOD_METR_CENTROID) {
-      members.init(N, 1);
+      if (members_ == Py_None) {
+        members__.init(N, 1);
+        members = members__;
+      }
+      else {
+        members = reinterpret_cast<t_index * const>(PyArray_DATA(
+            reinterpret_cast<PyArrayObject *>(PyArray_FromAny(
+                members_,
+                PyArray_DescrFromType(NPY_LONG),
+                1, 1,
+                NPY_ARRAY_CARRAY_RO,
+                NULL
+            ))
+        ));
+      }
     }
     // Operate on squared distances for these methods.
     if (method==METHOD_METR_WARD ||
@@ -1075,6 +1092,7 @@ static PyObject *linkage_vector_wrap(PyObject * const, PyObject * const args) {
   PyArrayObject * X, * Z;
   unsigned char method, metric;
   PyObject * extraarg;
+  PyObject * members_;
 
   try{
     // Parse the input arguments
@@ -1082,12 +1100,13 @@ static PyObject *linkage_vector_wrap(PyObject * const, PyObject * const args) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
-    if (!PyArg_ParseTuple(args, "O!O!bbO",
+    if (!PyArg_ParseTuple(args, "O!O!bbOO",
                           &PyArray_Type, &X, // NumPy array
                           &PyArray_Type, &Z, // NumPy array
                           &method,           // unsigned char
                           &metric,           // unsigned char
-                          &extraarg )) {     // Python object
+                          &extraarg,         // Python object
+                          &members_)) {      // Python object (None / NumPy array)
       return NULL;
     }
 #if HAVE_DIAGNOSTIC
@@ -1137,9 +1156,24 @@ static PyObject *linkage_vector_wrap(PyObject * const, PyObject * const args) {
 
     cluster_result Z2(N-1);
 
-    auto_array_ptr<t_index> members;
+    t_index * members;
+    auto_array_ptr<t_index> members__;
     if (method==METHOD_METR_WARD || method==METHOD_METR_CENTROID) {
-      members.init(2*N-1, 1);
+      if (members_ == Py_None) {
+        members__.init(2*N-1, 1);
+        members = members__;
+      }
+      else {
+        members = reinterpret_cast<t_index * const>(PyArray_DATA(
+            reinterpret_cast<PyArrayObject *>(PyArray_FromAny(
+                members_,
+                PyArray_DescrFromType(NPY_LONG),
+                1, 1,
+                NPY_ARRAY_CARRAY_RO,
+                NULL
+            ))
+        ));
+      }
     }
 
     if ((method!=METHOD_METR_SINGLE && metric!=METRIC_EUCLIDEAN) ||
@@ -1203,7 +1237,7 @@ static PyObject *linkage_vector_wrap(PyObject * const, PyObject * const args) {
 
     if (method==METHOD_METR_WARD ||
         method==METHOD_METR_CENTROID) {
-      members.free();
+      members__.free();
     }
 
     dist.postprocess(Z2);

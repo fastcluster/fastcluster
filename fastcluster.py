@@ -24,7 +24,7 @@ __version_info__ = ('1', '1', '25')
 __version__ = '.'.join(__version_info__)
 
 from numpy import double, empty, array, ndarray, var, cov, dot, bool, \
-    expand_dims, ceil, sqrt
+    expand_dims, ceil, sqrt, int_
 from numpy.linalg import inv
 try:
     from scipy.spatial.distance import pdist
@@ -46,25 +46,25 @@ def complete(D):
 function for further information.'''
     return linkage(D, method='complete')
 
-def average(D):
+def average(D, members=None):
     '''Hierarchical clustering with the “average” distance update formula
 (alias). See the help on the “linkage” function for further information.'''
-    return linkage(D, method='average')
+    return linkage(D, method='average', members=members)
 
 def weighted(D):
     '''Hierarchical clustering with the “weighted” distance update formula
 (alias). See the help on the “linkage” function for further information.'''
     return linkage(D, method='weighted')
 
-def ward(D):
+def ward(D, members=None):
     '''Hierarchical clustering with the “Ward” distance update formula
 (alias). See the help on the “linkage” function for further information.'''
-    return linkage(D, method='ward')
+    return linkage(D, method='ward', members=members)
 
-def centroid(D):
+def centroid(D, members=None):
     '''Hierarchical clustering with the “centroid” distance update formula
 (alias). See the help on the “linkage” function for further information.'''
-    return linkage(D, method='centroid')
+    return linkage(D, method='centroid', members=members)
 
 def median(D):
     '''Hierarchical clustering with the “median” distance update formula
@@ -80,13 +80,13 @@ mthidx = {'single'   : 0,
           'centroid' : 5,
           'median'   : 6 }
 
-def linkage(X, method='single', metric='euclidean', preserve_input=True):
+def linkage(X, method='single', metric='euclidean', preserve_input=True, members=None):
     r'''Hierarchical, agglomerative clustering on a dissimilarity matrix or on
 Euclidean data.
 
-Apart from the argument 'preserve_input', the method has the same input
-parameters and output format as the functions of the same name in the
-module scipy.cluster.hierarchy.
+Apart from the arguments 'preserve_input' and 'members', the method has
+the same input parameters and output format as the functions of the same
+name in the module scipy.cluster.hierarchy.
 
 The argument X is preferably a NumPy array with floating point entries
 (X.dtype==numpy.double). Any other data format will be converted before
@@ -226,7 +226,16 @@ in the original dissimilarities or as an updated dissimilarity, an error is
 raised.
 
 The linkage method does not treat NumPy's masked arrays as special
-and simply ignores the mask.'''
+and simply ignores the mask.
+
+When X represents clusters of observations instead of singletons you can
+set optional argument 'members' with a list of size N with the integral
+number of observations per cluster. This way the hierarchical cluster
+algorithm can be started in the middle of the dendrogram, e.g., in order
+to reconstruct the part of the tree above a cut. This only has effect
+when using methods average, centroid or ward.
+
+'''
     X = array(X, copy=False, subok=True)
     if X.ndim==1:
         if method=='single':
@@ -244,7 +253,13 @@ and simply ignores the mask.'''
         X = array(X, dtype=double, copy=False, order='C', subok=True)
     Z = empty((N-1,4))
     if N > 1:
-        linkage_wrap(N, X, Z, mthidx[method])
+        if members is not None:
+            if len(members) != N:
+                raise ValueError(r'The length of argument members must be equal to the number of data points')
+            members = array(members, dtype=int_, order='C', copy=True)
+            if members.ndim != 1:
+                raise ValueError(r'The members argument must be a flat list or array')
+        linkage_wrap(N, X, Z, mthidx[method], members)
     return Z
 
 # This dictionary must agree with the enum metric_codes in fastcluster_python.cpp.
@@ -274,7 +289,7 @@ mtridx = {'euclidean'      :  0,
 booleanmetrics = ('yule', 'matching', 'dice', 'kulsinski', 'rogerstanimoto',
                   'sokalmichener', 'russellrao', 'sokalsneath', 'kulsinski')
 
-def linkage_vector(X, method='single', metric='euclidean', extraarg=None):
+def linkage_vector(X, method='single', metric='euclidean', extraarg=None, members=None):
     r'''Hierarchical (agglomerative) clustering on Euclidean data.
 
 Compared to the 'linkage' method, 'linkage_vector' uses a memory-saving
@@ -489,5 +504,12 @@ metric='sokalmichener' is an alias for 'matching'.'''
     elif metric!='minkowski':
         assert extraarg is None
     if N > 1:
-        linkage_vector_wrap(X, Z, mthidx[method], mtridx[metric], extraarg)
+        if members is not None:
+            if len(members) != N:
+                raise ValueError(r'The length of argument members must be equal to the number of data points')
+            members_ = empty(N*2-1, dtype=int_, order='C')
+            for i, value in enumerate(members):
+                members_[i] = int(value)
+            members = members_
+        linkage_vector_wrap(X, Z, mthidx[method], mtridx[metric], extraarg, members)
     return Z
