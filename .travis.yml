@@ -23,6 +23,7 @@ before_install:
 - echo `which pip`
 - echo `which pip2`
 - echo `which pip3`
+- echo "$TERRYFY_PYTHON"
 - if [[ "$TERRYFY_PYTHON" == "homebrew 2" ]]; then alias pip=`which pip2` ; fi
 - if [[ "$TERRYFY_PYTHON" == "homebrew 3" ]]; then alias pip=`which pip3` ; fi
 - pip install --user --upgrade pip
