@@ -96,6 +96,9 @@ of this second GitHub repository, this is just an automatic, read-only mirror
 of the CRAN archive, so please do not attempt to report bugs or contact me via
 this repository.
 
+Christoph Dalitz wrote a pure `C++ interface to fastcluster
+<http://informatik.hsnr.de/~dalitz/data/hclust>`_.
+
 Reference: Daniel Müllner, *fastcluster: Fast Hierarchical, Agglomerative
 Clustering Routines for R and Python*, Journal of Statistical Software, **53**
 (2013), no. 9, 1–18, http://www.jstatsoft.org/v53/i09/.

@@ -31,9 +31,12 @@ is available on CRAN
 
     https://CRAN.R-project.org/package=fastcluster
 
-The Python package can be either installed from PyPI (conveniently with
-easy_install) or manually from the source package at CRAN. Both distributions
-compile and install identical libraries.
+The Python package can be installed either from PyPI (conveniently with pip)
+or manually from the source package at CRAN. Both distributions compile and
+install identical libraries.
+
+Christoph Dalitz wrote a pure C++ interface to fastcluster:
+<http://informatik.hsnr.de/~dalitz/data/hclust>.
 
 
 Installation

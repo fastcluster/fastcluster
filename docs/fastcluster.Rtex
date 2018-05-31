@@ -1,4 +1,4 @@
-\def\fastclusterversion{1.1.24}
+\def\fastclusterversion{1.1.25}
 \documentclass[fontsize=10pt,paper=letter,BCOR=-6mm]{scrartcl}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -89,7 +89,7 @@
 %\VignetteIndexEntry{User's manual}
 \title{The \textit{fastcluster} package: User's manual}
 \author{\href{http://danifold.net}{Daniel Müllner}}
-\date{August 14, 2017}
+\date{May 29, 2018}
 \subtitle{Version \fastclusterversion}
 \maketitle
 

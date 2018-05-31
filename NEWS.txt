@@ -198,3 +198,9 @@ Version 1.1.24, 08/04/2017
    The formula in the fastcluster package was changed accordingly. This
    concerns only the R interface. SciPy and fastcluster's Python interface
    always had the correct formula.
+
+Version 1.1.25, 05/27/2018
+
+ • Removed all “#pragma GCC diagnostic” directives in .cpp files due to changed
+   CRAN requirements (CRAN repository only, not the GitHub repository).
+
