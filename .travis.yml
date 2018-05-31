@@ -25,13 +25,11 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source terryfy/travis_tools.sh; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then get_python_environment $TERRYFY_PYTHON
   venv; fi
-- echo `which pip`
-- echo `which pip2`
-- echo `which pip3`
-- echo "$TERRYFY_PYTHON"
-- if [[ "$TERRYFY_PYTHON" == "homebrew 2" ]]; then alias pip=`which pip2` ; fi
-- if [[ "$TERRYFY_PYTHON" == "homebrew 3" ]]; then alias pip=`which pip3` ; fi
-- pip install --user --upgrade pip
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  pip install --upgrade pip;
+  else
+  pip install --user --upgrade pip;
+  fi
 install:
 - pip install numpy scipy
 - pip install .
