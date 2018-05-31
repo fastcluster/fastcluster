@@ -20,9 +20,9 @@ matrix:
     install: bash .manylinux.sh
     script: true
 before_install:
-- which pip
-- which pip2
-- which pip3
+- echo `which pip`
+- echo `which pip2`
+- echo `which pip3`
 - if [[ "$TERRYFY_PYTHON" == "homebrew 2" ]]; then alias pip=`which pip2` ; fi
 - if [[ "$TERRYFY_PYTHON" == "homebrew 3" ]]; then alias pip=`which pip3` ; fi
 - pip install --user --upgrade pip
