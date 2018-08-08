@@ -69,7 +69,7 @@ install:
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
-  - "conda install --upgrade -q -y wheel pip"
+  - "conda install -q -y wheel pip"
 
 build_script:
   # Build the compiled extension
