@@ -32,7 +32,7 @@ matrix:
     install: bash .manylinux.sh
     script: true
 before_install:
-  pip install --upgrade pip
+  pip install --upgrade pip wheel
 install:
 - pip install numpy scipy
 - pip install .
