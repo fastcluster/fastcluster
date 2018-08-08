@@ -31,9 +31,8 @@ matrix:
       - PRE_CMD=linux32
     install: bash .manylinux.sh
     script: true
-before_install:
-  pip install --upgrade pip wheel
 install:
+- pip install --upgrade pip wheel
 - pip install numpy scipy
 - pip install .
 - python setup.py bdist_wheel
