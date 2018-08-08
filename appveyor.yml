@@ -37,6 +37,14 @@ environment:
       PYTHON: "C:\\Miniconda3-x64"
       PYTHON_ARCH: "64"
 
+    - PYTHON_VERSION: "3.7"
+      PYTHON: "C:\\Miniconda3"
+      PYTHON_ARCH: "32"
+
+    - PYTHON_VERSION: "3.7"
+      PYTHON: "C:\\Miniconda3-x64"
+      PYTHON_ARCH: "64"
+
 install:
   - ECHO "Filesystem root:"
   - ps: "ls \"C:/\""
