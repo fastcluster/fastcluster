@@ -7,23 +7,21 @@ import sys
 #distutils.debug.DEBUG = 'yes'
 from setuptools import setup, Extension
 
+import numpy
+
 if sys.hexversion < 0x03000000: # uniform unicode handling for both Python 2.x and 3.x
-    def u(x):
-        return x.decode('utf-8')
     def textfileopen(filename):
         return open(filename, mode='r')
 else:
-    def u(x):
-        return x
     def textfileopen(filename):
         return open(filename, mode='r', encoding='utf_8')
-u('''
+u'''
   fastcluster: Fast hierarchical clustering routines for R and Python
 
   Copyright:
     * Until package version 1.1.23: © 2011 Daniel Müllner <http://danifold.net>
     * All changes from version 1.1.24 on: © Google Inc. <http://google.com>
-''')
+'''
 
 with textfileopen('fastcluster.py') as f:
     for line in f:
@@ -33,29 +31,11 @@ with textfileopen('fastcluster.py') as f:
 
 print('Version: ' + version)
 
-
-def get_include_dirs():
-    """ Avoid importing numpy until here, so that users can run "setup.py install"
-    without having numpy installed yet. """
-    def is_special_command():
-        special_list = ('--help-commands',
-                        'egg_info',
-                        '--version',
-                        'clean')
-        return ('--help' in sys.argv[1:] or
-                sys.argv[1] in special_list)
-
-    if len(sys.argv) >= 2 and is_special_command():
-        return []
-
-    import numpy
-    return [numpy.get_include()]
-
 setup(name='fastcluster',
       version=version,
       py_modules=['fastcluster'],
       description='Fast hierarchical clustering routines for R and Python.',
-      long_description=u("""
+      long_description=u"""
 This library provides Python functions for hierarchical clustering. It
 generates hierarchical clusters from distance matrices or from vector data.
 
@@ -102,14 +82,15 @@ Christoph Dalitz wrote a pure `C++ interface to fastcluster
 Reference: Daniel Müllner, *fastcluster: Fast Hierarchical, Agglomerative
 Clustering Routines for R and Python*, Journal of Statistical Software, **53**
 (2013), no. 9, 1–18, http://www.jstatsoft.org/v53/i09/.
-"""),
+""",
       requires=['numpy'],
       install_requires=["numpy>=1.9"],
+      extras_require={'test':  ['scipy']},
       provides=['fastcluster'],
       ext_modules=[Extension('_fastcluster',
                              ['src/fastcluster_python.cpp'],
                              extra_compile_args=['/EHsc'] if os.name == 'nt' else [],
-                             include_dirs=get_include_dirs(),
+                             include_dirs=[numpy.get_include()],
 # Feel free to uncomment the line below if you use the GCC.
 # This switches to more aggressive optimization and turns
 # more warning switches on. No warning should appear in
@@ -130,7 +111,7 @@ Clustering Routines for R and Python*, Journal of Statistical Software, **53**
       )],
       keywords=['dendrogram', 'linkage', 'cluster', 'agglomerative',
                 'hierarchical', 'hierarchy', 'ward'],
-      author=u("Daniel Müllner"),
+      author=u"Daniel Müllner",
       author_email="daniel@danifold.net",
       license="BSD <http://opensource.org/licenses/BSD-2-Clause>",
       classifiers=[
