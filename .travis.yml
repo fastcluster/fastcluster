@@ -33,7 +33,7 @@ matrix:
     script: true
 install:
 - pip install --upgrade pip wheel
-- pip install .['test']
+- pip install .[test]
 - python setup.py bdist_wheel
 script:
 - python setup.py test
