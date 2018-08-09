@@ -73,7 +73,7 @@ install:
 
 build_script:
   # Build the compiled extension
-  - "%CMD_IN_ENV% pip install --upgrade pip"
+  - "%CMD_IN_ENV% python -m pip install --upgrade pip"
   - "%CMD_IN_ENV% pip install .[test]"
 
 test_script:
