@@ -1,4 +1,16 @@
 [build-system]
+# We specify older version of numpy for the build environment because
+# numpy tries to maintain backwards compatibility but not forward
+# compatibility. So, if a user tries to use an extension that was compiled
+# along with an earlier version of numpy (say 1.12) than the user has on
+# their current system, that will work (say 1.15). However, if the
+# extension was compiled with a numpy 1.15 and the user has 1.12 on their
+# system, the extension will not work.
+#
+# For each version of Python, we choose the earliest versions of numpy that
+# has binary wheels for that Python version for window, mac, and linux.
+# Otherwise building fastcluster would require compiling numpy which
+# would make things much, much slower.
 requires = ["setuptools",
             "wheel",
             "numpy==1.10.4; python_version<'3.6'",
