@@ -18,7 +18,7 @@ matrix:
     language: generic
     before_install:
       - brew update
-      - brew versions python
+      - brew search python
       - brew install python
       - python3 -m venv env
       - source env/bin/activate
