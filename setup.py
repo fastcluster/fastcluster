@@ -1,20 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-import sys
-
-#import distutils.debug
-#distutils.debug.DEBUG = 'yes'
-from setuptools import setup, Extension
-
-import numpy
-
-if sys.hexversion < 0x03000000: # uniform unicode handling for both Python 2.x and 3.x
-    def textfileopen(filename):
-        return open(filename, mode='r')
-else:
-    def textfileopen(filename):
-        return open(filename, mode='r', encoding='utf_8')
 u'''
   fastcluster: Fast hierarchical clustering routines for R and Python
 
@@ -22,8 +7,12 @@ u'''
     * Until package version 1.1.23: © 2011 Daniel Müllner <http://danifold.net>
     * All changes from version 1.1.24 on: © Google Inc. <http://google.com>
 '''
+import os
+import sys
+import numpy
+from setuptools import setup, Extension
 
-with textfileopen('fastcluster.py') as f:
+with open('fastcluster.py') as f:
     for line in f:
         if line.find('__version_info__ =') == 0:
             version = '.'.join(line.split("'")[1:-1:2])
