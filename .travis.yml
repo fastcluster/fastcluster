@@ -18,7 +18,21 @@ matrix:
     language: generic
     before_install:
       - brew update
-      - brew upgrade python
+      - brew install python@3.5
+      - python3 -m venv env
+      - source env/bin/activate
+  - os: osx
+    language: generic
+    before_install:
+      - brew update
+      - brew install python@3.6
+      - python3 -m venv env
+      - source env/bin/activate
+  - os: osx
+    language: generic
+    before_install:
+      - brew update
+      - brew install python@3.7
       - python3 -m venv env
       - source env/bin/activate
   - services: docker
