@@ -19,7 +19,7 @@ matrix:
     before_install:
       - brew update
       - brew search python
-      - brew install python
+      - brew install python@3.7.0
       - python3 -m venv env
       - source env/bin/activate
   - services: docker
