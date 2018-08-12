@@ -1,3 +1,4 @@
+include pyproject.toml
 include docs/*
 include *.txt
 include src/*.cpp

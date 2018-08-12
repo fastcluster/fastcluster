@@ -37,6 +37,14 @@ environment:
       PYTHON: "C:\\Miniconda3-x64"
       PYTHON_ARCH: "64"
 
+    - PYTHON_VERSION: "3.7"
+      PYTHON: "C:\\Miniconda3"
+      PYTHON_ARCH: "32"
+
+    - PYTHON_VERSION: "3.7"
+      PYTHON: "C:\\Miniconda3-x64"
+      PYTHON_ARCH: "64"
+
 install:
   - ECHO "Filesystem root:"
   - ps: "ls \"C:/\""
@@ -61,11 +69,12 @@ install:
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
-  - "conda install -q -y wheel numpy scipy"
+  - "conda install -q -y wheel"
 
 build_script:
   # Build the compiled extension
-  - "%CMD_IN_ENV% python setup.py build"
+  - "%CMD_IN_ENV% python -m pip install --upgrade pip"
+  - "%CMD_IN_ENV% pip install .[test]"
 
 test_script:
   # Run the project tests
@@ -73,7 +82,7 @@ test_script:
 
 after_test:
   # If tests are successful, create binary packages for the project.
-  - "%CMD_IN_ENV% python setup.py bdist_wheel"
+  - "%CMD_IN_ENV% pip wheel -w dist --no-deps ."
   - ps: "ls dist"
 
 artifacts:
