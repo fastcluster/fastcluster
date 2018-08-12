@@ -11,8 +11,9 @@ import os
 import sys
 import numpy
 from setuptools import setup, Extension
+from io import open
 
-with open('fastcluster.py') as f:
+with open('fastcluster.py', encoding='utf_8') as f:
     for line in f:
         if line.find('__version_info__ =') == 0:
             version = '.'.join(line.split("'")[1:-1:2])
