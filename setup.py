@@ -45,8 +45,8 @@ library is in C++ for efficiency.
 <https://github.com/dmuellner/fastcluster/raw/master/docs/fastcluster.pdf>`_.
 
 Installation files for Windows are provided on `PyPI
-<https://pypi.python.org/pypi/fastcluster>`_ and on `Christoph Gohlke's web
-page <http://www.lfd.uci.edu/~gohlke/pythonlibs/#fastcluster>`_.
+<https://pypi.org/project/fastcluster/#files>`_ and on `Christoph Gohlke's
+web page <http://www.lfd.uci.edu/~gohlke/pythonlibs/#fastcluster>`_.
 
 **The fastcluster package is considered stable and will undergo few changes
 from now on. If some years from now there have not been any updates, this
@@ -56,15 +56,15 @@ bugs and incompatibilities to daniel@danifold.net. You may also use**
 `my GitHub repository <https://github.com/dmuellner/fastcluster/>`_
 **for bug reports, pull requests etc.**
 
-Note that PyPI and my GitHub repository host the source code for the Python
-interface only. The archive with both the R and the Python interface is
-available on `CRAN
-<https://CRAN.R-project.org/package=fastcluster>`_ and the
-GitHub repository `“cran/fastcluster”
-<https://github.com/cran/fastcluster>`_. Even though I appear as the author also
-of this second GitHub repository, this is just an automatic, read-only mirror
-of the CRAN archive, so please do not attempt to report bugs or contact me via
-this repository.
+Note that `PyPI <https://pypi.org/project/fastcluster/>`_ and `my GitHub
+repository <https://github.com/dmuellner/fastcluster/>`_ host the source code
+for the Python interface only. The archive with both the R and the Python
+interface is available on `CRAN
+<https://CRAN.R-project.org/package=fastcluster>`_ and the GitHub repository
+`“cran/fastcluster” <https://github.com/cran/fastcluster>`_. Even though I
+appear as the author also of this second GitHub repository, this is just an
+automatic, read-only mirror of the CRAN archive, so please do not attempt to
+report bugs or contact me via this repository.
 
 Christoph Dalitz wrote a pure `C++ interface to fastcluster
 <http://informatik.hsnr.de/~dalitz/data/hclust>`_.
