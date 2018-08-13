@@ -52,17 +52,22 @@
 \DeclareMathOperator\size{size}
 \DeclareMathOperator\Var{Var}
 
-\newcommand*\linkage{\href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html}{\texttt{linkage}}}
-\newcommand*\hierarchy{\href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html}{\texttt{scipy.\hskip0pt cluster.\hskip0pt hierarchy}}}
-\newcommand*\hclust{\href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/hclust.html}{\texttt{hclust}}}
-\newcommand*\stats{\href{http://stat.ethz.ch/R-manual/R-devel/library/stats/html/00Index.html}{\texttt{stats}}}
-\newcommand*\flashClustPack{\href{http://cran.r-project.org/web/packages/flashClust/index.html}{\texttt{flashClust}}}
-\newcommand*\dist{\href{http://stat.ethz.ch/R-manual/R-devel/library/stats/html/dist.html}{\texttt{dist}}}
-\newcommand*\print{\href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/print.html}{\texttt{print}}}
-\newcommand*\plot{\href{http://stat.ethz.ch/R-manual/R-patched/library/graphics/html/plot.html}{\texttt{plot}}}
-\newcommand*\identify{\href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/identify.hclust.html}{\texttt{identify}}}
-\newcommand*\rect{\href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/rect.hclust.html}{\texttt{rect.hclust}}}
-\newcommand*\NA{\href{http://stat.ethz.ch/R-manual/R-devel/library/base/html/NA.html}{\texttt{NA}}}
+\newcommand*\linkage{\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html}{\texttt{linkage}}}
+\newcommand*\hierarchy{\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html}{\texttt{scipy.\hskip0pt cluster.\hskip0pt hierarchy}}}
+\newcommand*\hclust{\href{https://stat.ethz.ch/R-manual/R-patched/library/stats/html/hclust.html}{\texttt{hclust}}}
+\newcommand*\stats{\href{https://stat.ethz.ch/R-manual/R-patched/library/stats/html/00Index.html}{\texttt{stats}}}
+\newcommand*\flashClustPack{\href{https://CRAN.R-project.org/package=flashClust}{\texttt{flashClust}}}
+\newcommand*\dist{\href{https://stat.ethz.ch/R-manual/R-patched/library/stats/html/dist.html}{\texttt{dist}}}
+\newcommand*\print{\href{https://stat.ethz.ch/R-manual/R-patched/library/base/html/print.html}{\texttt{print}}}
+\newcommand*\plot{\href{https://stat.ethz.ch/R-manual/R-patched/library/graphics/html/plot.html}{\texttt{plot}}}
+\newcommand*\identify{\href{https://stat.ethz.ch/R-manual/R-patched/library/stats/html/identify.hclust.html}{\texttt{identify}}}
+\newcommand*\rect{\href{https://stat.ethz.ch/R-manual/R-patched/library/stats/html/rect.hclust.html}{\texttt{rect.hclust}}}
+\newcommand*\NA{\href{https://stat.ethz.ch/R-manual/R-patched/library/base/html/NA.html}{\texttt{NA}}}
+\newcommand*\double{\href{https://stat.ethz.ch/R-manual/R-patched/library/base/html/double.html}{\texttt{double}}}
+\newcommand*\matchcall{\href{https://stat.ethz.ch/R-manual/R-patched/library/base/html/match.call.html}{\texttt{match.call}}}
+\newcommand*\NumPyarray{\href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html}{NumPy array}}
+\newcommand*\maskedarrays{\href{https://docs.scipy.org/doc/numpy/reference/maskedarray.html}{masked arrays}}
+\newcommand*\pdist{\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html}{\texttt{scipy.spatial.distance.pdist}}}
 
 %\usepackage{showframe}
 
@@ -137,7 +142,7 @@ way as the \flashClustPack{} package does). Please remove any references to the
 \flashClustPack{} package in your R files to not accidentally overwrite the \hclust{}
 function with the \flashClustPack{} version.
 
-The \hyperref[hclust]{new \texttt{hclust} function} has exactly the same calling conventions as the old one. You may just load the package and immediately and effortlessly enjoy the performance improvements. The function is also an improvement to the \texttt{flashClust} function from the \flashClustPack{} package. Just replace every call to \texttt{flashClust} by \hyperref[hclust]{\texttt{hclust}} and expect your code to work as before, only faster.\footnote{If you are using flashClust prior to version 1.01, update it! See the change log for \flashClustPack{} at \url{http://cran.r-project.org/web/packages/flashClust/ChangeLog}.} In case the data includes infinite or NaN values, see \autoref{sec:infnan}.
+The \hyperref[hclust]{new \texttt{hclust} function} has exactly the same calling conventions as the old one. You may just load the package and immediately and effortlessly enjoy the performance improvements. The function is also an improvement to the \texttt{flashClust} function from the \flashClustPack{} package. Just replace every call to \texttt{flashClust} by \hyperref[hclust]{\texttt{hclust}} and expect your code to work as before, only faster.\footnote{If you are using flashClust prior to version 1.01, update it! See the change log for \flashClustPack{} at \url{https://cran.r-project.org/web/packages/flashClust/ChangeLog}.} In case the data includes infinite or NaN values, see \autoref{sec:infnan}.
 
 If you need to access the old function or make sure that the right function is
 called, specify the package as follows:
@@ -167,7 +172,7 @@ The argument $d$ is a condensed distance matrix, as it is produced by \dist.
 
 The argument \textit{method} is one of the strings \textit{\q single\q}, \textit{\q complete\q}, \textit{\q average\q}, \textit{\q mcquitty\q}, \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward.D\q}, \textit{\q ward.D2\q} or an unambiguous abbreviation thereof.
 
-The argument \textit{members} specifies the sizes of the initial nodes, ie.\ the number of observations in the initial clusters. The default value \texttt{NULL} says that all initial nodes are singletons, ie.\ have size 1. Otherwise, \textit{members} must be a vector whose size is the number of input points. The vector is processed as a \href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/double.html}{\texttt{double}} array so that not only integer cardinalities of nodes can be accounted for but also weighted nodes with real weights.
+The argument \textit{members} specifies the sizes of the initial nodes, ie.\ the number of observations in the initial clusters. The default value \texttt{NULL} says that all initial nodes are singletons, ie.\ have size 1. Otherwise, \textit{members} must be a vector whose size is the number of input points. The vector is processed as a \double{} array so that not only integer cardinalities of nodes can be accounted for but also weighted nodes with real weights.
 
 The general scheme of the agglomerative clustering procedure is as follows:
 \begin{enumerate}
@@ -196,7 +201,7 @@ This copies the attribute \textit{\q Labels\q} from the first input parameter $d
 The (unabbreviated) string for the \textit{\q method\q} parameter. See below for a specification of all available methods.
 
 \item[\normalfont\textit{call}]
-The full command that produced the result. See \href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/match.call.html}{\texttt{match.call}}.
+The full command that produced the result. See \matchcall.
 
 \item[\normalfont\textit{dist.method}]
 This \textit{\q method\q} attribute of the first input parameter $d$. This specifies which metric was used in the \texttt{dist} method which generated the first argument.
@@ -277,13 +282,13 @@ d(A,B)=\sqrt{\frac{2|A||B|}{|A|+|B|}}\cdot\|\vec c_A-\vec c_B\|.
 \addcontentsline{toc}{subsection}{\texttt{hclust.vector}}
 This performs hierarchical, agglomerative clustering on vector data with memory-saving algorithms. While the \hyperref[hclust]{\texttt{hclust}} method requires $\Theta(N^2)$ memory for clustering of $N$ points, this method needs $\Theta(ND)$ for $N$ points in $\mathbb R^D$, which is usually much smaller.
 
-The argument $X$ must be a two-dimensional matrix with \href{http://stat.ethz.ch/R-manual/R-patched/library/base/html/double.html}{\texttt{double}} precision values. It describes $N$ data points in $\mathbb R^D$ as an $(N\times D)$ matrix.
+The argument $X$ must be a two-dimensional matrix with \double{} precision values. It describes $N$ data points in $\mathbb R^D$ as an $(N\times D)$ matrix.
 
 The parameter \textit{\q members\q} is the same as for \hyperref[hclust]{\texttt{hclust}}.
 
 The parameter \textit{\q method\q} is one of the strings \textit{\q single\q}, \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, or an unambiguous abbreviation thereof.
 
-If \textit{method} is \textit{\q single\q}, single linkage clustering is performed on the data points with the metric which is specified by the \textit{metric} parameter. The choices are the same as in the \href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/dist.html}{\texttt{dist}} method: \textit{\q euclidean\q}, \textit{\q maximum\q}, \textit{\q manhattan\q}, \textit{\q canberra\q}, \textit{\q binary\q} and \textit{\q minkowski\q}. Any unambiguous substring can be given. The parameter \textit{p} is used for the \textit{\q minkowski\q} metric only.
+If \textit{method} is \textit{\q single\q}, single linkage clustering is performed on the data points with the metric which is specified by the \textit{metric} parameter. The choices are the same as in the \dist{} method: \textit{\q euclidean\q}, \textit{\q maximum\q}, \textit{\q manhattan\q}, \textit{\q canberra\q}, \textit{\q binary\q} and \textit{\q minkowski\q}. Any unambiguous substring can be given. The parameter \textit{p} is used for the \textit{\q minkowski\q} metric only.
 
 The call
 \begin{quote}
@@ -305,9 +310,9 @@ Starting with R version 3.5.0, the formula was corrected to
 \]
 Summands with $u_j=v_j=0$ always contribute 0 to the sum. The second, newer formula equals SciPy's definition.
 
-The fastcluster package detects the R version at runtime and chooses the formula accordingly, so that fastcluster and the \href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/dist.html}{\texttt{dist}} method always use the same formula for a given R version.
+The fastcluster package detects the R version at runtime and chooses the formula accordingly, so that fastcluster and the \dist{} method always use the same formula for a given R version.
 
-If \textit{method} is one of \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, clustering is performed with respect to Euclidean distances. In this case, the parameter \textit{metric} must be \textit{\q euclidean\q}. Notice that \texttt{hclust.vector} operates on Euclidean distances for compatibility reasons with the \dist{} method, while \hyperref[hclust]{\texttt{hclust}} assumes \textbf{squared} Euclidean distances for compatibility with the \href{http://stat.ethz.ch/R-manual/R-patched/library/stats/html/hclust.html}{\texttt{stats::hclust}} method! Hence, the call
+If \textit{method} is one of \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, clustering is performed with respect to Euclidean distances. In this case, the parameter \textit{metric} must be \textit{\q euclidean\q}. Notice that \texttt{hclust.vector} operates on Euclidean distances for compatibility reasons with the \dist{} method, while \hyperref[hclust]{\texttt{hclust}} assumes \textbf{squared} Euclidean distances for compatibility with the \href{https://stat.ethz.ch/R-manual/R-patched/library/stats/html/hclust.html}{\texttt{stats::hclust}} method! Hence, the call
 \phantomsection\label{squared}
 \begin{quote}
 \texttt{hc = hclust.vector(X, method=\q centroid\q)}
@@ -351,9 +356,9 @@ Hierarchical, agglomerative clustering on a condensed dissimilarity matrix or on
 
 Apart from the argument \textit{preserve\_input}, the method has the same input parameters and output format as the function of the same name in the module \hierarchy.
 
-The argument $X$ is preferably a \href{http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html}{NumPy array} with floating point entries (\texttt{X.dtype\hskip0pt==\hskip0pt numpy.double}). Any other data format will be converted before it is processed. NumPy's \href{http://docs.scipy.org/doc/numpy/reference/maskedarray.html}{masked arrays} are not treated as special, and the mask is simply ignored.
+The argument $X$ is preferably a \NumPyarray{} with floating point entries (\texttt{X.dtype\hskip0pt==\hskip0pt numpy.double}). Any other data format will be converted before it is processed. NumPy's \maskedarrays{} are not treated as special, and the mask is simply ignored.
 
-If $X$ is a one-dimensional array, it is considered a condensed matrix of pairwise dissimilarities in the format which is returned by \href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html}{\texttt{scipy.spatial.distance.pdist}}. It contains the flattened, upper-triangular part of a pairwise dissimilarity matrix. That is, if there are $N$ data points and the matrix $d$ contains the dissimilarity between the $i$-th and $j$-th observation at position $d_{i,j}$, the vector $X$ has length $\binom N2$ and is ordered as follows:
+If $X$ is a one-dimensional array, it is considered a condensed matrix of pairwise dissimilarities in the format which is returned by \pdist. It contains the flattened, upper-triangular part of a pairwise dissimilarity matrix. That is, if there are $N$ data points and the matrix $d$ contains the dissimilarity between the $i$-th and $j$-th observation at position $d_{i,j}$, the vector $X$ has length $\binom N2$ and is ordered as follows:
 \[
 d
 = \begin{pmatrix}
@@ -398,7 +403,7 @@ The general scheme of the agglomerative clustering procedure is as follows:
 \item Repeat $N-1$ times from step 2, until there is one big node, which contains all original input points.
 \end{enumerate}
 
-The output of \texttt{linkage} is \emph{stepwise dendrogram}, which is represented as an $(N-1)\times 4$ \href{http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html}{NumPy array} with floating point entries (\texttt{dtype=numpy.double}). The first two columns contain the node indices which are joined in each step. The input nodes are labeled $0,\ldots,N-1$, and the newly generated nodes have the labels $N,\ldots, 2N-2$. The third column contains the distance between the two nodes at each step, ie.\ the current minimal distance at the time of the merge. The fourth column counts the number of points which comprise each new node.
+The output of \texttt{linkage} is \emph{stepwise dendrogram}, which is represented as an $(N-1)\times 4$ \NumPyarray{} with floating point entries (\texttt{dtype=numpy.double}). The first two columns contain the node indices which are joined in each step. The input nodes are labeled $0,\ldots,N-1$, and the newly generated nodes have the labels $N,\ldots, 2N-2$. The third column contains the distance between the two nodes at each step, ie.\ the current minimal distance at the time of the merge. The fourth column counts the number of points which comprise each new node.
 
 The parameter \textit{method} specifies which clustering scheme to use. The clustering scheme determines the distance from a new node to the other nodes. Denote the dissimilarities by $d$, the nodes to be joined by $I,J$, the new node by $K$ and any other node by $L$. The symbol $|I|$ denotes the size of the cluster $I$.
 
@@ -437,7 +442,7 @@ The following three methods are intended for Euclidean data only, ie.\ when $X$ 
 
 \begin{description}
 \item [\normalfont\textit{method=\q centroid\q}:]
-$\displaystyle d(K,L) = \sqrt{\frac{|I|\cdot d(I,L)+|J|\cdot d(J,L)}{|I|+|J|}-\frac{|I|\cdot|J|\cdot d(I,J)}{(|I|+|J|)^2}}$
+$\displaystyle d(K,L) = \sqrt{\frac{|I|\cdot d(I,L)^2+|J|\cdot d(J,L)^2}{|I|+|J|}-\frac{|I|\cdot|J|\cdot d(I,J)^2}{(|I|+|J|)^2}}$
 
 There is a geometric interpretation: $d(A,B)$ is the distance between the centroids (ie.\ barycenters) of the clusters in Euclidean space:
 \[
@@ -446,7 +451,7 @@ There is a geometric interpretation: $d(A,B)$ is the distance between the centro
 where $\vec c_A$ denotes the centroid of the points in cluster $A$.\pagebreak[2]
 
 \item [\normalfont\textit{method=\q median\q}:]
-$\displaystyle d(K,L) = \sqrt{\tfrac12 d(I,L)+\tfrac12 d(J,L)-\tfrac14 d(I,J)}$
+$\displaystyle d(K,L) = \sqrt{\tfrac12 d(I,L)^2+\tfrac12 d(J,L)^2-\tfrac14 d(I,J)^2}$
 
 Define the midpoint $\vec w_K$ of a cluster $K$ iteratively as $\vec w_K=k$ if $K=\{k\}$ is a singleton and as the midpoint $\frac12(\vec w_I+\vec w_J)$ if $K$ is formed by joining $I$ and $J$. Then we have
 \[
@@ -455,7 +460,7 @@ Define the midpoint $\vec w_K$ of a cluster $K$ iteratively as $\vec w_K=k$ if $
 in Euclidean space for all nodes $A,B$. Notice however that this distance depends on the order of the merging steps.
 
 \item [\normalfont\textit{method=\q ward\q}:]
-$\displaystyle d(K,L) = \sqrt{\frac{(|I|+|L|)\cdot d(I,L)+(|J|+|L|)\cdot d(J,L)-|L|\cdot d(I,J)}{|I|+|J|+|L|}}$
+$\displaystyle d(K,L) = \sqrt{\frac{(|I|+|L|)\cdot d(I,L)^2+(|J|+|L|)\cdot d(J,L)^2-|L|\cdot d(I,J)^2}{|I|+|J|+|L|}}$
 
 The global cluster dissimilarity can be expressed as
 \[
@@ -498,9 +503,9 @@ This performs hierarchical, agglomerative clustering on vector data with memory-
 
 The argument $X$ has the same format as before, when $X$ describes vector data, ie.\ it is an $(N\times D)$ array. Also the output array has the same format. The parameter \textit{method} must be one of \textit{\q single\q}, \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, ie.\ only for these methods there exist memory-saving algorithms currently. If \textit{method}, is one of \textit{\q centroid\q}, \textit{\q median\q}, \textit{\q ward\q}, the \textit{metric} must be \textit{\q euclidean\q}.
 
-Like the \texttt{linkage} method, \texttt{linkage\_vector} does not treat NumPy's \href{http://docs.scipy.org/doc/numpy/reference/maskedarray.html}{masked arrays} as special and simply ignores the mask.
+Like the \texttt{linkage} method, \texttt{linkage\_vector} does not treat NumPy's \maskedarrays{} as special and simply ignores the mask.
 
-For single linkage clustering, any dissimilarity function may be chosen. Basically, every metric which is implemented in the method \href{http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html}{\texttt{scipy.spatial.distance.pdist}} is reimplemented here. However, the metrics differ in some instances since a number of mistakes and typos (both in the code and in the documentation) were corrected in the \textit{fastcluster} package.\footnote{Hopefully, the SciPy metric will be corrected in future versions and some day coincide with the \textit{fastcluster} definitions. See the bug reports at \url{http://projects.scipy.org/scipy/ticket/1484}, \url{http://projects.scipy.org/scipy/ticket/1486}.}
+For single linkage clustering, any dissimilarity function may be chosen. Basically, every metric which is implemented in the method \pdist{} is reimplemented here. However, the metrics differ in some instances since a number of mistakes and typos (both in the code and in the documentation) were corrected in the \textit{fastcluster} package.\footnote{Hopefully, the SciPy metric will be corrected in future versions and some day coincide with the \textit{fastcluster} definitions. See the bug reports at \url{https://github.com/scipy/scipy/issues/2009}, \url{https://github.com/scipy/scipy/issues/2011}.}
 
 Therefore, the available metrics with their definitions are listed below as a reference. The symbols $u$ and $v$ mostly denote vectors in $\mathbb R^D$ with coordinates $u_j$ and $v_j$ respectively. See below for additional metrics for Boolean vectors. Unless otherwise stated, the input array $X$ is converted to a floating point array (\texttt{X.dtype==numpy.double}) if it does has have already the required data type. Some metrics accept Boolean input; in this case this is stated explicitly below.
 
@@ -673,13 +678,13 @@ The code example in the R documentation (enter \texttt{?hclust} or \texttt{examp
 \section{References}
 \begin{trivlist}
 \item
-\textit{NumPy: Scientific computing tools for Python}, \url{http://numpy.scipy.org/}.
+\textit{NumPy: Scientific computing tools for Python}, \url{http://numpy.org/}.
 
 \item
-Eric Jones, Travis Oliphant, Pearu Peterson et al., \textit{SciPy: Open Source Scientific Tools for Python}, 2001, \url{http://www.scipy.org}.
+Eric Jones, Travis Oliphant, Pearu Peterson et al., \textit{SciPy: Open Source Scientific Tools for Python}, 2001, \url{https://www.scipy.org}.
 
 \item
-\textit{R: A Language and Environment for Statistical Computing}, R Foundation for Statistical Computing, Vienna, 2011, \url{http://www.r-project.org}.
+\textit{R: A Language and Environment for Statistical Computing}, R Foundation for Statistical Computing, Vienna, 2011, \url{https://www.r-project.org}.
 \end{trivlist}
 \end{document}
 %%% Local variables:
