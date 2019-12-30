@@ -240,7 +240,7 @@ and simply ignores the mask.'''
     else:
         assert X.ndim==2
         N = len(X)
-        X = pdist(X, metric)
+        X = pdist(X, metric=metric)
         X = array(X, dtype=double, copy=False, order='C', subok=True)
     Z = empty((N-1,4))
     if N > 1:

@@ -61,7 +61,7 @@ def test_all(n,dim):
                  # http://projects.scipy.org/scipy/ticket/1484
                  ):
     sys.stdout.write("Metric: " + metric + "...")
-    D = pdist(pcd, metric)
+    D = pdist(pcd, metric=metric)
     D = correct_for_zero_vectors(D, pcd, metric)
 
     try:
@@ -92,15 +92,15 @@ def test_all(n,dim):
     if metric=='minkowski':
         p = np.random.uniform(1.,10.)
         sys.stdout.write("p: " + str(p) + "...")
-        D = pdist(pcd, metric, p)
+        D = pdist(pcd, metric=metric, p=p)
         Z2 = fc.linkage_vector(pcd, method, metric, p)
     elif metric=='user':
         # Euclidean metric as a user function
         fn = (lambda u, v: np.sqrt(((u-v)*(u-v).T).sum()))
-        D = pdist(pcd, fn)
+        D = pdist(pcd, metric=fn)
         Z2 = fc.linkage_vector(pcd, method, fn)
     else:
-        D = pdist(pcd, metric)
+        D = pdist(pcd, metric=metric)
         D = correct_for_zero_vectors(D, pcd, metric)
         try:
             Z2 = fc.linkage_vector(pcd, method, metric)
