@@ -9,9 +9,9 @@ matrix:
     language: generic
     before_install:
       - brew update
-      - brew upgrade python
       - brew install python@2
-      - pip install virtualenv
+      - brew upgrade python@2
+      - pip2 install virtualenv
       - python2 -m virtualenv env
       - source env/bin/activate
   - os: osx
