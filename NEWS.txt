@@ -203,9 +203,10 @@ Version 1.1.25, 05/27/2018
 
  • Removed all “#pragma GCC diagnostic” directives in .cpp files due to changed
    CRAN requirements (CRAN repository only, not the GitHub repository).
-
-------------------------------
-
  • Updated build scripts for Python 3.7 (thanks to Forest Gregg).
  • Simplified setup.py.
  • Updated and corrected documentation.
+
+Version 1.1.26, 12/30/2019
+
+• Small updates for Python 3.8.
