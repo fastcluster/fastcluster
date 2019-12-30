@@ -45,7 +45,7 @@ library is in C++ for efficiency.
 <https://github.com/dmuellner/fastcluster/raw/master/docs/fastcluster.pdf>`_.
 
 Installation files for Windows are provided on `PyPI
-<https://pypi.org/project/fastcluster/#files>`_ and on `Christoph Gohlke's
+<https://pypi.org/project/fastcluster/#files>`__ and on `Christoph Gohlke's
 web page <http://www.lfd.uci.edu/~gohlke/pythonlibs/#fastcluster>`_.
 
 **The fastcluster package is considered stable and will undergo few changes
@@ -56,7 +56,7 @@ bugs and incompatibilities to daniel@danifold.net. You may also use**
 `my GitHub repository <https://github.com/dmuellner/fastcluster/>`_
 **for bug reports, pull requests etc.**
 
-Note that `PyPI <https://pypi.org/project/fastcluster/>`_ and `my GitHub
+Note that `PyPI <https://pypi.org/project/fastcluster/>`__ and `my GitHub
 repository <https://github.com/dmuellner/fastcluster/>`_ host the source code
 for the Python interface only. The archive with both the R and the Python
 interface is available on `CRAN
@@ -73,6 +73,7 @@ Reference: Daniel Müllner, *fastcluster: Fast Hierarchical, Agglomerative
 Clustering Routines for R and Python*, Journal of Statistical Software, **53**
 (2013), no. 9, 1–18, http://www.jstatsoft.org/v53/i09/.
 """,
+      long_description_content_type='text/x-rst',
       requires=['numpy'],
       install_requires=["numpy>=1.9"],
       extras_require={'test':  ['scipy']},
