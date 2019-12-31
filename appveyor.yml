@@ -58,8 +58,8 @@ install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
-  #- ECHO "%PATH%"
-  #- "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - ECHO "%PATH%"
+  - "SET PATH=%PYTHON%;%PATH%"
 
   - "conda create -q -y --name py%PYTHON_VERSION% python=%PYTHON_VERSION%"
   - "conda install -q -y --name py%PYTHON_VERSION% pip wheel"
