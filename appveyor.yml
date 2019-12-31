@@ -63,7 +63,7 @@ install:
 
   - "conda create -q -y --name py%PYTHON_VERSION% python=%PYTHON_VERSION%"
   - "conda install -q -y --name py%PYTHON_VERSION% pip wheel"
-  - "conda activate py%PYTHON_VERSION%"
+  - "activate py%PYTHON_VERSION%"
 
   # Check that we have the expected version and architecture for Python
   - "python -c \"import sys; print(sys.executable)\""
