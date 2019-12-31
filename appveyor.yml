@@ -67,23 +67,21 @@ install:
 
   # Check that we have the expected version and architecture for Python
   - "python -c \"import sys; print(sys.executable)\""
-  - "%CMD_IN_ENV% python -c \"import sys; print(sys.executable)\""
   - "python --version"
-  - "%CMD_IN_ENV% python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
 build_script:
   # Build the compiled extension
-  - "%CMD_IN_ENV% pip --version"
+  - "pip --version"
   - "%CMD_IN_ENV% pip install .[test]"
 
 test_script:
   # Run the project tests
-  - "%CMD_IN_ENV% python setup.py test"
+  - "python setup.py test"
 
 after_test:
   # If tests are successful, create binary packages for the project.
-  - "%CMD_IN_ENV% pip wheel -w dist --no-deps ."
+  - "pip wheel -w dist --no-deps ."
   - ps: "ls dist"
 
 artifacts:
