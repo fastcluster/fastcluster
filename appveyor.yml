@@ -61,15 +61,15 @@ install:
   - ECHO "%PATH%"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
-  - "conda create -q -y --name py%PYTHON_VERSION% python=%PYTHON_VERSION%"
-  - "activate py%PYTHON_VERSION%"
+  - "%CMD_IN_ENV% conda create -q -y --name py%PYTHON_VERSION% python=%PYTHON_VERSION%"
+  - "%CMD_IN_ENV% activate py%PYTHON_VERSION%"
 
   # Check that we have the expected version and architecture for Python
-  - "python -c \"import sys; print(sys.executable)\""
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "%CMD_IN_ENV% python -c \"import sys; print(sys.executable)\""
+  - "%CMD_IN_ENV% python --version"
+  - "%CMD_IN_ENV% python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
-  - "conda install -q -y wheel"
+  - "%CMD_IN_ENV% conda install -q -y wheel"
 
 build_script:
   # Build the compiled extension
