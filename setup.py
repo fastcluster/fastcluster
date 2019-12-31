@@ -19,7 +19,8 @@ with open('fastcluster.py', encoding='utf_8') as f:
             version = '.'.join(line.split("'")[1:-1:2])
             break
 
-print('Version: ' + version)
+print('Fastcluster version: ' + version)
+print('Python version: ' + sys.version)
 
 setup(name='fastcluster',
       version=version,
