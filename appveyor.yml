@@ -22,19 +22,19 @@ environment:
       PYTHON_ARCH: "64"
 
     - PYTHON_VERSION: "3.6"
-      PYTHON: "C:\\Miniconda3"
+      PYTHON: "C:\\Miniconda36"
       PYTHON_ARCH: "32"
 
     - PYTHON_VERSION: "3.6"
-      PYTHON: "C:\\Miniconda3-x64"
+      PYTHON: "C:\\Miniconda36-x64"
       PYTHON_ARCH: "64"
 
     - PYTHON_VERSION: "3.7"
-      PYTHON: "C:\\Miniconda3"
+      PYTHON: "C:\\Miniconda37"
       PYTHON_ARCH: "32"
 
     - PYTHON_VERSION: "3.7"
-      PYTHON: "C:\\Miniconda3-x64"
+      PYTHON: "C:\\Miniconda37-x64"
       PYTHON_ARCH: "64"
 
     - PYTHON_VERSION: "3.8"
@@ -58,11 +58,12 @@ install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
-  - ECHO "%PATH%"
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  #- ECHO "%PATH%"
+  #- "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
   - "conda create -q -y --name py%PYTHON_VERSION% python=%PYTHON_VERSION%"
-  - "activate py%PYTHON_VERSION%"
+  - "conda install -q -y --name py%PYTHON_VERSION% pip wheel"
+  - "conda activate py%PYTHON_VERSION%"
 
   # Check that we have the expected version and architecture for Python
   - "python -c \"import sys; print(sys.executable)\""
@@ -71,11 +72,8 @@ install:
   - "%CMD_IN_ENV% python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
-  - "conda install -q -y wheel"
-
 build_script:
   # Build the compiled extension
-  - "%CMD_IN_ENV% python -m pip install --upgrade pip"
   - "%CMD_IN_ENV% pip --version"
   - "%CMD_IN_ENV% pip install .[test]"
 
