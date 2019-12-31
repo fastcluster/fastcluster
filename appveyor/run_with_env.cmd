@@ -37,6 +37,7 @@ SET WIN_WDK=c:\Program Files (x86)\Windows Kits\10\Include\wdf
 
 :: Extract the major and minor versions, and allow for the minor version to be
 :: more than 9.  This requires the version number to have two dots in it.
+ECHO Python version: %PYTHON_VERSION%
 SET MAJOR_PYTHON_VERSION=%PYTHON_VERSION:~0,1%
 IF "%PYTHON_VERSION:~3,1%" == "." (
     SET MINOR_PYTHON_VERSION=%PYTHON_VERSION:~2,1%
