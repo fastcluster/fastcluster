@@ -2,33 +2,33 @@ language: generic
 branches:
   only:
   - master
-  - /^v.*$/
+  - "/^v.*$/"
 matrix:
   include:
   - os: osx
     language: generic
     before_install:
-      - brew update
-      - brew upgrade python@2
-      - pip2 install virtualenv
-      - python2 -m virtualenv env
-      - source env/bin/activate
+    - brew update
+    - brew upgrade python@2
+    - pip2 install virtualenv
+    - python2 -m virtualenv env
+    - source env/bin/activate
   - os: osx
     language: generic
     before_install:
-      - brew update
-      - brew unlink python@2
-      - brew upgrade python
-      - python3 -m venv env
-      - source env/bin/activate
+    - brew update
+    - brew unlink python@2
+    - brew upgrade python
+    - python3 -m venv env
+    - source env/bin/activate
   - services: docker
     env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
     install: bash .manylinux.sh
     script: true
   - services: docker
     env:
-      - DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
-      - PRE_CMD=linux32
+    - DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
+    - PRE_CMD=linux32
     install: bash .manylinux.sh
     script: true
 install:
@@ -40,7 +40,7 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: Spde4nnDLwoQvazn9VUyjCDzFQPoSL69eZCyZdCa6PBlFI/RKiu4K/xH/jQZrHMh+1YUV6VMMZCFAZJIcbv7Outqeh6uVER1pyFYn7LLXKzANI87PV/I38HVQ8g+SKP5YyBUKRVnrNl9lPtSaMl8caL3x+ht/dVDyI0ZwujgRreL9qXf5V7s0H/P2IQQsPyFAV3kilYckT7xDnQdJ1KxRc820PQqHid6/04Lz/NUuwUBMQ88AeEaiHLK7/O4k9X/AQr0yozBTafBpyqqZ/rg/Carh4TpglSdovyIYF431Sa9hLi0ge2UjU2vNPnhsDRzaUjOzeqR2OmyDz9NE/0SZPWWrvlqR2GDWeIx/lYR3Qw8wWlNPzZpImxi0YOOcS098M6wdzphISrJVtTCs9EwwWqoT/STDIZ8cS3TnCq4p74k7QasGsL+Qp8gdgs4PnVdCbFSGZRSySSofhYO6QhuCoiM246OLg+RBy3z/XGQT+vsWQG8aCoX9tyJ5651rdtazRCQQUzrv8JyMZqiAmZ/BkFuFqUL0+nQkU49ykXlSP/RxaJEaReaJ72qMXe9RsT096pQkOX7sZ6qQtENVlaufd3jhZarD9PvhGGvFn/Bzrre2ROiBbUYY+G+d0Qg0YZd7wwbqlcB713pFr3yJ/9fxMlc6MkDhPqzRTQI+4/6bqY=
+    secure: oYq+Hct0XzGfTg51AhubX9gwqUmQt+vP8z2Ba+IVNliTScmyUbHqDqCYbefW5+6iKDMIsbuxMaHTGlXgDhZZy0Tro/1tLRsq198poNmHd5yCoqelwXwDGu/SviJl7JCRIxW1MDmyrKBuX5MkmXRQ8SHVGIppkaO15aMI7gjhi0tjRduBrnrVvPlaqPHMqNq1TxWy+X4265UzZ4xbfkHyMgbsHkepqhaJp6NkJiB/M0kVuYeLRAhXJSemde+Z8VQsHO8Y/AQ6jujUtjdPceDfAvieg62lQH29FGF1msUkzg5gAYoj36rAhDIl6mmdKGr5SsYAvZGuwc6My1sWuJ18p9fJR8S83y++A0RLcurLyrkf3qvuuz3wPpzshn6OgDQn3f6SXqqALxC9BPOrH/fkBkM5VyyEkcbbT8ySpJX4qZj1+5Mqn5RLERYl5C6surTPyv0VssmPrqwo1Vu0Xk1wbI5gmbOB1NmgrJizms1KxIcjp51MdBdjyCEZXw1fkGXA/kei3GxGYEY0svnWywXkwy9tgh4m+W07db5IgYKXs8jXV4R/4VIsTWXyOF0UYTs8Ld6qp7FUdfYLIId4CRVLkxUQZweadEwRLj5EWSs22vlXHGlqc2uk5ZnrHEN5ZHSGHxxiLPAozJHIzXJOv7KB6FJlCDMsmCNcSWDKg6hM7SU=
   file_glob: true
   file: dist/fastcluster*.whl
   skip_cleanup: true
