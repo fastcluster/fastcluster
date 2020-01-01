@@ -39,7 +39,7 @@ install:
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
   - "%MINICONDA%\\Scripts\\conda create -q -y --name fastclusterbuild python=%PYTHON_VERSION%"
-  - "%MINICONDA%\\Scripts\\conda install -q -y --name fastclusterbuild pip wheel"
+  - "%MINICONDA%\\Scripts\\conda install -q -y --name fastclusterbuild pip wheel unittest"
   - "%MINICONDA%\\Scripts\\activate fastclusterbuild"
 
   # Check that we have the expected version and architecture for Python
@@ -55,7 +55,7 @@ build_script:
 
 test_script:
   # Run the project tests
-  - "python setup.py test"
+  - "python -m unittest discover"
 
 after_test:
   # If tests are successful, create binary packages for the project.
