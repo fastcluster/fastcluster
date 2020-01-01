@@ -47,10 +47,11 @@ install:
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
   - "pip --version"
+  - "pip install .[test]"
 
 build_script:
   # Build the compiled extension
-  - "pip install .[test]"
+  - "python setup.py build"
 
 test_script:
   # Run the project tests
