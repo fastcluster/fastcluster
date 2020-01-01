@@ -56,7 +56,7 @@ install:
 
 build_script:
   # Build the compiled extension
-  - "%CMD_IN_ENV% pip install .[test]"
+  - "pip install .[test]"
 
 test_script:
   # Run the project tests
