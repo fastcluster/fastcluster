@@ -14,36 +14,28 @@ environment:
     # See: http://www.appveyor.com/docs/installed-software#python
 
     - PYTHON_VERSION: "2.7"
-      PYTHON: "C:\\Miniconda"
-      PYTHON_ARCH: "32"
+      MINICONDA: "C:\\Miniconda"
 
     - PYTHON_VERSION: "2.7"
-      PYTHON: "C:\\Miniconda-x64"
-      PYTHON_ARCH: "64"
+      MINICONDA: "C:\\Miniconda-x64"
 
     - PYTHON_VERSION: "3.6"
-      PYTHON: "C:\\Miniconda36"
-      PYTHON_ARCH: "32"
+      MINICONDA: "C:\\Miniconda36"
 
     - PYTHON_VERSION: "3.6"
-      PYTHON: "C:\\Miniconda36-x64"
-      PYTHON_ARCH: "64"
+      MINICONDA: "C:\\Miniconda36-x64"
 
     - PYTHON_VERSION: "3.7"
-      PYTHON: "C:\\Miniconda37"
-      PYTHON_ARCH: "32"
+      MINICONDA: "C:\\Miniconda37"
 
     - PYTHON_VERSION: "3.7"
-      PYTHON: "C:\\Miniconda37-x64"
-      PYTHON_ARCH: "64"
+      MINICONDA: "C:\\Miniconda37-x64"
 
     - PYTHON_VERSION: "3.8"
-      PYTHON: "C:\\Miniconda3"
-      PYTHON_ARCH: "32"
+      MINICONDA: "C:\\Miniconda3"
 
     - PYTHON_VERSION: "3.8"
-      PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_ARCH: "64"
+      MINICONDA: "C:\\Miniconda3-x64"
 
 install:
   - ECHO "Filesystem root:"
@@ -52,15 +44,9 @@ install:
   - ECHO "Installed SDKs:"
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
-  # Prepend Python to the PATH of this build (this cannot be done
-  # from inside the powershell script as it would require to restart
-  # the parent CMD process).
-  - ECHO "%PATH%"
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-
-  - "conda create -q -y --name py%PYTHON_VERSION% python=%PYTHON_VERSION%"
-  - "conda install -q -y --name py%PYTHON_VERSION% pip wheel"
-  - "activate py%PYTHON_VERSION%"
+  - "%MINICONDA%\\Scripts\\conda create -q -y --name fastclusterbuild python=%PYTHON_VERSION%"
+  - "%MINICONDA%\\Scripts\\conda install -q -y --name fastclusterbuild pip wheel"
+  - "%MINICONDA%\\Scripts\\activate fastclusterbuild"
 
   # Check that we have the expected version and architecture for Python
   - "python -c \"import sys; print(sys.executable)\""
