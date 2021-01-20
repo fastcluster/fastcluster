@@ -17,8 +17,7 @@ matrix:
     language: generic
     before_install:
     - brew update
-    - brew unlink python@2
-    - brew upgrade python
+    - brew upgrade python@3
     - python3 -m venv env
     - source env/bin/activate
   - services: docker
