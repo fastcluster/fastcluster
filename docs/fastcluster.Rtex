@@ -1,4 +1,4 @@
-\def\fastclusterversion{1.1.26}
+\def\fastclusterversion{1.1.27}
 \documentclass[fontsize=10pt,paper=letter,BCOR=-6mm]{scrartcl}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -94,7 +94,7 @@
 %\VignetteIndexEntry{User's manual}
 \title{The \textit{fastcluster} package: User's manual}
 \author{\href{http://danifold.net}{Daniel Müllner}}
-\date{December 30, 2019}
+\date{January 20, 2021}
 \subtitle{Version \fastclusterversion}
 \maketitle
 
@@ -114,7 +114,7 @@
 \begin{abstract}\noindent\small
 The fastcluster package is a C++ library for hierarchical, agglomerative
 clustering. It efficiently implements the
-seven most widely used clustering schemes: single, complete, average, weighted/mcquitty, Ward, centroid and median linkage. The library currently has interfaces to two languages: R and Python/SciPy. Part of the functionality is designed as drop-in replacement for existing routines: \linkage{} in the SciPy package \hierarchy{}, \hclust{} in R's \stats{} package, and the \flashClustPack{} package. Once the fastcluster library is loaded at the beginning of the code, every program that uses hierarchical clustering can benefit immediately and effortlessly from the performance gain. Moreover, there are memory-saving routines for clustering of vector data, which go beyond what the existing packages provide.
+seven most widely used clustering schemes: single, complete, average, weighted/\hskip0pt mcquitty, Ward, centroid and median linkage. The library currently has interfaces to two languages: R and Python/SciPy. Part of the functionality is designed as drop-in replacement for existing routines: \linkage{} in the SciPy package \hierarchy{}, \hclust{} in R's \stats{} package, and the \flashClustPack{} package. Once the fastcluster library is loaded at the beginning of the code, every program that uses hierarchical clustering can benefit immediately and effortlessly from the performance gain. Moreover, there are memory-saving routines for clustering of vector data, which go beyond what the existing packages provide.
 \end{abstract}
 
 \noindent
@@ -507,7 +507,7 @@ Like the \texttt{linkage} method, \texttt{linkage\_vector} does not treat NumPy'
 
 For single linkage clustering, any dissimilarity function may be chosen. Basically, every metric which is implemented in the method \pdist{} is reimplemented here. However, the metrics differ in some instances since a number of mistakes and typos (both in the code and in the documentation) were corrected in the \textit{fastcluster} package.\footnote{Hopefully, the SciPy metric will be corrected in future versions and some day coincide with the \textit{fastcluster} definitions. See the bug reports at \url{https://github.com/scipy/scipy/issues/2009}, \url{https://github.com/scipy/scipy/issues/2011}.}
 
-Therefore, the available metrics with their definitions are listed below as a reference. The symbols $u$ and $v$ mostly denote vectors in $\mathbb R^D$ with coordinates $u_j$ and $v_j$ respectively. See below for additional metrics for Boolean vectors. Unless otherwise stated, the input array $X$ is converted to a floating point array (\texttt{X.dtype==numpy.double}) if it does has have already the required data type. Some metrics accept Boolean input; in this case this is stated explicitly below.
+Therefore, the available metrics with their definitions are listed below as a reference. The symbols $u$ and $v$ mostly denote vectors in $\mathbb R^D$ with coordinates $u_j$ and $v_j$ respectively. See below for additional metrics for Boolean vectors. Unless otherwise stated, the input array $X$ is converted to a floating point array (\texttt{X.dtype==\allowbreak numpy.double}) if it does has have already the required data type. Some metrics accept Boolean input; in this case this is stated explicitly below.
 
 \begin{description}
 \item[\normalfont\textit{\q euclidean\q}:] Euclidean metric, $L_2$ norm
@@ -531,7 +531,7 @@ The vector $V=(V_0,\ldots,V_{D-1})$ is given as the \textit{extraarg} argument. 
 \[
  d(u,v) = \sqrt{(u-v)^{\mkern-3mu\top}V (u-v)}
 \]
-Here, $V=\textit{extraarg}$, a $(D\times D)$-matrix. If $V$ is not specified, the inverse of the covariance matrix \texttt{numpy.linalg.inv(numpy.cov(X, rowvar=False))} is used:
+Here, $V=\textit{extraarg}$, a $(D\times D)$-matrix. If $V$ is not specified, the inverse of the covariance matrix \texttt{numpy.linalg.inv(numpy.\allowbreak cov(\allowbreak X, rowvar=False))} is used:
 \[
  (V^{-1})_{j,k} = \frac1{N-1} \sum_i (X_{i,j}-\mu(X_j))(X_{i,k}-\mu(X_k))
 \]
@@ -580,12 +580,12 @@ Summands with $u_j=v_j=0$ contribute 0 to the sum.
 \end{quote}
 This method, however, is much slower than the built-in function.
 
-\item[\normalfont\textit{\q hamming\q}:] The Hamming distance accepts a Boolean array (\texttt{X.dtype==bool}) for efficient storage. Any other data type is converted to \texttt{numpy.double}.
+\item[\normalfont\textit{\q hamming\q}:] The Hamming distance accepts a Boolean array (\texttt{X.\allowbreak dtype\allowbreak ==\allowbreak bool}) for efficient storage. Any other data type is converted to \texttt{numpy.double}.
 \[
  d(u,v) = |\{j\mid u_j\neq v_j\}|
 \]
 
-\item[\normalfont\textit{\q jaccard\q}:] The Jaccard distance accepts a Boolean array (\texttt{X.dtype\hskip0pt ==\hskip0pt bool}) for efficient storage. Any other data type is converted to \texttt{numpy.double}.
+\item[\normalfont\textit{\q jaccard\q}:] The Jaccard distance accepts a Boolean array (\texttt{X.dtype\allowbreak ==\allowbreak bool}) for efficient storage. Any other data type is converted to \texttt{numpy.double}.
 \[
  d(u,v) = \frac{|\{j\mid u_j\neq v_j\}|}{|\{j\mid u_j\neq 0\text{ or } v_j\neq 0\}|}
 \]
@@ -670,7 +670,7 @@ If the same results in both interfaces ought to be obtained, then the \hyperref[
 
 For the \textit{\q average\q} and \textit{\q weighted\q} alias \textit{\q mcquitty\q} methods, the same, non-squared distance matrix \texttt{d} as in the Python interface must be used for the same results. The \textit{\q single\q} and \textit{\q complete\q} methods only depend on the relative order of the distances, hence it does not make a difference whether the method operates on the distances or the squared distances.
 
-The code example in the R documentation (enter \texttt{?hclust} or \texttt{example(hclust)} in R) contains another instance where the squared distance matrix is generated from Euclidean data.
+The code example in the R documentation (enter \texttt{?hclust} or \texttt{ex\-am\-ple(hclust)} in R) contains another instance where the squared distance matrix is generated from Euclidean data.
 
 \item The Python interface is not designed to deal with missing values, and NaN values in the vector data raise an error message. The \hyperref[hclust.vector]{\texttt{hclust.vector}} method in the R interface, in contrast, deals with NaN and the (R specific) {\NA} values in the same way as the \dist{} method does. Confer the documentation for \dist{} for details.
 \end{itemize}

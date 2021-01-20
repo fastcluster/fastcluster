@@ -210,3 +210,7 @@ Version 1.1.25, 05/27/2018
 Version 1.1.26, 12/30/2019
 
 • Small updates for Python 3.8.
+
+Version 1.1.27, 01/20/2021
+
+• Updated NumPy dependency for Python 3.9.

@@ -1,5 +1,5 @@
 # version format
-version: 1.1.26-{build}
+version: 1.1.27-{build}
 
 environment:
   matrix:
@@ -13,12 +13,6 @@ environment:
     - PYTHON_VERSION: "2.7"
       MINICONDA: "C:\\Miniconda-x64"
 
-    - PYTHON_VERSION: "3.6"
-      MINICONDA: "C:\\Miniconda36"
-
-    - PYTHON_VERSION: "3.6"
-      MINICONDA: "C:\\Miniconda36-x64"
-
     - PYTHON_VERSION: "3.7"
       MINICONDA: "C:\\Miniconda37"
 
@@ -26,10 +20,16 @@ environment:
       MINICONDA: "C:\\Miniconda37-x64"
 
     - PYTHON_VERSION: "3.8"
-      MINICONDA: "C:\\Miniconda3"
+      MINICONDA: "C:\\Miniconda38"
 
     - PYTHON_VERSION: "3.8"
-      MINICONDA: "C:\\Miniconda3-x64"
+      MINICONDA: "C:\\Miniconda38-x64"
+
+    - PYTHON_VERSION: "3.9"
+      MINICONDA: "C:\\Miniconda39"
+
+    - PYTHON_VERSION: "3.9"
+      MINICONDA: "C:\\Miniconda39-x64"
 
 install:
   - ECHO "Filesystem root:"
