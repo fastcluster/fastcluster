@@ -3,7 +3,7 @@ branches:
   only:
   - master
   - "/^v.*$/"
-matrix:
+jobs:
   include:
   - os: osx
     language: generic
@@ -37,11 +37,11 @@ script:
 - python setup.py test
 deploy:
   provider: releases
-  api_key:
+  token:
     secure: LLIpsqiZ8qSKoUpxJYmlDx4vhVGe3akQdrbWEyY3cNA/ixN7MTjCyYrCGNAv85GM2Z5coIt/KVJxYDigMLTrw/geJwsNInFZnWlwT627p9CCaH3hXT2P/Fk8jwCGycgUDkPppGYrWXTfy82OZi9LtbDYYP5r6TP/oz4hr7HwlYrk7udEItuWKiqSpyZT1QvRHTWZ24YOCxCq7krMfSdlwtwJS1htbIgQL6x7ZKIeKcp+KT0Omp8mVzbspoG3XUklQmzLIrkh0kemEnEktnOgGHiCUGW95YeO5SiMthiov7YM1t4hKSqmplizjJOhkhkaGP3Wq8tDzAG4Q73+bPZWeDN+Xj3cY7J+4ahWH8CnBe0jV50UbwL5kpPoM4zx+KFNNsYSE0GYoZN2eCcdwmsO4D3eI7KfS+0Ik2p1Uf27q9HiDYN40KyHrEKlGSRKqPb9c7Tj8ad1pWJxdmC6AyDPxvK8j3VDKdUoS3tsSxuJSgpyiTs5yMHbOorbT+h5R2ro56GeNknhCrbFSt64k5eBnYxG5brmwUJB+Ift4WNCr2H5soq0Js2npDJg1BDZb5/viiEftATWsL34C0k+zaw3vzPY0G3ProBHfsYnkjmYupNo2JiPIHte+cI0yLOGihcIB3C/cefQzSxAnGOh+Ws5SD7993zejXkDasROi7mGCqQ=
   file_glob: true
   file: dist/fastcluster*.whl
-  skip_cleanup: true
+  cleanup: false
   on:
     repo: dmuellner/fastcluster
     tags: true
