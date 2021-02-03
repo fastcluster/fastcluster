@@ -13,7 +13,7 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.27'
+version = '1.1.28'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
@@ -47,7 +47,7 @@ def test_all(n,dim):
   method = 'single'
 
   # metrics for boolean vectors
-  pcd = np.random.randint(0, 2, size=(n,dim), dtype=np.bool)
+  pcd = np.random.randint(0, 2, size=(n,dim), dtype=bool)
   pcd2 = pcd.copy()
 
   for metric in ('hamming', 'jaccard', 'yule', 'matching', 'dice',
@@ -127,7 +127,7 @@ def check(Z2, method, D):
     n = len(Ds)
     row_repr = np.arange(2*n-1)
     row_repr[n:] = -1
-    size = np.ones(n, dtype=np.int)
+    size = np.ones(n, dtype=int)
 
     np.fill_diagonal(Ds, np.nan)
 

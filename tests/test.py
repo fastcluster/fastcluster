@@ -11,7 +11,7 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.27'
+version = '1.1.28'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
@@ -46,7 +46,7 @@ def check(Z2, D, method):
     n = len(Ds)
     row_repr = np.arange(2*n-1)
     row_repr[n:] = -1
-    size = np.ones(n, dtype=np.int)
+    size = np.ones(n, dtype=int)
 
     np.fill_diagonal(Ds, np.nan)
 
