@@ -8,9 +8,9 @@ jobs:
   - os: osx
     language: generic
     before_install:
-    - brew upgrade python
-    - python3 -m venv env
-    - source env/bin/activate
+    - brew install pyenv
+    - pyenv install 3.9
+    - pyenv version
   - services: docker
     env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
     install: bash .manylinux.sh
