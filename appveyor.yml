@@ -8,16 +8,22 @@ environment:
     # See: http://www.appveyor.com/docs/installed-software#python
 
     - PYTHON_VERSION: "3.7"
-      MINICONDA: "C:\\Miniconda37"
+      PYTHON_PATH: "C:\\Python37"
 
     - PYTHON_VERSION: "3.7"
-      MINICONDA: "C:\\Miniconda37-x64"
+      PYTHON_PATH: "C:\\Python37-x64"
 
     - PYTHON_VERSION: "3.8"
-      MINICONDA: "C:\\Miniconda3"
+      PYTHON_PATH: "C:\\Python38"
 
     - PYTHON_VERSION: "3.8"
-      MINICONDA: "C:\\Miniconda3-x64"
+      PYTHON_PATH: "C:\\Python38"
+
+    - PYTHON_VERSION: "3.9"
+      PYTHON_PATH: "C:\\Python39"
+
+    - PYTHON_VERSION: "3.9"
+      PYTHON_PATH: "C:\\Python39"
 
 install:
   - ECHO "Filesystem root:"
@@ -26,28 +32,24 @@ install:
   - ECHO "Installed SDKs:"
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
-  - "%MINICONDA%\\Scripts\\conda create -q -y --name fastclusterbuild python=%PYTHON_VERSION%"
-  - "%MINICONDA%\\Scripts\\conda install -q -y --name fastclusterbuild pip wheel"
-  - "%MINICONDA%\\Scripts\\activate fastclusterbuild"
-
   # Check that we have the expected version and architecture for Python
-  - "python -c \"import sys; print(sys.executable)\""
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
-  - "pip --version"
-  - "pip install .[test]"
+  - "%PYTHON_PATH%\\python.exe -c \"import sys; print(sys.executable)\""
+  - "%PYTHON_PATH%\\python.exe --version"
+  - "%PYTHON_PATH%\\python.exe -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "%PYTHON_PATH%\\pip.exe --version"
+  - "%PYTHON_PATH%\\pip.exe install .[test]"
 
 build_script:
   # Build the compiled extension
-  - "python setup.py build"
+  - "%PYTHON_PATH%\\python.exe setup.py build"
 
 test_script:
   # Run the project tests
-  - "python -m unittest discover"
+  - "%PYTHON_PATH%\\python.exe -m unittest discover"
 
 after_test:
   # If tests are successful, create binary packages for the project.
-  - "pip wheel -w dist --no-deps ."
+  - "%PYTHON_PATH%\\pip.exe wheel -w dist --no-deps ."
   - ps: "ls dist"
 
 artifacts:
