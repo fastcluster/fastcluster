@@ -25,7 +25,7 @@ install:
   - ps: "ls \"C:/\""
 
   - ECHO "Installed SDKs:"
-  - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
+  - ps: "ls \"C:/Program Files\""
 
   # Check that we have the expected version and architecture for Python
   - "%PYTHON_PATH%\\python.exe -c \"import sys; print(sys.executable)\""
