@@ -36,8 +36,8 @@ install:
   - "%PYTHON_PATH%\\python.exe -c \"import sys; print(sys.executable)\""
   - "%PYTHON_PATH%\\python.exe --version"
   - "%PYTHON_PATH%\\python.exe -c \"import struct; print(struct.calcsize('P') * 8)\""
-  - "%PYTHON_PATH%\\pip.exe --version"
-  - "%PYTHON_PATH%\\pip.exe install .[test]"
+  - "%PYTHON_PATH%\\python.exe -m pip --version"
+  - "%PYTHON_PATH%\\python.exe -m pip install .[test]"
 
 build_script:
   # Build the compiled extension
@@ -49,7 +49,7 @@ test_script:
 
 after_test:
   # If tests are successful, create binary packages for the project.
-  - "%PYTHON_PATH%\\pip.exe wheel -w dist --no-deps ."
+  - "%PYTHON_PATH%\\python.exe -m pip wheel -w dist --no-deps ."
   - ps: "ls dist"
 
 artifacts:
