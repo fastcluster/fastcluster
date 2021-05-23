@@ -24,9 +24,6 @@ install:
   - ECHO "Filesystem root:"
   - ps: "ls \"C:/\""
 
-  - ECHO "Installed SDKs:"
-  - ps: "ls \"C:/Program Files/Microsoft SDKs\""
-
   - "SET PATH=%PYTHON_PATH%;%PYTHON_PATH%\\Scripts;%path%"
 
   # Check that we have the expected version and architecture for Python
