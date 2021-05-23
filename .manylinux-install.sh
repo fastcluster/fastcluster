@@ -2,10 +2,12 @@
 
 set -e -x
 
+arch=$(uname -m)
+
 # Compile wheels
 for PYBIN in /opt/python/*/bin; do
-    if [[ "${PYBIN}" == *"cp35"* ]] || \
-       [[ "${PYBIN}" == *"cp36"* ]] || \
+    if [[ "${PYBIN}" == *"cp35"* && $arch != "aarch64" ]] || \
+       [[ "${PYBIN}" == *"cp36"* && $arch != "aarch64" ]] || \
        [[ "${PYBIN}" == *"cp37"* ]] || \
        [[ "${PYBIN}" == *"cp38"* ]]; then
         "${PYBIN}/pip" install numpy scipy
