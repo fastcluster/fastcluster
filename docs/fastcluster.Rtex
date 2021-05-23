@@ -1,5 +1,5 @@
-\def\fastclusterversion{1.1.28}
-\documentclass[fontsize=10pt,paper=letter,BCOR=-6mm]{scrartcl}
+\def\fastclusterversion{1.2.0}
+\documentclass[fontsize=10pt,paper=letter,BCOR=-6mm,DIV=8]{scrartcl}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \normalfont
@@ -94,7 +94,7 @@
 %\VignetteIndexEntry{User's manual}
 \title{The \textit{fastcluster} package: User's manual}
 \author{\href{http://danifold.net}{Daniel Müllner}}
-\date{February 3, 2021}
+\date{May 23, 2021}
 \subtitle{Version \fastclusterversion}
 \maketitle
 
@@ -125,7 +125,10 @@ If you use the fastcluster package for scientific work, please cite it as:
 Daniel Müllner, \textit{fastcluster: Fast Hierarchical, Agglomerative Clustering Routines for R and Python}, Journal of Statistical Software, \textbf{53} (2013), no.~9, 1--18, \url{http://www.jstatsoft.org/v53/i09/}.
 \end{quote}
 
-\textbf{The fastcluster package is considered stable and will undergo few changes from now on. If some years from now there have not been any updates, this does not necessarily mean that the package is unmaintained but maybe it just was not necessary to correct anything. Of course, please still report potential bugs and incompatibilities to \texttt{daniel@danifold.net}.}
+The fastcluster package is considered stable and will undergo few changes from now on. If some years from now there have not been any updates, this does not necessarily mean that the package is unmaintained but maybe it just was not necessary to correct anything. Of course, please still report potential bugs and incompatibilities to \texttt{daniel@danifold.net}.
+
+\textbf{The \hyperref[yule]{“Yule” distance function} changed in the Python interface of fastcluster version 1.2.0. This is following a \href{https://github.com/scipy/scipy/commit/3b22d1da98dc1b5f64bc944c21f398d4ba782bce}{change in SciPy 1.6.3}.}
+
 
 \pagebreak
 \tableofcontents
@@ -448,7 +451,7 @@ There is a geometric interpretation: $d(A,B)$ is the distance between the centro
 \[
   d(A,B) = \|\vec c_A-\vec c_B\|,
 \]
-where $\vec c_A$ denotes the centroid of the points in cluster $A$.\pagebreak[2]
+where $\vec c_A$ denotes the centroid of the points in cluster $A$.
 
 \item [\normalfont\textit{method=\q median\q}:]
 $\displaystyle d(K,L) = \sqrt{\tfrac12 d(I,L)^2+\tfrac12 d(J,L)^2-\tfrac14 d(I,J)^2}$
@@ -459,7 +462,7 @@ Define the midpoint $\vec w_K$ of a cluster $K$ iteratively as $\vec w_K=k$ if $
 \]
 in Euclidean space for all nodes $A,B$. Notice however that this distance depends on the order of the merging steps.
 
-\item [\normalfont\textit{method=\q ward\q}:]
+\item [\normalfont\textit{method=\q ward\q}:] \raggedright
 $\displaystyle d(K,L) = \sqrt{\frac{(|I|+|L|)\cdot d(I,L)^2+(|J|+|L|)\cdot d(J,L)^2-|L|\cdot d(I,J)^2}{|I|+|J|+|L|}}$
 
 The global cluster dissimilarity can be expressed as
@@ -608,9 +611,12 @@ Recall that $D$ denotes the number of dimensions, hence $D=a+b+c+d$.
 
 \begin{description}
 \item[\normalfont\textit{\q yule\q}]
-\[
- d(u,v) = \frac{2bc}{ad+bc}
-\]
+\phantomsection\label{yule}
+\begin{align*}
+  d(u,v) &= \frac{2bc}{ad+bc} && \text{if $bc \neq 0$}\\
+  d(u,v) &= 0 && \text{if $bc = 0$}
+\end{align*}
+Note that the second clause $d(u,v)=0$ if $bc = 0$ was introduced in fastcluster version 1.2.0. Before, the result was NaN if the denominator in the formula was zero. fastcluster is following a \href{https://github.com/scipy/scipy/commit/3b22d1da98dc1b5f64bc944c21f398d4ba782bce}{change in SciPy 1.6.3} here.
 
 \item[\normalfont\textit{\q dice\q}]
 \begin{gather*}
@@ -653,7 +659,7 @@ Notice that when given a Boolean array, the \textit{matching} and \textit{hammin
 
 \section{Behavior for NaN and infinite values}\label{sec:infnan}
 
-Whenever the fastcluster package encounters a NaN value as the distance between nodes, either as the initial distance or as an updated distance after some merging steps, it raises an error. This was designed intentionally, even if there might be ways to propagate NaNs through the algorithms in a more or less sensible way. Indeed, since the clustering result depends on every single distance value, the presence of NaN values usually indicates a dubious clustering result, and therefore NaN values should be eliminated in preprocessing.\pagebreak[1]
+Whenever the fastcluster package encounters a NaN value as the distance between nodes, either as the initial distance or as an updated distance after some merging steps, it raises an error. This was designed intentionally, even if there might be ways to propagate NaNs through the algorithms in a more or less sensible way. Indeed, since the clustering result depends on every single distance value, the presence of NaN values usually indicates a dubious clustering result, and therefore NaN values should be eliminated in preprocessing.
 
 In the R interface for vector input, coordinates with {\NA} value are interpreted as missing data and treated in the same way as R's {\dist} function does. This results in valid output whenever the resulting distances are not NaN. The Python interface does not provide any way of handling missing coordinates, and data should be processed accordingly and given as pairwise distances to the clustering algorithms in this case.
 

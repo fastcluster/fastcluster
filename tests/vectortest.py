@@ -13,7 +13,7 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.28'
+version = '1.2.0'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
@@ -233,13 +233,7 @@ message.
         print('Dimension: {0}'.format(dim))
         print('Number of points: {0}'.format(n))
 
-        try:
-            test_all(n,dim)
-        except AssertionError as E:
-            print(E.args[0])
-            print(E.args[1])
-            return False
-    return True
+        test_all(n,dim)
 
 if __name__ == "__main__":
     test(None)

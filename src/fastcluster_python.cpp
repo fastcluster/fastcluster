@@ -1022,10 +1022,10 @@ private:
     }
   }
 
-  // Caution: zero denominators can happen here!
   t_float yule(const t_index i, const t_index j) const {
     nbool_correspond_tfft(i, j);
-    return static_cast<t_float>(2*NTFFT) / static_cast<t_float>(NTFFT + NFFTT);
+    return (NTFFT==0) ? 0 :
+      static_cast<t_float>(2*NTFFT) / static_cast<t_float>(NTFFT + NFFTT);
   }
 
   // Prevent a zero denominator for equal vectors.

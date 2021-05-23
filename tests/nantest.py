@@ -10,7 +10,7 @@ Copyright:
 import numpy as np
 import fastcluster
 
-version = '1.1.28'
+version = '1.2.0'
 if fastcluster.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fastcluster.__version__, version))
 
@@ -65,8 +65,6 @@ def test():
             raise AssertionError('fastcluster did not detect a NaN value!')
         except FloatingPointError:
             pass
-
-    return True
 
 if __name__ == "__main__":
     test()

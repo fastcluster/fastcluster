@@ -218,3 +218,8 @@ Version 1.1.27, 01/20/2021
 Version 1.1.28, 02/03/2021
 
 • Replace deprecated “numpy.bool” and “numpy.int” by “bool” and “int”.
+
+Version 1.2.0, 05/23/2021
+
+• Python interface: Updated definition of the Yule distance function, following
+  a change in SciPy 1.6.3.

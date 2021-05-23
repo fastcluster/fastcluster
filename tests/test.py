@@ -11,7 +11,7 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import math
 
-version = '1.1.28'
+version = '1.2.0'
 if fc.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fc.__version__, version))
 
@@ -152,17 +152,11 @@ message.
         print('Number of points: {0}'.format(n))
         D = pdist(np.random.randn(n,dim))
 
-        try:
-            print('Real distance values:')
-            test_all(D)
-            D = np.round(D*n/4)
-            print('Integer distance values:')
-            test_all(D)
-        except AssertionError as E:
-            print(E)
-            print(squareform(D))
-            return False
-    return True
+        print('Real distance values:')
+        test_all(D)
+        D = np.round(D*n/4)
+        print('Integer distance values:')
+        test_all(D)
 
 if __name__ == "__main__":
     test(None)

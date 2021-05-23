@@ -20,7 +20,7 @@ also be obtained at <http://danifold.net/fastcluster.html>.
 """
 
 __all__ = ['single', 'complete', 'average', 'weighted', 'ward', 'centroid', 'median', 'linkage', 'linkage_vector']
-__version_info__ = ('1', '1', '28')
+__version_info__ = ('1', '2', '0')
 __version__ = '.'.join(__version_info__)
 
 from numpy import double, empty, array, ndarray, var, cov, dot, expand_dims, \
@@ -421,7 +421,8 @@ Recall that D denotes the number of dimensions, hence D=a+b+c+d.
 
 metric='yule'
 
-    d(u,v) = 2bc / (ad+bc)
+    d(u,v) = 2bc / (ad+bc)  if bc≠0
+    d(u,v) = 0              if bc=0
 
 metric='dice':
 
