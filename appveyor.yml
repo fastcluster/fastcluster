@@ -40,17 +40,12 @@ install:
   - "%PYTHON_PATH%\\python.exe -m pip install .[test]"
 
 build_script:
-  # Build the compiled extension
-  - "%PYTHON_PATH%\\python.exe setup.py build"
+  - "%PYTHON_PATH%\\python.exe setup.py bdist_wheel"
+  - ps: "ls dist"
 
 test_script:
   # Run the project tests
-  - "%PYTHON_PATH%\\python.exe -m unittest discover"
-
-after_test:
-  # If tests are successful, create binary packages for the project.
-  - "%PYTHON_PATH%\\python.exe -m pip wheel -w dist --no-deps ."
-  - ps: "ls dist"
+  - "%PYTHON_PATH%\\python.exe setup.py test"
 
 artifacts:
   # Archive the generated packages in the ci.appveyor.com build report.
