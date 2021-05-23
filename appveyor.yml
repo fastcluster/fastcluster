@@ -7,23 +7,17 @@ environment:
     # a later point release.
     # See: http://www.appveyor.com/docs/installed-software#python
 
-    - PYTHON_VERSION: "3.7"
-      PYTHON_PATH: "C:\\Python37"
+    - PYTHON_PATH: "C:\\Python37"
 
-    - PYTHON_VERSION: "3.7"
-      PYTHON_PATH: "C:\\Python37-x64"
+    - PYTHON_PATH: "C:\\Python37-x64"
 
-    - PYTHON_VERSION: "3.8"
-      PYTHON_PATH: "C:\\Python38"
+    - PYTHON_PATH: "C:\\Python38"
 
-    - PYTHON_VERSION: "3.8"
-      PYTHON_PATH: "C:\\Python38"
+    - PYTHON_PATH: "C:\\Python38-x64"
 
-    - PYTHON_VERSION: "3.9"
-      PYTHON_PATH: "C:\\Python39"
+    - PYTHON_PATH: "C:\\Python39"
 
-    - PYTHON_VERSION: "3.9"
-      PYTHON_PATH: "C:\\Python39"
+    - PYTHON_PATH: "C:\\Python39-x64"
 
 install:
   - ECHO "Filesystem root:"
