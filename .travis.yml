@@ -9,14 +9,6 @@ jobs:
     language: generic
     before_install:
     - brew update
-    - brew upgrade python@2
-    - pip2 install virtualenv
-    - python2 -m virtualenv env
-    - source env/bin/activate
-  - os: osx
-    language: generic
-    before_install:
-    - brew update
     - python3 -m venv env
     - source env/bin/activate
   - services: docker
