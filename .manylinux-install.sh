@@ -12,7 +12,6 @@ for PYBIN in /opt/python/*/bin; do
         "${PYBIN}/pip" install .[test]
         "${PYBIN}/python" setup.py bdist_wheel
         "${PYBIN}/python" setup.py test
-        false
     fi
 done
 
