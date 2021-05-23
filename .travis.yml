@@ -8,7 +8,7 @@ jobs:
   - os: osx
     language: generic
     before_install:
-    - pyenv install 3.9
+    - pyenv install 3.8
     - pyenv version
   - services: docker
     env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
