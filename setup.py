@@ -72,7 +72,7 @@ Christoph Dalitz wrote a pure `C++ interface to fastcluster
 
 Reference: Daniel Müllner, *fastcluster: Fast Hierarchical, Agglomerative
 Clustering Routines for R and Python*, Journal of Statistical Software, **53**
-(2013), no. 9, 1–18, http://www.jstatsoft.org/v53/i09/.
+(2013), no. 9, 1–18, https://www.jstatsoft.org/v53/i09/.
 """,
       long_description_content_type='text/x-rst',
       python_requires='>=3',
