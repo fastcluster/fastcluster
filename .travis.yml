@@ -8,7 +8,7 @@ jobs:
   - os: osx
     language: generic
     before_install:
-    - brew update python
+    - brew upgrade python
     - python3 -m venv env
     - source env/bin/activate
   - services: docker
