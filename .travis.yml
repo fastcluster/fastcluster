@@ -7,11 +7,6 @@ jobs:
   include:
   - os: osx
     language: generic
-    addons:
-      homebrew:
-        packages:
-        - pyenv
-        update: true
     before_install:
     - pyenv install -l
     - pyenv install 3.8.0
