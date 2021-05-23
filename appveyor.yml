@@ -30,6 +30,7 @@ install:
   - "%PYTHON_PATH%\\python.exe -c \"import sys; print(sys.executable)\""
   - "%PYTHON_PATH%\\python.exe --version"
   - "%PYTHON_PATH%\\python.exe -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "%PYTHON_PATH%\\python.exe -m pip --upgrade pip wheel"
   - "%PYTHON_PATH%\\python.exe -m pip --version"
   - "%PYTHON_PATH%\\python.exe -m pip install .[test]"
 
