@@ -22,6 +22,11 @@ jobs:
     - PRE_CMD=linux32
     install: bash .manylinux.sh
     script: true
+  - services: docker
+    arch: arm64
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_aarch64
+    install: bash .manylinux.sh
+    script: true
 install:
 - pip install --upgrade pip wheel
 - pip install .[test]
