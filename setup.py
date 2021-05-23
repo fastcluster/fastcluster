@@ -75,7 +75,7 @@ Clustering Routines for R and Python*, Journal of Statistical Software, **53**
 (2013), no. 9, 1–18, http://www.jstatsoft.org/v53/i09/.
 """,
       long_description_content_type='text/x-rst',
-      python_requires='>=3'
+      python_requires='>=3',
       requires=['numpy'],
       install_requires=["numpy>=1.9"],
       extras_require={'test':  ['scipy>=1.6.3']},
