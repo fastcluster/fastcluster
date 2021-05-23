@@ -1,6 +1,7 @@
 # version format
 version: 1.2.0-{build}
 
+image: Visual Studio 2019
 environment:
   matrix:
     # Pre-installed Python versions, which Appveyor may upgrade to
@@ -25,8 +26,6 @@ install:
 
   - ECHO "Installed SDKs:"
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
-  - "dir %PYTHON_PATH%"
-  - "dir %PYTHON_PATH%\\Scripts"
 
   # Check that we have the expected version and architecture for Python
   - "%PYTHON_PATH%\\python.exe -c \"import sys; print(sys.executable)\""
