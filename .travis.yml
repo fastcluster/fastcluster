@@ -26,8 +26,12 @@ install:
 - pip install --upgrade pip wheel
 - pip install .[test]
 - python setup.py bdist_wheel
+- pwd
+- ls -la dist
 script:
 - python setup.py test
+- pwd
+- ls -la dist
 deploy:
   provider: releases
   token:
