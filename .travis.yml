@@ -6,11 +6,12 @@ branches:
 jobs:
   include:
   - os: osx
+    # TODO: Update according to https://docs.travis-ci.com/user/reference/osx/#macos-version.
+    osx_image: xcode12.5
     language: generic
     before_install:
-    - pyenv install -l
-    - pyenv install 3.8.0
-    - pyenv version
+    - python3 -m venv env
+    - source env/bin/activate
   - services: docker
     env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
     install: bash .manylinux.sh
@@ -22,11 +23,11 @@ jobs:
     install: bash .manylinux.sh
     script: true
 install:
-- pip3 install --upgrade pip wheel
-- pip3 install .[test]
-- python3 setup.py bdist_wheel
+- pip install --upgrade pip wheel
+- pip install .[test]
+- python setup.py bdist_wheel
 script:
-- python3 setup.py test
+- python setup.py test
 deploy:
   provider: releases
   token:
