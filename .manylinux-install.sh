@@ -6,8 +6,7 @@ arch=$(uname -m)
 
 # Compile wheels
 for PYBIN in /opt/python/*/bin; do
-    if [[ "${PYBIN}" == *"cp35"* && $arch != "aarch64" ]] || \
-       [[ "${PYBIN}" == *"cp36"* && $arch != "aarch64" ]] || \
+    if [[ "${PYBIN}" == *"cp36"* && $arch != "aarch64" ]] || \
        [[ "${PYBIN}" == *"cp37"* ]] || \
        [[ "${PYBIN}" == *"cp38"* ]] || \
        [[ "${PYBIN}" == *"cp39"* ]]; then
@@ -27,6 +26,7 @@ done
 
 pwd
 ls -la dist
+ls -la /io
 ls -la /io/dist
 
 # Bundle external shared libraries into the wheels
