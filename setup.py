@@ -27,8 +27,8 @@ setup(name='fastcluster',
       py_modules=['fastcluster'],
       description='Fast hierarchical clustering routines for R and Python.',
       long_description=u"""
-This library provides Python functions for hierarchical clustering. It generates
-hierarchical clusters from distance matrices or from vector data.
+This library provides Python functions for hierarchical clustering. It
+generates hierarchical clusters from distance matrices or from vector data.
 
 This module is intended to replace the functions
 ```

@@ -36,7 +36,7 @@ or manually from the source package at CRAN. Both distributions compile and
 install identical libraries.
 
 Christoph Dalitz wrote a pure C++ interface to fastcluster:
-<http://informatik.hsnr.de/~dalitz/data/hclust>.
+<https://lionel.kr.hs-niederrhein.de/~dalitz/data/hclust/>.
 
 
 Installation
