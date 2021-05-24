@@ -31,9 +31,9 @@ This library provides Python functions for hierarchical clustering. It generates
 hierarchical clusters from distance matrices or from vector data.
 
 This module is intended to replace the functions
-
+```
     linkage, single, complete, average, weighted, centroid, median, ward
-
+```
 in the module [`scipy.cluster.hierarchy`](
 https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html) with the same
 functionality but much faster algorithms. Moreover, the function
@@ -81,7 +81,7 @@ Reference: Daniel Müllner, *fastcluster: Fast Hierarchical, Agglomerative
 Clustering Routines for R and Python*, Journal of Statistical Software, **53**
 (2013), no. 9, 1–18, https://www.jstatsoft.org/v53/i09/.
 """,
-      long_descriptio_content_type='text/markdown',
+      long_description_content_type='text/markdown',
       python_requires='>=3',
       requires=['numpy'],
       install_requires=["numpy>=1.9"],
