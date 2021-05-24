@@ -224,3 +224,7 @@ Version 1.2.0, 05/23/2021
 • Dropped support for Python 2.
 • Python interface: Updated definition of the Yule distance function, following
   a change in SciPy 1.6.3.
+
+Version 1.2.1, 05/24/2021
+
+• Documentation update.
