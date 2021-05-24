@@ -228,3 +228,7 @@ Version 1.2.0, 05/23/2021
 Version 1.2.1, 05/24/2021
 
 • Documentation update.
+
+Version 1.2.2, 05/24/2021
+
+• Documentation update.
