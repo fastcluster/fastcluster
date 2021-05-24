@@ -18,5 +18,5 @@ done
 
 # Bundle external shared libraries into the wheels
 for whl in dist/fastcluster*.whl; do
-    auditwheel repair "$whl"
+    auditwheel repair "$whl" -w /io/dist/
 done
