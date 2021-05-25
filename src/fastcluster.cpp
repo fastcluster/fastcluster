@@ -50,8 +50,17 @@
 #ifdef NO_INCLUDE_FENV
 #pragma message("Do not use fenv header.")
 #else
-#pragma message("Use fenv header. If there is a warning about unknown #pragma STDC FENV_ACCESS, this can be ignored.")
-#pragma STDC FENV_ACCESS on
+#pragma message("Use fenv header.")
+/* The following #pragma is necessary even if it generates a warning in many
+   compilers. Quoting https://en.cppreference.com/w/cpp/numeric/fenv:
+   "The floating-point environment access and modification is only meaningful
+   when #pragma STDC FENV_ACCESS is supported and is set to ON. [...]
+   In practice, few current compilers, such as HP aCC, Oracle Studio, or IBM XL,
+   support the #pragma explicitly, but most compilers allow meaningful access
+   to the floating-point environment anyway."
+*/
+#pragma STDC FENV_ACCESS ON
+#pragma messag("If there is a warning about unknown #pragma STDC FENV_ACCESS, this can be ignored.")
 #include <fenv.h>
 #endif
 
