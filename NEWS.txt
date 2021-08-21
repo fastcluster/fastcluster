@@ -236,3 +236,7 @@ Version 1.2.2, 05/24/2021
 Version 1.2.3, 05/24/2021
 
 • Fixed #pragma in fastcluster.cpp.
+
+Version 1.2.4, 08/21/2021
+
+• Fixed NumPy versions in Travis builds.
