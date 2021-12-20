@@ -7,14 +7,7 @@
 # extension was compiled with a numpy 1.15 and the user has 1.12 on their
 # system, the extension will not work.
 #
-# For each version of Python, we choose the earliest versions of numpy that
-# has binary wheels for that Python version for window, mac, and linux.
-# Otherwise building fastcluster would require compiling numpy which
-# would make things much, much slower.
+# Scipy's "oldest_supported_numpy" package does this work for us.
 requires = ["setuptools",
             "wheel",
-            "numpy==1.10.4; python_version<'3.6'",
-            "numpy==1.12.1; python_version=='3.6'",
-            "numpy==1.15.0; python_version=='3.7'",
-            "numpy==1.17.3; python_version=='3.8'",
-            "numpy==1.19.3; python_version=='3.9'"]
+            "oldest_supported_numpy"]
