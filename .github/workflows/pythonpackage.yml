@@ -1,0 +1,60 @@
+name: tests
+
+on: [push]
+
+jobs:
+  test:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        python-version: [3.7, 3.8, 3.9, "3.10"]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -e .[test]
+    - name: Test with pytest
+      run: pytest
+  wheels:
+    needs: test
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v2
+    - name: Set up QEMU
+      if: runner.os == 'Linux'
+      uses: docker/setup-qemu-action@v1
+      with:
+        platforms: all    
+    - name: Build wheels
+      uses: pypa/cibuildwheel@v2.2.2
+      env:
+        CIBW_ARCHS_MACOS: x86_64 arm64 universal2
+        CIBW_ARCHS_LINUX: auto aarch64
+        CIBW_SKIP: pp38-macosx_* pp37-macosx_* pp37-win_* pp38-win_* pp38-manylinux_aarch64 pp37-manylinux_aarch64 pp37-manylinux_i686 pp38-manylinux_i686 *-musllinux_* *s390x *ppc64le
+        CIBW_BUILD_VERBOSITY: 1
+    - name: Build sdist
+      run: |
+        pip install numpy cython wheel setuptools
+        python setup.py sdist
+    - name: Publish wheels to PyPI
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        pip install twine
+        twine upload --skip-existing wheelhouse/*.whl
+        twine upload dist/*
+      continue-on-error: true
