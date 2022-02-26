@@ -240,3 +240,7 @@ Version 1.2.3, 05/24/2021
 Version 1.2.4, 08/21/2021
 
 • Fixed NumPy versions in Travis builds.
+
+Version 1.2.5, 02/26/2022
+
+• Updated pyproject.toml to work with Python 3.10 and future Python versions.
