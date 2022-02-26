@@ -20,7 +20,7 @@ also be obtained at <http://danifold.net/fastcluster.html>.
 """
 
 __all__ = ['single', 'complete', 'average', 'weighted', 'ward', 'centroid', 'median', 'linkage', 'linkage_vector']
-__version_info__ = ('1', '2', '4')
+__version_info__ = ('1', '2', '5')
 __version__ = '.'.join(__version_info__)
 
 from numpy import double, empty, array, ndarray, var, cov, dot, expand_dims, \

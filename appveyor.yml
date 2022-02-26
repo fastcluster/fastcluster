@@ -1,0 +1,51 @@
+# version format
+version: 1.2.5-{build}
+
+image: Visual Studio 2019
+environment:
+  matrix:
+    # Pre-installed Python versions, which Appveyor may upgrade to
+    # a later point release.
+    # See: http://www.appveyor.com/docs/installed-software#python
+
+    - PYTHON_PATH: "C:\\Python37"
+
+    - PYTHON_PATH: "C:\\Python37-x64"
+
+    - PYTHON_PATH: "C:\\Python38"
+
+    - PYTHON_PATH: "C:\\Python38-x64"
+
+    - PYTHON_PATH: "C:\\Python39"
+
+    - PYTHON_PATH: "C:\\Python39-x64"
+
+install:
+  - ECHO "Filesystem root:"
+  - ps: "ls \"C:/\""
+
+  - "SET PATH=%PYTHON_PATH%;%PYTHON_PATH%\\Scripts;%path%"
+
+  # Check that we have the expected version and architecture for Python
+  - "python.exe -c \"import sys; print(sys.executable)\""
+  - "python.exe --version"
+  - "python.exe -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "python.exe -m pip install --upgrade pip wheel"
+  - "python.exe -m pip --version"
+  - "python.exe -m pip install .[test]"
+
+build_script:
+  - "python.exe setup.py bdist_wheel"
+  - ps: "ls dist"
+
+test_script:
+  # Run the project tests
+  - "python.exe setup.py test"
+
+artifacts:
+  # Archive the generated packages in the ci.appveyor.com build report.
+  - path: dist\*
+
+#on_success:
+#  - TODO: upload the content of dist/*.whl to a public wheelhouse
+#
