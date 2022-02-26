@@ -47,7 +47,7 @@ install the fastcluster package for R.
 
 Usage
 ‾‾‾‾‾
-1. R
+1. R
 ‾‾‾‾
 In R, load the package with the following command:
 
