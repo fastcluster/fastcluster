@@ -1,0 +1,45 @@
+language: generic
+branches:
+  only:
+  - master
+  - "/^v.*$/"
+jobs:
+  include:
+  - os: osx
+    # TODO: Update according to https://docs.travis-ci.com/user/reference/osx/#macos-version.
+    osx_image: xcode12.5
+    language: generic
+    before_install:
+    - python3 -m venv env
+    - source env/bin/activate
+  - services: docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64
+    install: bash .manylinux.sh
+    script: true
+  - services: docker
+    env:
+    - DOCKER_IMAGE=quay.io/pypa/manylinux2014_i686
+    - PRE_CMD=linux32
+    install: bash .manylinux.sh
+    script: true
+  - services: docker
+    arch: arm64
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_aarch64
+    install: bash .manylinux.sh
+    script: true
+install:
+- pip install --upgrade pip wheel
+- pip install .[test]
+- python setup.py bdist_wheel
+script:
+- python setup.py test
+deploy:
+  provider: releases
+  token:
+    secure: KBfC8lAqwL+Vr46Ujlk+dCN50xGOBO2ASV5TMpUrFwgZOwetdZnIYVTwjVqK3DtPMoI0y9Q+xBJO6+ianGohYNoxea7+4PNwiISCR9S2CiMhzGA46b0Aod4TD+/1+o4/ZnR8Yxs7A681hnypd01Nbl7x6FBYE8i/cl8gtr9OnJSL2OjJ7HR1ZEVl3j8r/6Dfl1M4cnP9EVfRYTL0XQcnUcMmFDBBEpUtQqL0g8EUYIL4sjeYbXgqjM+zYg6swT9BFbWfUNRRGoA/y3CrgE46ZCIjWQL85yihLbWzSUuWej+3XeLI6uHH141tNRkSmeoRuhOczmS7RCZcZpu4UnAFtF9YbfLtwCgzl2PPfH6rVYcPAzZ8GkfyrIvlPnBSP3ARjuislSvhD5RzH7wI92U6+EC/MQ31g29Lp8uP1y9/0/RHJPYCZE/0ovRKUun2qwRl8EyY8UmwELjOEhR69CE3UYpVy71mGeclf7hVi1ntlIG55gLf5BM3BvD16aP0+3kn9LhpprfQSaRQXyum0MNn3V8HzICKqH2P/eYclry9WtS8BiV8OON7TAPlVsm8/8utiW3gIjgR8IHzx3Tc9Yd8OuF8cK7QjALcRtiWO6/lt3PH/UASjwB4At+6MVoa22x+maciGcHT1FaGjlkQnVyNt7CV9g0SfVQab1r/1fNfq6c=
+  file_glob: true
+  file: dist/fastcluster*.whl
+  skip_cleanup: true
+  on:
+    repo: dmuellner/fastcluster
+    tags: true
