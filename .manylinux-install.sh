@@ -15,7 +15,8 @@ for PYBIN in /opt/python/*/bin; do
     fi
 
     "${PYBIN}/python" -m venv fastcluster-env
-    fastcluster-env/bin/activate
+    ls -l fastcluster-env/bin
+    source fastcluster-env/bin/activate
     pip install --upgrade pip wheel
     pip install oldest_supported_numpy
     pip install .[test]
