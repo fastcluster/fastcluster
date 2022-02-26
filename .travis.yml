@@ -13,12 +13,12 @@ jobs:
     - python3 -m venv env
     - source env/bin/activate
   - services: docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64
     install: bash .manylinux.sh
     script: true
   - services: docker
     env:
-    - DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
+    - DOCKER_IMAGE=quay.io/pypa/manylinux2014_i686
     - PRE_CMD=linux32
     install: bash .manylinux.sh
     script: true
