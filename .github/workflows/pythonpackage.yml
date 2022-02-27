@@ -1,4 +1,4 @@
-name: Test, Build, and Publish
+name: Test, build, and publish
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   test:
+    name: Test on ${{ matrix.os }}, ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -31,7 +32,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-10.15]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
