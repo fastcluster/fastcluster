@@ -80,6 +80,4 @@ jobs:
       - name: Release on GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            ./dist/*.tar.gz
-            ./wheelhouse/*.whl
+          files: ./dist/*
