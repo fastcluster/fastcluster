@@ -41,7 +41,7 @@ jobs:
         with:
           platforms: all
       - name: Build wheels
-        uses: pypa/cibuildwheel@e9ef3e975082f6f57e64eebd798219c5a7bcf3fd
+        uses: pypa/cibuildwheel@1a5fec7075255d974a4adf330e507dbe4bce6cb7
         env:
           CIBW_ARCHS_LINUX: x86_64 aarch64 i686
           CIBW_ARCHS_MACOS: x86_64 arm64 universal2
