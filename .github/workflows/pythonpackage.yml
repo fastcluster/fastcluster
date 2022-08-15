@@ -41,7 +41,7 @@ jobs:
         with:
           platforms: all
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.8.0
+        uses: pypa/cibuildwheel@v2.9.0
         env:
           CIBW_ARCHS_LINUX: x86_64 aarch64 i686
           CIBW_ARCHS_MACOS: x86_64 arm64 universal2
