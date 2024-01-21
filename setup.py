@@ -4,8 +4,8 @@ u'''
   fastcluster: Fast hierarchical clustering routines for R and Python
 
   Copyright:
-    * Until package version 1.1.23: © 2011 Daniel Müllner <http://danifold.net>
-    * All changes from version 1.1.24 on: © Google Inc. <http://google.com>
+    * Until package version 1.1.23: © 2011 Daniel Müllner <https://danifold.net>
+    * All changes from version 1.1.24 on: © Google Inc. <https://www.google.com>
 '''
 import os
 import sys
@@ -127,6 +127,6 @@ Clustering Routines for R and Python*, Journal of Statistical Software, **53**
           "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
           "Intended Audience :: Science/Research",
           "Development Status :: 5 - Production/Stable"],
-      url='http://danifold.net',
+      url='https://danifold.net',
       test_suite='tests.fastcluster_test',
 )

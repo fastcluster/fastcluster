@@ -1,3 +1,3 @@
 # fastcluster
 
-See the project home page: http://danifold.net/fastcluster.html
+See the project home page: https://danifold.net/fastcluster.html

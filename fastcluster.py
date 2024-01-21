@@ -2,8 +2,8 @@
 __doc__ = """Fast hierarchical clustering routines for R and Python
 
 Copyright:
-Until package version 1.1.23: © 2011 Daniel Müllner <http://danifold.net>
-All changes from version 1.1.24 on: © Google Inc. <http://google.com>
+Until package version 1.1.23: © 2011 Daniel Müllner <https://danifold.net>
+All changes from version 1.1.24 on: © Google Inc. <https://www.google.com>
 
 This module provides fast hierarchical clustering routines. The "linkage"
 method is designed to provide a replacement for the “linkage” function and
@@ -16,7 +16,7 @@ saving algorithms.
 
 Refer to the User's manual "fastcluster.pdf" for comprehensive details. It
 is located in the directory inst/doc/ in the source distribution and may
-also be obtained at <http://danifold.net/fastcluster.html>.
+also be obtained at <https://danifold.net/fastcluster.html>.
 """
 
 __all__ = ['single', 'complete', 'average', 'weighted', 'ward', 'centroid', 'median', 'linkage', 'linkage_vector']
