@@ -496,7 +496,7 @@ public:
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
         V = reinterpret_cast<PyArrayObject *>(PyArray_FromAny(extraarg,
-                PyArray_DescrFromType(NPY_DOUBLE),
+                PyArray_DescrFromType(NPY_FLOAT),
                 1, 1,
                 NPY_ARRAY_CARRAY_RO,
                 NULL));
@@ -565,7 +565,7 @@ public:
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
         V = reinterpret_cast<PyArrayObject *>(PyArray_FromAny(extraarg,
-              PyArray_DescrFromType(NPY_DOUBLE),
+              PyArray_DescrFromType(NPY_FLOAT),
               2, 2,
               NPY_ARRAY_CARRAY_RO,
               NULL));
@@ -796,7 +796,7 @@ private:
                       "The Minkowski metric needs a parameter.");
       throw pythonerror();
     }
-    postprocessarg = PyFloat_AsDouble(extraarg);
+    postprocessarg = static_cast<t_float>(PyFloat_AsDouble(extraarg));
     if (PyErr_Occurred()) {
       throw pythonerror();
     }
@@ -950,7 +950,7 @@ private:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
-    const t_float C_result = PyFloat_AsDouble(result);
+    const t_float C_result = static_cast<t_float>(PyFloat_AsDouble(result));
     Py_DECREF(result);
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic pop

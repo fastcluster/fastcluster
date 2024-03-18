@@ -149,7 +149,7 @@ typedef int_fast32_t t_index;
 #if (INT_MAX > MAX_INDEX)
 #error The integer format "int" must not have a greater range than "t_index".
 #endif
-typedef double t_float;
+typedef float t_float;
 
 /* Method codes.
 
