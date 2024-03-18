@@ -280,7 +280,7 @@ mtridx = {'euclidean'      :  0,
 booleanmetrics = ('yule', 'matching', 'dice', 'kulsinski', 'rogerstanimoto',
                   'sokalmichener', 'russellrao', 'sokalsneath', 'kulsinski')
 
-def linkage_vector(X, method='single', metric='euclidean', extraarg=None):
+def linkage_vector(X, method='single', metric='euclidean', extraarg=None, low_precision=False):
     r'''Hierarchical (agglomerative) clustering on Euclidean data.
 
 Compared to the 'linkage' method, 'linkage_vector' uses a memory-saving
@@ -463,6 +463,7 @@ metric='matching':
   (False, True) but the Hamming distance is 0.5.
 
 metric='sokalmichener' is an alias for 'matching'.'''
+    dtype = single_ if low_precision else double
     if method=='single':
         assert metric!='USER'
         if metric in ('hamming', 'jaccard'):
@@ -473,10 +474,10 @@ metric='sokalmichener' is an alias for 'matching'.'''
         X = array(X, dtype=dtype, copy=False, order='C', subok=True)
     else:
         assert metric=='euclidean'
-        X = array(X, dtype=single_, copy=(method=='ward'), order='C', subok=True)
+        X = array(X, dtype=dtype, copy=(method=='ward'), order='C', subok=True)
     assert X.ndim==2
     N = len(X)
-    Z = empty((N-1,4), dtype=single_)
+    Z = empty((N-1,4), dtype=dtype)
 
     if metric=='seuclidean':
         if extraarg is None:
@@ -486,7 +487,7 @@ metric='sokalmichener' is an alias for 'matching'.'''
             extraarg = inv(cov(X, rowvar=False))
         # instead of the inverse covariance matrix, pass the matrix product
         # with the data matrix!
-        extraarg = array(dot(X,extraarg),dtype=single_, copy=False, order='C', subok=True)
+        extraarg = array(dot(X,extraarg),dtype=dtype, copy=False, order='C', subok=True)
     elif metric=='correlation':
         X = X-expand_dims(X.mean(axis=1),1)
         metric='cosine'
