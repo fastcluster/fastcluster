@@ -72,10 +72,16 @@
 #include <string> // for std::string
 
 #include <cfloat> // also for DBL_MAX, DBL_MIN
-#ifndef DBL_MANT_DIG
-#error The constant DBL_MANT_DIG could not be defined.
-#endif
-#define T_FLOAT_MANT_DIG DBL_MANT_DIG
+template<typename T>
+constexpr int get_mantissa_digits();
+template<>
+constexpr int get_mantissa_digits<float>() {
+    return FLT_MANT_DIG;
+}
+template<>
+constexpr int get_mantissa_digits<double>() {
+    return DBL_MANT_DIG;
+}
 
 #ifndef LONG_MAX
 #include <climits>
@@ -149,7 +155,7 @@ typedef int_fast32_t t_index;
 #if (INT_MAX > MAX_INDEX)
 #error The integer format "int" must not have a greater range than "t_index".
 #endif
-typedef float t_float;
+// typedef double t_float; // Since we are not templating, this line is not needed.
 
 /* Method codes.
 
@@ -222,18 +228,21 @@ public:
   inline operator type *() const { return ptr; }
 };
 
+template<typename T>
 struct node {
   t_index node1, node2;
-  t_float dist;
+  T dist;
 };
 
-inline bool operator< (const node a, const node b) {
+template<typename T>
+inline bool operator< (const node<T> a, const node<T> b) {
   return (a.dist < b.dist);
 }
 
+template<typename T>
 class cluster_result {
 private:
-  auto_array_ptr<node> Z;
+  auto_array_ptr<node<T>> Z; // Use node<T> here
   t_index pos;
 
 public:
@@ -242,30 +251,30 @@ public:
     , pos(0)
   {}
 
-  void append(const t_index node1, const t_index node2, const t_float dist) {
+  void append(const t_index node1, const t_index node2, const T dist) {
     Z[pos].node1 = node1;
     Z[pos].node2 = node2;
     Z[pos].dist  = dist;
     ++pos;
   }
 
-  node * operator[] (const t_index idx) const { return Z + idx; }
+  node<T> * operator[] (const t_index idx) const { return Z + idx; }
 
   /* Define several methods to postprocess the distances. All these functions
-     are monotone, so they do not change the sorted order of distances. */
-
+     are monotone, so they do not change the sorted order of distances. */  
+  
   void sqrt() const {
-    for (node * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
+    for (node<T> * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
       ZZ->dist = std::sqrt(ZZ->dist);
     }
   }
 
-  void sqrt(const t_float) const { // ignore the argument
+  void sqrt(const T) const { // ignore the argument
     sqrt();
   }
 
-  void sqrtdouble(const t_float) const { // ignore the argument
-    for (node * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
+  void sqrtdouble(const T) const { // ignore the argument
+    for (node<T> * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
       ZZ->dist = std::sqrt(2*ZZ->dist);
     }
   }
@@ -276,21 +285,21 @@ public:
   #define my_pow std::pow
   #endif
 
-  void power(const t_float p) const {
-    t_float const q = 1/p;
-    for (node * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
+  void power(const T p) const {
+    T const q = 1/p;
+    for (node<T> * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
       ZZ->dist = my_pow(ZZ->dist,q);
     }
   }
 
-  void plusone(const t_float) const { // ignore the argument
-    for (node * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
+  void plusone(const T) const { // ignore the argument
+    for (node<T> * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
       ZZ->dist += 1;
     }
   }
 
-  void divide(const t_float denom) const {
-    for (node * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
+  void divide(const T denom) const {
+    for (node<T> * ZZ=Z; ZZ!=Z+pos; ++ZZ) {
       ZZ->dist /= denom;
     }
   }
@@ -402,8 +411,9 @@ class nan_error{};
 class fenv_error{};
 #endif
 
-static void MST_linkage_core(const t_index N, const t_float * const D,
-                             cluster_result & Z2) {
+template <typename T>
+static void MST_linkage_core(const t_index N, const T * const D,
+                             cluster_result<T> & Z2) {
 /*
     N: integer, number of data points
     D: condensed distance matrix N*(N-1)/2
@@ -417,14 +427,14 @@ static void MST_linkage_core(const t_index N, const t_float * const D,
   t_index i;
   t_index idx2;
   doubly_linked_list active_nodes(N);
-  auto_array_ptr<t_float> d(N);
+  auto_array_ptr<T> d(N);
 
   t_index prev_node;
-  t_float min;
+  T min;
 
   // first iteration
   idx2 = 1;
-  min = std::numeric_limits<t_float>::infinity();
+  min = std::numeric_limits<T>::infinity();
   for (i=1; i<N; ++i) {
     d[i] = D[i-1];
 #if HAVE_DIAGNOSTIC
@@ -450,7 +460,7 @@ static void MST_linkage_core(const t_index N, const t_float * const D,
     idx2 = active_nodes.succ[0];
     min = d[idx2];
     for (i=idx2; i<prev_node; i=active_nodes.succ[i]) {
-      t_float tmp = D_(i, prev_node);
+      T tmp = D_(i, prev_node);
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
@@ -468,7 +478,7 @@ static void MST_linkage_core(const t_index N, const t_float * const D,
       }
     }
     for (; i<N; i=active_nodes.succ[i]) {
-      t_float tmp = D_(prev_node, i);
+      T tmp = D_(prev_node, i);
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
@@ -491,13 +501,18 @@ static void MST_linkage_core(const t_index N, const t_float * const D,
 
 /* Functions for the update of the dissimilarity array */
 
-inline static void f_single( t_float * const b, const t_float a ) {
+template<typename T>
+inline static void f_single( T * const b, const T a) {
   if (*b > a) *b = a;
 }
-inline static void f_complete( t_float * const b, const t_float a ) {
+
+template<typename T>
+inline static void f_complete( T * const b, const T a) {
   if (*b < a) *b = a;
 }
-inline static void f_average( t_float * const b, const t_float a, const t_float s, const t_float t) {
+
+template<typename T>
+inline static void f_average( T * const b, const T a, const T s, const T t) {
   *b = s*a + t*(*b);
   #ifndef FE_INVALID
 #if HAVE_DIAGNOSTIC
@@ -512,8 +527,10 @@ inline static void f_average( t_float * const b, const t_float a, const t_float 
 #endif
   #endif
 }
-inline static void f_weighted( t_float * const b, const t_float a) {
-  *b = (a+*b)*.5;
+
+template<typename T>
+inline static void f_weighted( T * const b, const T a) {
+  *b = (a + *b) * T(0.5);
   #ifndef FE_INVALID
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
@@ -527,7 +544,9 @@ inline static void f_weighted( t_float * const b, const t_float a) {
 #endif
   #endif
 }
-inline static void f_ward( t_float * const b, const t_float a, const t_float c, const t_float s, const t_float t, const t_float v) {
+
+template<typename T>
+inline static void f_ward( T * const b, const T a, const T c, const T s, const T t, const T v) {
   *b = ( (v+s)*a - v*c + (v+t)*(*b) ) / (s+t+v);
   //*b = a+(*b)-(t*a+s*(*b)+v*c)/(s+t+v);
   #ifndef FE_INVALID
@@ -543,7 +562,9 @@ inline static void f_ward( t_float * const b, const t_float a, const t_float c, 
 #endif
   #endif
 }
-inline static void f_centroid( t_float * const b, const t_float a, const t_float stc, const t_float s, const t_float t) {
+
+template<typename T>
+inline static void f_centroid( T * const b, const T a, const T stc, const T s, const T t) {
   *b = s*a - stc + t*(*b);
   #ifndef FE_INVALID
   if (fc_isnan(*b)) {
@@ -554,8 +575,10 @@ inline static void f_centroid( t_float * const b, const t_float a, const t_float
 #endif
   #endif
 }
-inline static void f_median( t_float * const b, const t_float a, const t_float c_4) {
-  *b = (a+(*b))*.5 - c_4;
+
+template<typename T>
+inline static void f_median( T * const b, const T a, const T c_4) {
+  *b = (a + (*b)) * T(0.5) - c_4;
   #ifndef FE_INVALID
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
@@ -570,8 +593,8 @@ inline static void f_median( t_float * const b, const t_float a, const t_float c
   #endif
 }
 
-template <method_codes method, typename t_members>
-static void NN_chain_core(const t_index N, t_float * const D, t_members * const members, cluster_result & Z2) {
+template <method_codes method, typename t_members, typename T>
+static void NN_chain_core(const t_index N, T * const D, t_members * const members, cluster_result<T> & Z2) {
 /*
     N: integer
     D: condensed distance matrix N*(N-1)/2
@@ -589,12 +612,12 @@ static void NN_chain_core(const t_index N, t_float * const D, t_members * const 
 
   t_index idx1, idx2;
 
-  t_float size1, size2;
+  T size1, size2;
   doubly_linked_list active_nodes(N);
 
-  t_float min;
+  T min;
 
-  for (t_float const * DD=D; DD!=D+(static_cast<std::ptrdiff_t>(N)*(N-1)>>1);
+  for (T const * DD=D; DD!=D+(static_cast<std::ptrdiff_t>(N)*(N-1)>>1);
        ++DD) {
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
@@ -664,8 +687,8 @@ static void NN_chain_core(const t_index N, t_float * const D, t_members * const 
 
     if (method==METHOD_METR_AVERAGE ||
         method==METHOD_METR_WARD) {
-      size1 = static_cast<t_float>(members[idx1]);
-      size2 = static_cast<t_float>(members[idx2]);
+      size1 = static_cast<T>(members[idx1]);
+      size2 = static_cast<T>(members[idx2]);
       members[idx2] += members[idx1];
     }
 
@@ -714,8 +737,8 @@ static void NN_chain_core(const t_index N, t_float * const D, t_members * const 
       Shorter and longer distances can occur.
       */
       // Update the distance matrix in the range [start, idx1).
-      t_float s = size1/(size1+size2);
-      t_float t = size2/(size1+size2);
+      T s = size1/(size1+size2);
+      T t = size2/(size1+size2);
       for (i=active_nodes.start; i<idx1; i=active_nodes.succ[i])
         f_average(&D_(i, idx2), D_(i, idx1), s, t );
       // Update the distance matrix in the range (idx1, idx2).
@@ -752,18 +775,18 @@ static void NN_chain_core(const t_index N, t_float * const D, t_members * const 
       but maybe bigger than max(d1,d2).
       */
       // Update the distance matrix in the range [start, idx1).
-      //t_float v = static_cast<t_float>(members[i]);
+      //T v = static_cast<T>(members[i]);
       for (i=active_nodes.start; i<idx1; i=active_nodes.succ[i])
         f_ward(&D_(i, idx2), D_(i, idx1), min,
-               size1, size2, static_cast<t_float>(members[i]) );
+               size1, size2, static_cast<T>(members[i]) );
       // Update the distance matrix in the range (idx1, idx2).
       for (; i<idx2; i=active_nodes.succ[i])
         f_ward(&D_(i, idx2), D_(idx1, i), min,
-               size1, size2, static_cast<t_float>(members[i]) );
+               size1, size2, static_cast<T>(members[i]) );
       // Update the distance matrix in the range (idx2, N).
       for (i=active_nodes.succ[idx2]; i<N; i=active_nodes.succ[i])
         f_ward(&D_(idx2, i), D_(idx1, i), min,
-               size1, size2, static_cast<t_float>(members[i]) );
+               size1, size2, static_cast<T>(members[i]) );
       break;
 
     default:
@@ -775,6 +798,7 @@ static void NN_chain_core(const t_index N, t_float * const D, t_members * const 
   #endif
 }
 
+template <typename T>
 class binary_min_heap {
   /*
   Class for a binary min-heap. The data resides in an array A. The elements of
@@ -798,7 +822,7 @@ class binary_min_heap {
   This implementation is not designed to handle NaN values.
   */
 private:
-  t_float * const A;
+  T * const A;
   t_index size;
   auto_array_ptr<t_index> I;
   auto_array_ptr<t_index> R;
@@ -810,7 +834,7 @@ private:
   binary_min_heap & operator=(binary_min_heap const &);
 
 public:
-  binary_min_heap(t_float * const A_, const t_index size_)
+  binary_min_heap(T * const A_, const t_index size_)
     : A(A_), size(size_), I(size), R(size)
   { // Allocate memory and initialize the lists I and R to the identity. This
     // does not make it a heap. Call heapify afterwards!
@@ -818,7 +842,7 @@ public:
       R[i] = I[i] = i;
   }
 
-  binary_min_heap(t_float * const A_, const t_index size1, const t_index size2,
+  binary_min_heap(T * const A_, const t_index size1, const t_index size2,
                   const t_index start)
     : A(A_), size(size1), I(size1), R(size2)
   { // Allocate memory and initialize the lists I and R to the identity. This
@@ -872,7 +896,7 @@ public:
   }
 
   void replace ( const t_index idxold, const t_index idxnew,
-                 const t_float val) {
+                 const T val) {
     R[idxnew] = R[idxold];
     I[R[idxnew]] = idxnew;
     if (val<=A[idxold])
@@ -881,7 +905,7 @@ public:
       update_geq(idxnew, val);
   }
 
-  void update ( const t_index idx, const t_float val ) const {
+  void update ( const t_index idx, const T val ) const {
     // Update the element A[i] with val and re-arrange the indices to preserve
     // the heap condition.
     if (val<=A[idx])
@@ -890,13 +914,13 @@ public:
       update_geq(idx, val);
   }
 
-  void update_leq ( const t_index idx, const t_float val ) const {
+  void update_leq ( const t_index idx, const T val ) const {
     // Use this when the new value is not more than the old value.
     A[idx] = val;
     update_leq_(R[idx]);
   }
 
-  void update_geq ( const t_index idx, const t_float val ) const {
+  void update_geq ( const t_index idx, const T val ) const {
     // Use this when the new value is not less than the old value.
     A[idx] = val;
     update_geq_(R[idx]);
@@ -930,14 +954,14 @@ private:
     R[I[j]] = j;
   }
 
-  inline t_float H(const t_index i) const {
+  inline T H(const t_index i) const {
     return A[I[i]];
   }
 
 };
 
-template <method_codes method, typename t_members>
-static void generic_linkage(const t_index N, t_float * const D, t_members * const members, cluster_result & Z2) {
+template <method_codes method, typename t_members, typename T>
+static void generic_linkage(const t_index N, T * const D, t_members * const members, cluster_result<T> & Z2) {
   /*
     N: integer, number of data points
     D: condensed distance matrix N*(N-1)/2
@@ -949,16 +973,16 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
   t_index idx1, idx2; // row and column indices
 
   auto_array_ptr<t_index> n_nghbr(N_1); // array of nearest neighbors
-  auto_array_ptr<t_float> mindist(N_1); // distances to the nearest neighbors
+  auto_array_ptr<T> mindist(N_1); // distances to the nearest neighbors
   auto_array_ptr<t_index> row_repr(N); // row_repr[i]: node number that the
                                        // i-th row represents
   doubly_linked_list active_nodes(N);
-  binary_min_heap nn_distances(&*mindist, N_1); // minimum heap structure for
+  binary_min_heap<T> nn_distances(&*mindist, N_1); // minimum heap structure for
                         // the distance to the nearest neighbor of each point
   t_index node1, node2; // node numbers in the output
-  t_float size1, size2; // and their cardinalities
+  T size1, size2; // and their cardinalities
 
-  t_float min; // minimum and row index for nearest-neighbor search
+  T min; // minimum and row index for nearest-neighbor search
   t_index idx;
 
   for (i=0; i<N; ++i)
@@ -969,9 +993,9 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
   // Initialize the minimal distances:
   // Find the nearest neighbor of each point.
   // n_nghbr[i] = argmin_{j>i} D(i,j) for i in range(N-1)
-  t_float const * DD = D;
+  T const * DD = D;
   for (i=0; i<N_1; ++i) {
-    min = std::numeric_limits<t_float>::infinity();
+    min = std::numeric_limits<T>::infinity();
     for (idx=j=i+1; j<N; ++j, ++DD) {
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
@@ -1063,8 +1087,8 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
     if (method==METHOD_METR_AVERAGE ||
         method==METHOD_METR_WARD ||
         method==METHOD_METR_CENTROID) {
-      size1 = static_cast<t_float>(members[idx1]);
-      size2 = static_cast<t_float>(members[idx2]);
+      size1 = static_cast<T>(members[idx1]);
+      size2 = static_cast<T>(members[idx2]);
       members[idx2] += members[idx1];
     }
     Z2.append(node1, node2, mindist[idx1]);
@@ -1140,8 +1164,8 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
         Shorter and longer distances can occur.
       */
       // Update the distance matrix in the range [start, idx1).
-      t_float s = size1/(size1+size2);
-      t_float t = size2/(size1+size2);
+      T s = size1/(size1+size2);
+      T t = size2/(size1+size2);
       for (j=active_nodes.start; j<idx1; j=active_nodes.succ[j]) {
         f_average(&D_(j, idx2), D_(j, idx1), s, t);
         if (n_nghbr[j] == idx1)
@@ -1218,14 +1242,14 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
       // Update the distance matrix in the range [start, idx1).
       for (j=active_nodes.start; j<idx1; j=active_nodes.succ[j]) {
         f_ward(&D_(j, idx2), D_(j, idx1), mindist[idx1],
-               size1, size2, static_cast<t_float>(members[j]) );
+               size1, size2, static_cast<T>(members[j]) );
         if (n_nghbr[j] == idx1)
           n_nghbr[j] = idx2;
       }
       // Update the distance matrix in the range (idx1, idx2).
       for (; j<idx2; j=active_nodes.succ[j]) {
         f_ward(&D_(j, idx2), D_(idx1, j), mindist[idx1], size1, size2,
-               static_cast<t_float>(members[j]) );
+               static_cast<T>(members[j]) );
         if (D_(j, idx2) < mindist[j]) {
           nn_distances.update_leq(j, D_(j, idx2));
           n_nghbr[j] = idx2;
@@ -1235,11 +1259,11 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
       if (idx2<N_1) {
         n_nghbr[idx2] = j = active_nodes.succ[idx2]; // exists, maximally N-1
         f_ward(&D_(idx2, j), D_(idx1, j), mindist[idx1],
-               size1, size2, static_cast<t_float>(members[j]) );
+               size1, size2, static_cast<T>(members[j]) );
         min = D_(idx2,j);
         for (j=active_nodes.succ[j]; j<N; j=active_nodes.succ[j]) {
           f_ward(&D_(idx2, j), D_(idx1, j), mindist[idx1],
-                 size1, size2, static_cast<t_float>(members[j]) );
+                 size1, size2, static_cast<T>(members[j]) );
           if (D_(idx2,j) < min) {
             min = D_(idx2,j);
             n_nghbr[idx2] = j;
@@ -1257,9 +1281,9 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
         but maybe smaller than min(d1,d2).
       */
       // Update the distance matrix in the range [start, idx1).
-      t_float s = size1/(size1+size2);
-      t_float t = size2/(size1+size2);
-      t_float stc = s*t*mindist[idx1];
+      T s = size1/(size1+size2);
+      T t = size2/(size1+size2);
+      T stc = s*t*mindist[idx1];
       for (j=active_nodes.start; j<idx1; j=active_nodes.succ[j]) {
         f_centroid(&D_(j, idx2), D_(j, idx1), stc, s, t);
         if (D_(j, idx2) < mindist[j]) {
@@ -1302,7 +1326,7 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
         but maybe smaller than min(d1,d2).
       */
       // Update the distance matrix in the range [start, idx1).
-      t_float c_4 = mindist[idx1]*.25;
+      T c_4 = mindist[idx1]*.25;
       for (j=active_nodes.start; j<idx1; j=active_nodes.succ[j]) {
         f_median(&D_(j, idx2), D_(j, idx1), c_4 );
         if (D_(j, idx2) < mindist[j]) {
@@ -1350,10 +1374,10 @@ static void generic_linkage(const t_index N, t_float * const D, t_members * cons
   Clustering methods for vector data
 */
 
-template <typename t_dissimilarity>
+template <typename t_dissimilarity, typename T>
 static void MST_linkage_core_vector(const t_index N,
                                     t_dissimilarity & dist,
-                                    cluster_result & Z2) {
+                                    cluster_result<T> & Z2) {
 /*
     N: integer, number of data points
     dist: function pointer to the metric
@@ -1367,14 +1391,14 @@ static void MST_linkage_core_vector(const t_index N,
   t_index i;
   t_index idx2;
   doubly_linked_list active_nodes(N);
-  auto_array_ptr<t_float> d(N);
+  auto_array_ptr<T> d(N);
 
   t_index prev_node;
-  t_float min;
+  T min;
 
   // first iteration
   idx2 = 1;
-  min = std::numeric_limits<t_float>::infinity();
+  min = std::numeric_limits<T>::infinity();
   for (i=1; i<N; ++i) {
     d[i] = dist(0,i);
 #if HAVE_DIAGNOSTIC
@@ -1402,7 +1426,7 @@ static void MST_linkage_core_vector(const t_index N,
     min = d[idx2];
 
     for (i=idx2; i<N; i=active_nodes.succ[i]) {
-      t_float tmp = dist(i, prev_node);
+      T tmp = dist(i, prev_node);
 #if HAVE_DIAGNOSTIC
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
@@ -1423,10 +1447,10 @@ static void MST_linkage_core_vector(const t_index N,
   }
 }
 
-template <method_codes_vector method, typename t_dissimilarity>
+template <method_codes_vector method, typename t_dissimilarity, typename T>
 static void generic_linkage_vector(const t_index N,
                                    t_dissimilarity & dist,
-                                   cluster_result & Z2) {
+                                   cluster_result<T> & Z2) {
   /*
     N: integer, number of data points
     dist: function pointer to the metric
@@ -1440,14 +1464,14 @@ static void generic_linkage_vector(const t_index N,
   t_index idx1, idx2; // row and column indices
 
   auto_array_ptr<t_index> n_nghbr(N_1); // array of nearest neighbors
-  auto_array_ptr<t_float> mindist(N_1); // distances to the nearest neighbors
+  auto_array_ptr<T> mindist(N_1); // distances to the nearest neighbors
   auto_array_ptr<t_index> row_repr(N); // row_repr[i]: node number that the
                                        // i-th row represents
   doubly_linked_list active_nodes(N);
-  binary_min_heap nn_distances(&*mindist, N_1); // minimum heap structure for
+  binary_min_heap<T> nn_distances(&*mindist, N_1); // minimum heap structure for
                         // the distance to the nearest neighbor of each point
   t_index node1, node2;     // node numbers in the output
-  t_float min; // minimum and row index for nearest-neighbor search
+  T min; // minimum and row index for nearest-neighbor search
 
   for (i=0; i<N; ++i)
     // Build a list of row ↔ node label assignments.
@@ -1458,10 +1482,10 @@ static void generic_linkage_vector(const t_index N,
   // Find the nearest neighbor of each point.
   // n_nghbr[i] = argmin_{j>i} D(i,j) for i in range(N-1)
   for (i=0; i<N_1; ++i) {
-    min = std::numeric_limits<t_float>::infinity();
+    min = std::numeric_limits<T>::infinity();
     t_index idx;
     for (idx=j=i+1; j<N; ++j) {
-      t_float tmp;
+      T tmp;
       switch (method) {
       case METHOD_VECTOR_WARD:
         tmp = dist.ward_initial(i,j);
@@ -1499,7 +1523,7 @@ static void generic_linkage_vector(const t_index N,
       case METHOD_VECTOR_WARD:
         min = dist.ward(idx1,j);
         for (j=active_nodes.succ[j]; j<N; j=active_nodes.succ[j]) {
-          t_float const tmp = dist.ward(idx1,j);
+          T const tmp = dist.ward(idx1,j);
           if (tmp<min) {
             min = tmp;
             n_nghbr[idx1] = j;
@@ -1509,7 +1533,7 @@ static void generic_linkage_vector(const t_index N,
       default:
         min = dist.template sqeuclidean<true>(idx1,j);
         for (j=active_nodes.succ[j]; j<N; j=active_nodes.succ[j]) {
-          t_float const tmp = dist.template sqeuclidean<true>(idx1,j);
+          T const tmp = dist.template sqeuclidean<true>(idx1,j);
           if (tmp<min) {
             min = tmp;
             n_nghbr[idx1] = j;
@@ -1565,7 +1589,7 @@ static void generic_linkage_vector(const t_index N,
       }
       // Update the distance matrix in the range (idx1, idx2).
       for ( ; j<idx2; j=active_nodes.succ[j]) {
-        t_float const tmp = dist.ward(j, idx2);
+        T const tmp = dist.ward(j, idx2);
         if (tmp < mindist[j]) {
           nn_distances.update_leq(j, tmp);
           n_nghbr[j] = idx2;
@@ -1579,7 +1603,7 @@ static void generic_linkage_vector(const t_index N,
         n_nghbr[idx2] = j = active_nodes.succ[idx2]; // exists, maximally N-1
         min = dist.ward(idx2,j);
         for (j=active_nodes.succ[j]; j<N; j=active_nodes.succ[j]) {
-          t_float const tmp = dist.ward(idx2,j);
+          T const tmp = dist.ward(idx2,j);
           if (tmp < min) {
             min = tmp;
             n_nghbr[idx2] = j;
@@ -1597,7 +1621,7 @@ static void generic_linkage_vector(const t_index N,
         but maybe smaller than min(d1,d2).
       */
       for (j=active_nodes.start; j<idx2; j=active_nodes.succ[j]) {
-        t_float const tmp = dist.template sqeuclidean<true>(j, idx2);
+        T const tmp = dist.template sqeuclidean<true>(j, idx2);
         if (tmp < mindist[j]) {
           nn_distances.update_leq(j, tmp);
           n_nghbr[j] = idx2;
@@ -1610,7 +1634,7 @@ static void generic_linkage_vector(const t_index N,
         n_nghbr[idx2] = j = active_nodes.succ[idx2]; // exists, maximally N-1
         min = dist.template sqeuclidean<true>(idx2,j);
         for (j=active_nodes.succ[j]; j<N; j=active_nodes.succ[j]) {
-          t_float const tmp = dist.template sqeuclidean<true>(idx2, j);
+          T const tmp = dist.template sqeuclidean<true>(idx2, j);
           if (tmp < min) {
             min = tmp;
             n_nghbr[idx2] = j;
@@ -1622,10 +1646,10 @@ static void generic_linkage_vector(const t_index N,
   }
 }
 
-template <method_codes_vector method, typename t_dissimilarity>
+template <method_codes_vector method, typename t_dissimilarity, typename T>
 static void generic_linkage_vector_alternative(const t_index N,
                                                t_dissimilarity & dist,
-                                               cluster_result & Z2) {
+                                               cluster_result<T> & Z2) {
   /*
     N: integer, number of data points
     dist: function pointer to the metric
@@ -1639,22 +1663,22 @@ static void generic_linkage_vector_alternative(const t_index N,
   t_index idx1, idx2; // row and column indices
 
   auto_array_ptr<t_index> n_nghbr(2*N-2); // array of nearest neighbors
-  auto_array_ptr<t_float> mindist(2*N-2); // distances to the nearest neighbors
+  auto_array_ptr<T> mindist(2*N-2); // distances to the nearest neighbors
 
   doubly_linked_list active_nodes(N+N_1);
-  binary_min_heap nn_distances(&*mindist, N_1, 2*N-2, 1); // minimum heap
+  binary_min_heap<T> nn_distances(&*mindist, N_1, 2*N-2, 1); // minimum heap
       // structure for the distance to the nearest neighbor of each point
 
-  t_float min; // minimum for nearest-neighbor searches
+  T min; // minimum for nearest-neighbor searches
 
   // Initialize the minimal distances:
   // Find the nearest neighbor of each point.
   // n_nghbr[i] = argmin_{j>i} D(i,j) for i in range(N-1)
   for (i=1; i<N; ++i) {
-    min = std::numeric_limits<t_float>::infinity();
+    min = std::numeric_limits<T>::infinity();
     t_index idx;
     for (idx=j=0; j<i; ++j) {
-      t_float tmp;
+      T tmp;
       switch (method) {
       case METHOD_VECTOR_WARD:
         tmp = dist.ward_initial(i,j);
@@ -1710,7 +1734,7 @@ static void generic_linkage_vector_alternative(const t_index N,
       case METHOD_VECTOR_WARD:
         min = dist.ward_extended(idx1,j);
         for (j=active_nodes.succ[j]; j<idx1; j=active_nodes.succ[j]) {
-          t_float tmp = dist.ward_extended(idx1,j);
+          T tmp = dist.ward_extended(idx1,j);
           if (tmp<min) {
             min = tmp;
             n_nghbr[idx1] = j;
@@ -1720,7 +1744,7 @@ static void generic_linkage_vector_alternative(const t_index N,
       default:
         min = dist.sqeuclidean_extended(idx1,j);
         for (j=active_nodes.succ[j]; j<idx1; j=active_nodes.succ[j]) {
-          t_float const tmp = dist.sqeuclidean_extended(idx1,j);
+          T const tmp = dist.sqeuclidean_extended(idx1,j);
           if (tmp<min) {
             min = tmp;
             n_nghbr[idx1] = j;
@@ -1765,7 +1789,7 @@ static void generic_linkage_vector_alternative(const t_index N,
         min = dist.ward_extended(active_nodes.start, i);
         for (j=active_nodes.succ[active_nodes.start]; j<i;
              j=active_nodes.succ[j]) {
-          t_float tmp = dist.ward_extended(j, i);
+          T tmp = dist.ward_extended(j, i);
           if (tmp < min) {
             min = tmp;
             n_nghbr[i] = j;
@@ -1782,7 +1806,7 @@ static void generic_linkage_vector_alternative(const t_index N,
         min = dist.sqeuclidean_extended(active_nodes.start, i);
         for (j=active_nodes.succ[active_nodes.start]; j<i;
              j=active_nodes.succ[j]) {
-          t_float tmp = dist.sqeuclidean_extended(j, i);
+          T tmp = dist.sqeuclidean_extended(j, i);
           if (tmp < min) {
             min = tmp;
             n_nghbr[i] = j;
