@@ -151,7 +151,7 @@ follows:
      contains all original input points.
 
 The output of linkage is stepwise dendrogram, which is represented as an
-(N−1)×4 NumPy array with singleing point entries (dtype=numpy.double).
+(N−1)×4 NumPy array with floating point entries (dtype=numpy.double).
 The first two columns contain the node indices which are joined in each
 step. The input nodes are labeled 0,...,N−1, and the newly generated
 nodes have the labels N,...,2N−2. The third column contains the distance
@@ -307,7 +307,7 @@ Therefore, the available metrics with their definitions are listed below
 as a reference. The symbols u and v mostly denote vectors in R^D with
 coordinates u_j and v_j respectively. See below for additional metrics
 for Boolean vectors. Unless otherwise stated, the input array X is
-converted to a singleing point array (X.dtype==numpy.single) if it does
+converted to a floating point array (X.dtype==numpy.single) if it does
 not have already the required data type. Some metrics accept Boolean
 input; in this case this is stated explicitly below.
 
@@ -388,7 +388,7 @@ metric='braycurtis'
     d(u,v) = (\sum_j |u_j-v_j|) / (\sum_j |u_j+v_j|)
 
 metric=(user function): The parameter metric may also be a function
-  which accepts two NumPy singleing point vectors and returns a number.
+  which accepts two NumPy floating point vectors and returns a number.
   Eg. the Euclidean distance could be emulated with
 
     fn = lambda u, v: numpy.sqrt(((u-v)*(u-v)).sum())
