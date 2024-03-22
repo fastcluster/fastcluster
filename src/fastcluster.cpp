@@ -71,17 +71,7 @@
 #include <stdexcept> // for std::runtime_error
 #include <string> // for std::string
 
-#include <cfloat> // also for DBL_MAX, DBL_MIN
-template<typename T>
-constexpr int get_mantissa_digits();
-template<>
-constexpr int get_mantissa_digits<float>() {
-    return FLT_MANT_DIG;
-}
-template<>
-constexpr int get_mantissa_digits<double>() {
-    return DBL_MANT_DIG;
-}
+#include <cfloat>
 
 #ifndef LONG_MAX
 #include <climits>
@@ -242,7 +232,7 @@ inline bool operator< (const node<T> a, const node<T> b) {
 template<typename T>
 class cluster_result {
 private:
-  auto_array_ptr<node<T>> Z; // Use node<T> here
+  auto_array_ptr<node<T> > Z; // Use node<T> here
   t_index pos;
 
 public:
@@ -1374,7 +1364,7 @@ static void generic_linkage(const t_index N, T * const D, t_members * const memb
   Clustering methods for vector data
 */
 
-template <typename t_dissimilarity, typename T>
+template <typename T, typename t_dissimilarity>
 static void MST_linkage_core_vector(const t_index N,
                                     t_dissimilarity & dist,
                                     cluster_result<T> & Z2) {
@@ -1447,7 +1437,7 @@ static void MST_linkage_core_vector(const t_index N,
   }
 }
 
-template <method_codes_vector method, typename t_dissimilarity, typename T>
+template <method_codes_vector method, typename T, typename t_dissimilarity>
 static void generic_linkage_vector(const t_index N,
                                    t_dissimilarity & dist,
                                    cluster_result<T> & Z2) {
@@ -1646,7 +1636,7 @@ static void generic_linkage_vector(const t_index N,
   }
 }
 
-template <method_codes_vector method, typename t_dissimilarity, typename T>
+template <method_codes_vector method, typename T, typename t_dissimilarity>
 static void generic_linkage_vector_alternative(const t_index N,
                                                t_dissimilarity & dist,
                                                cluster_result<T> & Z2) {
