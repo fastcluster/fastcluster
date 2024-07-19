@@ -23,7 +23,7 @@ __all__ = ['single', 'complete', 'average', 'weighted', 'ward', 'centroid', 'med
 __version_info__ = ('1', '2', '6')
 __version__ = '.'.join(__version_info__)
 
-from numpy import double, empty, array, ndarray, var, cov, dot, expand_dims, \
+from numpy import double, empty, array, asarray, ndarray, var, cov, dot, expand_dims, \
     ceil, sqrt
 from numpy.linalg import inv
 try:
@@ -227,7 +227,7 @@ raised.
 
 The linkage method does not treat NumPy's masked arrays as special
 and simply ignores the mask.'''
-    X = array(X, copy=False, subok=True)
+    X = asarray(X)
     if X.ndim==1:
         if method=='single':
             preserve_input = False
@@ -464,10 +464,10 @@ metric='sokalmichener' is an alias for 'matching'.'''
             dtype = bool if X.dtype==bool else double
         else:
             dtype = bool if metric in booleanmetrics else double
-        X = array(X, dtype=dtype, copy=False, order='C', subok=True)
     else:
         assert metric=='euclidean'
-        X = array(X, dtype=double, copy=(method=='ward'), order='C', subok=True)
+        dtype = double
+    X = asarray(X, dtype=dtype, order='C')
     assert X.ndim==2
     N = len(X)
     Z = empty((N-1,4))
