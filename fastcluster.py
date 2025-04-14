@@ -227,11 +227,12 @@ raised.
 
 The linkage method does not treat NumPy's masked arrays as special
 and simply ignores the mask.'''
-    X = array(X, copy=False, subok=True)
+    X = array(X, subok=True)
     if X.ndim==1:
         if method=='single':
             preserve_input = False
-        X = array(X, dtype=double, copy=preserve_input, order='C', subok=True)
+        X = array(X, dtype=double, copy=True if preserve_input else None,
+                  order='C', subok=True)
         NN = len(X)
         N = int(ceil(sqrt(NN*2)))
         if (N*(N-1)//2) != NN:
@@ -241,7 +242,7 @@ and simply ignores the mask.'''
         assert X.ndim==2
         N = len(X)
         X = pdist(X, metric=metric)
-        X = array(X, dtype=double, copy=False, order='C', subok=True)
+        X = array(X, dtype=double, order='C', subok=True)
     Z = empty((N-1,4))
     if N > 1:
         linkage_wrap(N, X, Z, mthidx[method])
@@ -460,14 +461,15 @@ metric='sokalmichener' is an alias for 'matching'.'''
     if method=='single':
         assert metric!='USER'
         if metric in ('hamming', 'jaccard'):
-            X = array(X, copy=False, subok=True)
+            X = array(X, subok=True)
             dtype = bool if X.dtype==bool else double
         else:
             dtype = bool if metric in booleanmetrics else double
-        X = array(X, dtype=dtype, copy=False, order='C', subok=True)
+        X = array(X, dtype=dtype, order='C', subok=True)
     else:
         assert metric=='euclidean'
-        X = array(X, dtype=double, copy=(method=='ward'), order='C', subok=True)
+        X = array(X, dtype=double, copy=(True if method=='ward' else None),
+                  order='C', subok=True)
     assert X.ndim==2
     N = len(X)
     Z = empty((N-1,4))
@@ -480,7 +482,7 @@ metric='sokalmichener' is an alias for 'matching'.'''
             extraarg = inv(cov(X, rowvar=False))
         # instead of the inverse covariance matrix, pass the matrix product
         # with the data matrix!
-        extraarg = array(dot(X,extraarg),dtype=double, copy=False, order='C', subok=True)
+        extraarg = array(dot(X,extraarg), dtype=double, order='C', subok=True)
     elif metric=='correlation':
         X = X-expand_dims(X.mean(axis=1),1)
         metric='cosine'
