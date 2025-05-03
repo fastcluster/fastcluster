@@ -9,6 +9,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{xcolor}
+\usepackage{booktabs}
 \usepackage{ifpdf}
   \ifpdf
     \newcommand*\driver{}
@@ -125,7 +126,17 @@ If you use the fastcluster package for scientific work, please cite it as:
 Daniel Müllner, \textit{fastcluster: Fast Hierarchical, Agglomerative Clustering Routines for R and Python}, Journal of Statistical Software, \textbf{53} (2013), no.~9, 1--18, \url{https://doi.org/10.18637/jss.v053.i09}.
 \end{quote}
 
-The \hyperref[yule]{“Yule” distance function} changed in the Python interface of fastcluster version 1.2.0. This is following a \href{https://github.com/scipy/scipy/commit/3b22d1da98dc1b5f64bc944c21f398d4ba782bce}{change in SciPy 1.6.3}. \textbf{It is recommended to use fastcluster version 1.1.x together with SciPy versions before 1.6.3 and fastcluster 1.2.x with SciPy $\geq{}$1.6.3.} The R interface does have the “Yule” distance function, hence is not affected by this change.
+The \hyperref[yule]{“Yule” distance function} changed in the Python interface of fastcluster version 1.2.0. This is following a \href{https://github.com/scipy/scipy/commit/3b22d1da98dc1b5f64bc944c21f398d4ba782bce}{change in SciPy 1.6.3}. The \hyperref[jaccard]{“Jaccard” distance function} changed in the Python interface of fastcluster version 1.3.0. This is following a \href{https://github.com/scipy/scipy/commit/ecf3ff0ff12666cbeaa5c61d5726fd0141657b54}{change in SciPy 1.15.0}. Therefore, the following pairings of SciPy and fastcluster versions are recommended:
+\[
+\begin{tabular}{ll}\toprule
+  SciPy version $v$ & Recommended fastcluster version \\\midrule
+  $v<\textrm{1.6.3}$ & 1.1.28 \\
+  $\textrm{1.6.3} \leq v < \textrm{1.15.0}$ & 1.2.6 \\
+  $v \geq \textrm{1.15.0}$ & 1.3.x\\\bottomrule
+\end{tabular}
+\]
+
+The R interface does not have the “Yule” and “Jaccard” distance functions, hence is not affected by these changes.
 
 The fastcluster package is considered stable and will undergo few changes from now on. If some years from now there have not been any updates, this does not necessarily mean that the package is unmaintained but maybe it just was not necessary to correct anything. Of course, please still report potential bugs and incompatibilities to \texttt{daniel@danifold.net}.
 
@@ -586,18 +597,6 @@ This method, however, is much slower than the built-in function.
  d(u,v) = |\{j\mid u_j\neq v_j\}|
 \]
 
-\item[\normalfont\textit{\q jaccard\q}:] The Jaccard distance accepts a Boolean array (\texttt{X.dtype\allowbreak ==\allowbreak bool}) for efficient storage. Any other data type is converted to \texttt{numpy.double}.
-\[
- d(u,v) = \frac{|\{j\mid u_j\neq v_j\}|}{|\{j\mid u_j\neq 0\text{ or } v_j\neq 0\}|}
-\]
-\[
- d(0,0) = 0
-\]
-Python represents \texttt{True} by 1 and \texttt{False} by 0. In the Boolean case, the Jaccard distance is therefore:
-\[
- d(u,v) = \frac{|\{j\mid u_j\neq v_j\}|}{|\{j\mid u_j\lor v_j\}|}
-\]
-
 \end{description}
 The following metrics are designed for Boolean vectors. The input array is converted to the \texttt{bool} data type if it is not Boolean already. Use the following abbreviations for the entries of a contingency table:
 \begin{align*}
@@ -608,6 +607,15 @@ Recall that $D$ denotes the number of dimensions, hence $D=a+b+c+d$.
 
 
 \begin{description}
+\item[\normalfont\textit{\q jaccard\q}]
+\phantomsection\label{jaccard}
+\[
+ d(u,v) = \frac{b+c}{b+c+d}
+\]
+\[
+ d(0,0) = 0
+\]
+
 \item[\normalfont\textit{\q yule\q}]
 \phantomsection\label{yule}
 \begin{align*}

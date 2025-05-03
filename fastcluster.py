@@ -272,8 +272,9 @@ mtridx = {'euclidean'      :  0,
           'USER'           : 19,
           }
 
-booleanmetrics = ('yule', 'matching', 'dice', 'kulsinski', 'rogerstanimoto',
-                  'sokalmichener', 'russellrao', 'sokalsneath', 'kulsinski')
+booleanmetrics = ('jaccard', 'yule', 'matching', 'dice', 'kulsinski',
+                  'rogerstanimoto', 'sokalmichener', 'russellrao',
+                  'sokalsneath', 'kulsinski')
 
 def linkage_vector(X, method='single', metric='euclidean', extraarg=None):
     r'''Hierarchical (agglomerative) clustering on Euclidean data.
@@ -396,18 +397,6 @@ metric='hamming': The Hamming distance accepts a Boolean array
 
     d(u,v) = |{j | u_j≠v_j }|
 
-metric='jaccard': The Jaccard distance accepts a Boolean array
-  (X.dtype==bool) for efficient storage. Any other data type is
-  converted to numpy.double.
-
-    d(u,v) = |{j | u_j≠v_j }| / |{j | u_j≠0 or v_j≠0 }|
-    d(0,0) = 0
-
-  Python represents True by 1 and False by 0. In the Boolean case, the
-  Jaccard distance is therefore:
-
-    d(u,v) = |{j | u_j≠v_j }| / |{j | u_j  ∨ v_j }|
-
 The following metrics are designed for Boolean vectors. The input array
 is converted to the 'bool' data type if it is not Boolean already. Use
 the following abbreviations to count the number of True/False
@@ -419,6 +408,11 @@ combinations:
   d = |{j | (¬u_j) ∧ (¬v_j) }|
 
 Recall that D denotes the number of dimensions, hence D=a+b+c+d.
+
+metric='jaccard'
+
+    d(u,v) = (b+c) / (b+c+d)
+    d(0,0) = 0
 
 metric='yule'
 
@@ -460,7 +454,7 @@ metric='matching':
 metric='sokalmichener' is an alias for 'matching'.'''
     if method=='single':
         assert metric!='USER'
-        if metric in ('hamming', 'jaccard'):
+        if metric == 'hamming':
             X = array(X, subok=True)
             dtype = bool if X.dtype==bool else double
         else:

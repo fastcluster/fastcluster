@@ -49,8 +49,16 @@ https://github.com/dmuellner/fastcluster/raw/master/docs/fastcluster.pdf).
 The “Yule” distance function changed in fastcluster version 1.2.0. This is
 following a [change in SciPy 1.6.3](
 https://github.com/scipy/scipy/commit/3b22d1da98dc1b5f64bc944c21f398d4ba782bce).
-It is recommended to use fastcluster version 1.1.x together with SciPy versions
-before 1.6.3 and fastcluster 1.2.x with SciPy ≥1.6.3.
+The “Jaccard” distance function changed in the Python interface of fastcluster
+version 1.3.0. This is following a [change in SciPy 1.15.0](
+https://github.com/scipy/scipy/commit/ecf3ff0ff12666cbeaa5c61d5726fd0141657b54).
+Therefore, the following pairings of SciPy and fastcluster versions are recommended:
+
+|SciPy version v     |Recommended fastcluster version|
+|--------------------|-------------------------------|
+|v < 1.6.3           |1.1.28                         |
+|1.6.3 ≤  v < 1.15.0 |1.2.6                          |
+|v ≥ 1.15.0          |1.3.x                          |
 
 The fastcluster package is considered stable and will undergo few changes
 from now on. If some years from now there have not been any updates, this does
