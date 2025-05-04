@@ -43,7 +43,7 @@ def correct_for_zero_vectors(D, pcd, metric):
             D = squareform(DD)
     return D
 
-def test_all(n,dim):
+def __test_all(n,dim):
   method = 'single'
 
   # metrics for boolean vectors
@@ -216,7 +216,7 @@ def check(Z2, method, D):
       size[i2] = S
     print('OK.')
 
-def test(repeats):
+def test(repeats=10):
     if repeats:
         iterator = range(repeats)
     else:
@@ -233,7 +233,7 @@ message.
         print('Dimension: {0}'.format(dim))
         print('Number of points: {0}'.format(n))
 
-        test_all(n,dim)
+        __test_all(n,dim)
 
 if __name__ == "__main__":
     test(None)

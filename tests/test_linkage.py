@@ -29,7 +29,7 @@ rtol = 1e-14 # relative tolerance
 # NaN values are used in computations. Do not warn about them.
 np.seterr(invalid='ignore')
 
-def test_all(D):
+def __test_all(D):
   D2 = D.copy()
   for method in ['single', 'complete', 'average', 'weighted', 'ward',
                  'centroid', 'median']:
@@ -134,7 +134,7 @@ def check(Z2, D, method):
       size[i2] = S
     print('OK.')
 
-def test(repeats):
+def test(repeats=10):
     if repeats:
         iterator = range(repeats)
     else:
@@ -153,10 +153,10 @@ message.
         D = pdist(np.random.randn(n,dim))
 
         print('Real distance values:')
-        test_all(D)
+        __test_all(D)
         D = np.round(D*n/4)
         print('Integer distance values:')
-        test_all(D)
+        __test_all(D)
 
 if __name__ == "__main__":
     test(None)
