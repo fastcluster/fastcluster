@@ -23,6 +23,20 @@ jobs:
         run: pip install tox
       - name: Run tests
         run: tox
+  test_latest:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+      - name: Install dependencies
+        run: pip install tox
+      - name: Run tests
+        run: tox
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     needs: [test]
