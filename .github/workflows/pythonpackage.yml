@@ -51,6 +51,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           path: ./wheelhouse/*.whl
+          name: artifacts-${{ matrix.os }}
   build_sdist:
     name: Build source distribution
     needs: [test]
