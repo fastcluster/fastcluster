@@ -46,7 +46,7 @@ jobs:
           CIBW_TEST_REQUIRES: pytest scipy>=1.15
           CIBW_TEST_COMMAND: 'pytest {project}/tests'
           CIBW_SKIP: >-
-            cp36-* cp37-* cp38-* cp39-*
+            cp36-* cp37-* cp38-* cp39-* cp310-*
             pp* *-musllinux_* *s390x *ppc64le
       - uses: actions/upload-artifact@v4
         with:
