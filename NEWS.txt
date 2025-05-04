@@ -248,3 +248,9 @@ Version 1.2.5, 02/26/2022
 Version 1.2.6, 02/27/2022
 
 • Move to GitHub action for CI. No code changes.
+
+Version 1.3.0, 05/04/2025
+
+• Support for NumPy 2.
+• Python interface: Updated definition of the Jaccard distance function,
+  following a change in SciPy 1.15.0.

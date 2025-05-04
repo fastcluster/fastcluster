@@ -10,7 +10,7 @@ Copyright:
 import numpy as np
 import fastcluster
 
-version = '1.2.6'
+version = '1.3.0'
 if fastcluster.__version__ != version:
     raise ValueError('Wrong module version: {} instead of {}.'.format(fastcluster.__version__, version))
 
