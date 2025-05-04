@@ -19,14 +19,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install setuptools
-          pip install .[test]
       - name: Run tests
         run: |
-          python setup.py test
+          tox
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     needs: [test]
