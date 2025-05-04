@@ -93,7 +93,6 @@ Clustering Routines for R and Python*, Journal of Statistical Software, **53**
       python_requires='>=3',
       requires=['numpy'],
       install_requires=["numpy>=2"],
-      extras_require={'test':  ['scipy>=1.6.3']},
       provides=['fastcluster'],
       ext_modules=[Extension('_fastcluster',
                              ['src/fastcluster_python.cpp'],
