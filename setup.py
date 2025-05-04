@@ -120,7 +120,7 @@ Clustering Routines for R and Python*, Journal of Statistical Software, **53**
                 'hierarchical', 'hierarchy', 'ward'],
       author=u"Daniel Müllner",
       author_email="daniel@danifold.net",
-      license="BSD <http://opensource.org/licenses/BSD-2-Clause>",
+      license="BSD-2-clause OR GPL-2.0-or-later",
       classifiers=[
           "Topic :: Scientific/Engineering :: Information Analysis",
           "Topic :: Scientific/Engineering :: Artificial Intelligence",
