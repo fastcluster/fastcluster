@@ -63,6 +63,16 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           path: ./dist/*.tar.gz
+  display_artifacts:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: ls -la dist
   publish:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
@@ -71,8 +81,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: artifact
           path: dist
+          merge-multiple: true
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.4
         with:
