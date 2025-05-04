@@ -42,11 +42,11 @@ jobs:
         env:
           CIBW_ARCHS_LINUX: x86_64 aarch64 i686
           CIBW_ARCHS_MACOS: x86_64 arm64 universal2
-          CIBW_ARCHS_WINDOWS: auto
-          CIBW_TEST_REQUIRES: pytest scipy
+          CIBW_ARCHS_WINDOWS: x86_64
+          CIBW_TEST_REQUIRES: pytest scipy>=1.15
           CIBW_TEST_COMMAND: 'pytest {project}/tests'
           CIBW_SKIP: >-
-            cp36-* cp37-* cp38-* cp39-* cp310-*
+            cp36-* cp37-* cp38-* cp39-*
             pp* *-musllinux_* *s390x *ppc64le
       - uses: actions/upload-artifact@v4
         with:
