@@ -66,7 +66,8 @@ jobs:
           path: ./dist/*.tar.gz
           name: artifacts-sdist
           if-no-files-found: error
-  display_artifacts:
+  download_artifacts:
+    name: Download and list all artifacts
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     steps:
@@ -77,6 +78,7 @@ jobs:
           merge-multiple: true
       - run: ls -la dist
   publish:
+    name: Publish
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     # run on every tag starting with 'v'
