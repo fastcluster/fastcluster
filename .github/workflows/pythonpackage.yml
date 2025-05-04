@@ -52,6 +52,7 @@ jobs:
         with:
           path: ./wheelhouse/*.whl
           name: artifacts-${{ matrix.os }}
+          if-no-files-found: error
   build_sdist:
     name: Build source distribution
     needs: [test]
@@ -63,6 +64,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           path: ./dist/*.tar.gz
+          name: artifacts-sdist
+          if-no-files-found: error
   display_artifacts:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
