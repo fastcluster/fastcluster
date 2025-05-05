@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", ">=3.13"]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
@@ -20,13 +20,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install setuptools
-          pip install .[test]
+        run: pip install tox
       - name: Run tests
-        run: |
-          python setup.py test
+        run: tox
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     needs: [test]
@@ -44,13 +40,19 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.23.3
         env:
-          CIBW_ARCHS_LINUX: x86_64 aarch64 i686
+          CIBW_ARCHS_LINUX: x86_64 aarch64
           CIBW_ARCHS_MACOS: x86_64 arm64 universal2
-          CIBW_ARCHS_WINDOWS: auto
-          CIBW_SKIP: pp* *-musllinux_* *s390x *ppc64le
+          CIBW_ARCHS_WINDOWS: auto64
+          CIBW_TEST_REQUIRES: pytest scipy>=1.15
+          CIBW_TEST_COMMAND: 'pytest {project}/tests'
+          CIBW_SKIP: >-
+            cp36-* cp37-* cp38-* cp39-*
+            pp* *-musllinux_* *s390x *ppc64le
       - uses: actions/upload-artifact@v4
         with:
           path: ./wheelhouse/*.whl
+          name: artifacts-${{ matrix.os }}
+          if-no-files-found: error
   build_sdist:
     name: Build source distribution
     needs: [test]
@@ -62,7 +64,21 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           path: ./dist/*.tar.gz
+          name: artifacts-sdist
+          if-no-files-found: error
+  download_artifacts:
+    name: Download and list all artifacts
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: ls -la dist
   publish:
+    name: Publish
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     # run on every tag starting with 'v'
@@ -70,8 +86,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: artifact
           path: dist
+          merge-multiple: true
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.4
         with:
