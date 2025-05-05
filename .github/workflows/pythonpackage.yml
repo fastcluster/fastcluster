@@ -81,7 +81,6 @@ jobs:
     name: Publish to TestPyPI
     # only publish to TestPyPI on tag pushes
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/testv')
-    environment: testpypi
     needs: [build_wheels, build_sdist, download_artifacts]
     runs-on: ubuntu-latest
     environment:
@@ -98,7 +97,6 @@ jobs:
     name: Publish to PyPI and GitHub
     # only publish to PyPI on tag pushes
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
-    environment: pypi
     needs: [build_wheels, build_sdist, download_artifacts]
     runs-on: ubuntu-latest
     environment:
