@@ -77,23 +77,38 @@ jobs:
           path: dist
           merge-multiple: true
       - run: ls -la dist
-  publish:
-    name: Publish
-    needs: [build_wheels, build_sdist]
+  publish-to-testpypi:
+    name: Publish to TestPyPI
+    # only publish to TestPyPI on tag pushes
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/testv')
+    environment: testpypi
+    needs: [build_wheels, build_sdist, download_artifacts]
     runs-on: ubuntu-latest
-    # run on every tag starting with 'v'
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    environment:
+      name: pypi
+      url: https://test.pypi.org/p/fastcluster
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Publish distribution to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          path: dist
-          merge-multiple: true
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.12.4
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
-          # To test: repository_url: https://test.pypi.org/legacy/
+          repository-url: https://test.pypi.org/legacy/
+  publish-to-pypi:
+    name: Publish to PyPI and GitHub
+    # only publish to PyPI on tag pushes
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    environment: pypi
+    needs: [build_wheels, build_sdist, download_artifacts]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/fastcluster
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    steps:
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
       - name: Release on GitHub
         uses: softprops/action-gh-release@v2
         with:
