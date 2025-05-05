@@ -80,7 +80,7 @@ jobs:
   publish-to-testpypi:
     name: Publish to TestPyPI
     # only publish to TestPyPI on tag pushes
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/testv')
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/test')
     needs: [build_wheels, build_sdist, download_artifacts]
     runs-on: ubuntu-latest
     environment:
