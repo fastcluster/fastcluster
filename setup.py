@@ -58,7 +58,7 @@ Therefore, the following pairings of SciPy and fastcluster versions are recommen
 |--------------------|-------------------------------|
 |v < 1.6.3           |1.1.28                         |
 |1.6.3 ≤  v < 1.15.0 |1.2.6                          |
-|v ≥ 1.15.0          |1.3.x                          |
+|v ≥ 1.15.0          |latest (≥ 1.3.0)               |
 
 The fastcluster package is considered stable and will undergo few changes
 from now on. If some years from now there have not been any updates, this does
