@@ -110,6 +110,7 @@ jobs:
       url: https://pypi.org/p/fastcluster
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
+      contents: write  # action-gh-release seems to need this.
     steps:
       - name: Download
         uses: actions/download-artifact@v4
@@ -117,8 +118,8 @@ jobs:
           path: dist
           merge-multiple: true
       - run: ls -la ./dist
-      - name: Publish distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      #- name: Publish distribution to PyPI
+      #  uses: pypa/gh-action-pypi-publish@release/v1
       - name: Release on GitHub
         uses: softprops/action-gh-release@v2
         with:
