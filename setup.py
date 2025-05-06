@@ -44,7 +44,7 @@ easier to port from MATLAB to Python/NumPy. The core implementation of this
 library is in C++ for efficiency.
 
 **User manual:** [fastcluster.pdf](
-https://github.com/dmuellner/fastcluster/raw/master/docs/fastcluster.pdf).
+https://raw.githubusercontent.com/fastcluster/fastcluster/master/docs/fastcluster.pdf).
 
 The “Yule” distance function changed in fastcluster version 1.2.0. This is
 following a [change in SciPy 1.6.3](
