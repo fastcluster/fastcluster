@@ -1,6 +1,0 @@
-include pyproject.toml
-include docs/*
-include *.txt
-include src/*.cpp
-include tests/*.py
-include MANIFEST.in

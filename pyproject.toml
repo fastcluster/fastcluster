@@ -1,4 +1,45 @@
 [build-system]
-requires = ["setuptools",
-            "wheel",
-            "numpy >= 2"]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastcluster"
+authors = [
+    {name = "Daniel Müllner", email = "daniel@danifold.net"}
+]
+description = "Fast hierarchical clustering routines for R and Python"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords=[
+    "dendrogram", "linkage", "cluster", "agglomerative", "hierarchical",
+    "hierarchy", "ward"
+]
+license = "BSD-2-Clause"
+classifiers = [
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Development Status :: 5 - Production/Stable",
+]
+dependencies = [
+    "numpy >= 2",
+]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {file = "version.txt"}
+
+
+[[tool.setuptools.ext-modules]]
+    name = "_fastcluster"
+    sources = ["src/fastcluster_python.cpp"]
+    include-dirs = [
+        "src",
+        "/usr/lib/python3.13/site-packages/numpy/_core/include",
+    ]
