@@ -126,11 +126,17 @@ The fastcluster package is distributed under the [BSD license][]. See the file
 [BSD License]: https://opensource.org/licenses/BSD-2-Clause
 [LICENSE]: https://raw.githubusercontent.com/fastcluster/fastcluster/refs/heads/master/LICENSE
 
+## Citation
+
+To cite fastcluster in publications, please use:
+
+Daniel Müllner, fastcluster: Fast Hierarchical, Agglomerative Clustering
+Routines for R and Python, Journal of Statistical Software, 53 (2013), no. 9,
+1–18, https://doi.org/10.18637/jss.v053.i09.
+
 ## Further links
 
 * Project home page:
   [https://danifold.net/fastcluster](https://danifold.net/fastcluster)
-* Paper in the Journal of Statistical Software:
-  DOI [10.18637/jss.v053.i09](https://doi.org/10.18637/jss.v053.i09)
 * Christoph Dalitz wrote a pure C++ interface to fastcluster:
   <https://lionel.kr.hs-niederrhein.de/~dalitz/data/hclust/>.

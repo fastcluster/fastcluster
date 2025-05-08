@@ -1,4 +1,44 @@
 [build-system]
-requires = ["setuptools",
-            "wheel",
-            "numpy >= 2"]
+build-backend = "mesonpy"
+requires = ["meson-python", "numpy >= 2"]
+
+[project]
+name = "fastcluster"
+authors = [
+    {name = "Daniel Müllner", email = "daniel@danifold.net"}
+]
+description = "Fast hierarchical clustering routines for R and Python"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords=[
+    "dendrogram", "linkage", "cluster", "agglomerative", "hierarchical",
+    "hierarchy", "ward"
+]
+license = "BSD-2-Clause"
+classifiers = [
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Development Status :: 5 - Production/Stable",
+]
+dependencies = ["numpy >= 2"]
+dynamic = ["version"]
+
+[tool.meson-python.args]
+# Force the activation of the Visual Studio environment on Windows
+setup = ['--vsenv']
+
+[tool.tox.env_run_base]
+deps = [
+    "pytest",
+    "scipy >= 1.15"
+]
+commands = [["pytest", "-s", { replace = "posargs", default = ["tests"], extend = true }]]
+
+
