@@ -416,8 +416,7 @@ enum metric_codes {
   METRIC_KULSINSKI       = 18,
   METRIC_USER            = 19,
   METRIC_INVALID         = 20, // sentinel
-  METRIC_JACCARD_BOOL    = 21, // separate function for Jaccard metric on
-};                             // Boolean input data
+};
 
 /*
    Helper class: Throw this if calling the Python interpreter from within
@@ -623,8 +622,6 @@ public:
         this->userfn = extraarg;
         distfn = &python_dissimilarity::user;
         break;
-      default: // case METRIC_JACCARD_BOOL:
-        distfn = &python_dissimilarity::jaccard_bool;
       }
       break;
 
@@ -895,25 +892,6 @@ private:
     return sum;
   }
 
-  // Differs from scipy.spatial.distance: equal vectors correctly
-  // return distance 0.
-  t_float jaccard(const t_index i, const t_index j) const {
-    t_index sum1 = 0;
-    t_index sum2 = 0;
-    for (t_index k=0; k<dim; ++k) {
-#if HAVE_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wfloat-equal"
-#endif
-      sum1 += (X(i,k)!=X(j,k));
-      sum2 += ((X(i,k)!=0) || (X(j,k)!=0));
-#if HAVE_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    }
-    return sum1==0 ? 0 : static_cast<t_float>(sum1) / static_cast<t_float>(sum2);
-  }
-
   t_float canberra(const t_index i, const t_index j) const {
     t_float sum = 0;
     for (t_index k=0; k<dim; ++k) {
@@ -1064,7 +1042,7 @@ private:
   }
 
   // Prevent a zero denominator for equal vectors.
-  t_float jaccard_bool(const t_index i, const t_index j) const {
+  t_float jaccard(const t_index i, const t_index j) const {
     nbool_correspond(i, j);
     return (NXO==0) ? 0 :
       static_cast<t_float>(NXO) / static_cast<t_float>(NXO+NTT);
@@ -1151,9 +1129,6 @@ static PyObject *linkage_vector_wrap(PyObject * const, PyObject * const args) {
     if (PyArray_ISBOOL(X)) {
       if (metric==METRIC_HAMMING) {
         metric = METRIC_MATCHING; // Alias
-      }
-      if (metric==METRIC_JACCARD) {
-        metric = METRIC_JACCARD_BOOL;
       }
     }
 
