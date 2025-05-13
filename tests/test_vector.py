@@ -84,10 +84,8 @@ def __test_all(n,dim):
   pcd = np.random.randint(-bound, bound + 1, (n,dim))
   for metric in ['euclidean', 'sqeuclidean', 'cityblock', 'chebychev',
                  'minkowski', 'cosine', 'correlation', 'hamming', 'jaccard',
-                 'canberra',
-                 # canberra: see bug in older Scipy versions
-                 # http://projects.scipy.org/scipy/ticket/1430
-                 'braycurtis', 'seuclidean', 'mahalanobis', 'user']:
+                 'canberra',  'braycurtis', 'seuclidean', 'mahalanobis',
+                 'user']:
     sys.stdout.write("Metric: " + metric + "...")
     if metric=='minkowski':
         p = np.random.uniform(1.,10.)
@@ -163,9 +161,7 @@ def check(Z2, method, D):
       s2 = size[i2]
       S = float(s1+s2)
       if method=='single':
-          if i1>0: # mostly unnecessary; workaround for a bug/feature in NumPy
-          # 1.7.0.dev, see http://projects.scipy.org/numpy/ticket/2078
-              Ds[:i1,i2]   = np.min( Ds[:i1,(i1,i2)],axis=1)
+          Ds[:i1,i2]   = np.min( Ds[:i1,(i1,i2)],axis=1)
           Ds[i1:i2,i2] = np.minimum(Ds[i1,i1:i2],Ds[i1:i2,i2])
           Ds[i2,i2:]   = np.min( Ds[(i1,i2),i2:],axis=0)
       elif method=='complete':
