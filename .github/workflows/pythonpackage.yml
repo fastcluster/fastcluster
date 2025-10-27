@@ -46,7 +46,7 @@ jobs:
           CIBW_TEST_REQUIRES: pytest scipy>=1.15
           CIBW_TEST_COMMAND: 'pytest -s {project}/tests'
           CIBW_SKIP: pp* *-musllinux_* *s390x *ppc64le
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           path: ./wheelhouse/*.whl
           name: artifacts-${{ matrix.os }}
@@ -59,7 +59,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Build sdist
         run: pipx run build --sdist
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           path: ./dist/*.tar.gz
           name: artifacts-sdist
