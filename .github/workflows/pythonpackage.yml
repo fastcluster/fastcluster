@@ -43,7 +43,7 @@ jobs:
           CIBW_ARCHS_LINUX: x86_64 aarch64
           CIBW_ARCHS_MACOS: x86_64 arm64
           CIBW_ARCHS_WINDOWS: auto64
-          CIBW_BEFORE_TEST: pip install "scipy>=1.15" --only-binary
+          CIBW_BEFORE_TEST: pip install "scipy>=1.15" --only-binary scipy
           CIBW_TEST_REQUIRES: pytest scipy>=1.15
           CIBW_TEST_COMMAND: 'pytest -s {project}/tests'
           CIBW_SKIP: "*-musllinux_* *s390x *ppc64le"
