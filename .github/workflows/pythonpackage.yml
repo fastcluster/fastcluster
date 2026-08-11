@@ -46,7 +46,7 @@ jobs:
           CIBW_BEFORE_TEST: pip install "scipy>=1.15" --only-binary scipy
           CIBW_TEST_REQUIRES: pytest scipy>=1.15
           CIBW_TEST_COMMAND: 'pytest -s {project}/tests'
-          CIBW_BUILD: cp311* cp312* cp313* cp314*
+          CIBW_BUILD: cp312* cp313* cp314*
           CIBW_SKIP: "*-musllinux_* *s390x *ppc64le"
       - uses: actions/upload-artifact@v7
         with:
