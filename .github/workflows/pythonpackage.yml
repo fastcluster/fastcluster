@@ -30,7 +30,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.12", "3.13", "3.14", ">=3.14"]
     steps:
       - uses: actions/checkout@v7
       - name: Set up QEMU
@@ -47,7 +46,7 @@ jobs:
           CIBW_BEFORE_TEST: pip install "scipy>=1.15" --only-binary scipy
           CIBW_TEST_REQUIRES: pytest scipy>=1.15
           CIBW_TEST_COMMAND: 'pytest -s {project}/tests'
-          CIBW_SKIP: "*-musllinux_* *s390x *ppc64le"
+          CIBW_SKIP: cp310* *-musllinux_* *s390x *ppc64le
       - uses: actions/upload-artifact@v7
         with:
           path: ./wheelhouse/*.whl
